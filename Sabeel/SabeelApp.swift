@@ -13,7 +13,7 @@ struct SabeelApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            STabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
