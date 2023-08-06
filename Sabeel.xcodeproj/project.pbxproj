@@ -62,6 +62,7 @@
 		CDB075442A7F54220004DE7B /* SFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFeedView.swift; sourceTree = "<group>"; };
 		CDB075462A7F54390004DE7B /* SFriendsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFriendsListView.swift; sourceTree = "<group>"; };
 		CDB075482A7F54430004DE7B /* SSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSettingsView.swift; sourceTree = "<group>"; };
+		CDB0754A2A7F617A0004DE7B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +93,7 @@
 		CDB074FF2A7F4C860004DE7B = {
 			isa = PBXGroup;
 			children = (
+				CDB0754A2A7F617A0004DE7B /* .gitignore */,
 				CDB0750A2A7F4C860004DE7B /* Sabeel */,
 				CDB075212A7F4C880004DE7B /* SabeelTests */,
 				CDB0752B2A7F4C880004DE7B /* SabeelUITests */,
