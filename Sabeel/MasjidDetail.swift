@@ -29,11 +29,11 @@ struct MasjidDetail: View {
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.5)
                             }
-                            Button(action: {
+                            Button{
                                 withAnimation(.easeInOut){
                                     showContactInfo = true
-                                    
-                                }}) {
+                                }
+                            } label: {
                                     Image(systemName: "ellipsis")
                                         .foregroundColor(.brandSecondary)
                                 }
@@ -51,19 +51,20 @@ struct MasjidDetail: View {
                                         print( "send to website" )
                                     }
                                     .disabled($selectedMasjid.wrappedValue?.website == nil)
-                                    Button(role: .destructive, action: {
+                                    Button(role: .destructive) {
                                         withAnimation (.easeInOut) {
                                             self.showChangeTimingsView = true
                                             self.showContactInfo = false
-                                        }}) {
+                                        }
+                                    } label: {
                                             Text("Suggest a change to Prayer Times")
                                         }
                                 }
-                            Button(action: {
+                            Button{
                                 withAnimation (.easeInOut) {
                                     self.selectedMasjid = nil
                                 }
-                            }) {
+                        } label: {
                                 Image(systemName: "xmark")
                                     .foregroundColor(.brandSecondary)
                             }
@@ -145,7 +146,9 @@ struct MasjidDetail: View {
                     
                 }
                 else {
-                    MasjidChangeRequestView(isShowingThisView: $showChangeTimingsView, selectedMasjid: $selectedMasjid)
+                    if let selectedMasjid = Binding<Masjid>($selectedMasjid) {
+                        MasjidChangeRequestView(isShowingThisView: $showChangeTimingsView, selectedMasjid: selectedMasjid)
+                    }
                 }
             }
         }

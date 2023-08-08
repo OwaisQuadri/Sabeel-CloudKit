@@ -26,6 +26,9 @@
 		CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */; };
 		CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */; };
 		CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075522A8007000004DE7B /* MasjidDetail.swift */; };
+		CDB075572A81D9980004DE7B /* Masjid.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075562A81D9980004DE7B /* Masjid.swift */; };
+		CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */; };
+		CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequestView.swift; sourceTree = "<group>"; };
 		CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulPreviewWrapper.swift; sourceTree = "<group>"; };
 		CDB075522A8007000004DE7B /* MasjidDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidDetail.swift; sourceTree = "<group>"; };
+		CDB075562A81D9980004DE7B /* Masjid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Masjid.swift; sourceTree = "<group>"; };
+		CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequest.swift; sourceTree = "<group>"; };
+		CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 		CDB0750A2A7F4C860004DE7B /* Sabeel */ = {
 			isa = PBXGroup;
 			children = (
+				CDB075542A81D9840004DE7B /* Models */,
 				CDB0754F2A8006450004DE7B /* Helpers */,
 				CDB0753B2A7F4CDD0004DE7B /* Sabeel.entitlements */,
 				CDB0750B2A7F4C860004DE7B /* SabeelApp.swift */,
@@ -175,6 +182,16 @@
 				CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		CDB075542A81D9840004DE7B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075562A81D9980004DE7B /* Masjid.swift */,
+				CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */,
+				CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,7 +333,10 @@
 				CDB075152A7F4C870004DE7B /* Persistence.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
 				CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */,
+				CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */,
+				CDB075572A81D9980004DE7B /* Masjid.swift in Sources */,
 				CDB075432A7F53F00004DE7B /* SProfileView.swift in Sources */,
+				CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */,
 				CDB0750C2A7F4C860004DE7B /* SabeelApp.swift in Sources */,
 				CDB075182A7F4C870004DE7B /* Sabeel.xcdatamodeld in Sources */,
 				CDB0753D2A7F4F120004DE7B /* Color+Ext.swift in Sources */,
