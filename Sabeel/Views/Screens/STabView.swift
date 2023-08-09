@@ -18,10 +18,12 @@ struct STabView: View {
                 .tabItem {
                     Label("Map", systemImage: "map")
                 }
-            SProfileView()
-                .tabItem {
-                    Label("mySabeel", systemImage: "person.crop.circle")
-                }
+            NavigationView {
+                SProfileView()
+            }
+            .tabItem {
+                Label("mySabeel", systemImage: "person.crop.circle")
+            }
         }
         .accentColor(.brandPrimary)
         

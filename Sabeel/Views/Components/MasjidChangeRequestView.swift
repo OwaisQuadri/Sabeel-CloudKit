@@ -47,11 +47,11 @@ struct MasjidChangeRequestView: View {
     }
     
     var isEdited: Bool { // TODO: have state variable for this later
-        let email = $email.wrappedValue == Optional("") ? nil : $email.wrappedValue
-        let phoneNumber = $phoneNumber.wrappedValue == Optional("") ? nil : $phoneNumber.wrappedValue
-        let website = $website.wrappedValue == Optional("") ? nil : $website.wrappedValue
-        let proposal = Masjid(name: $name.wrappedValue, email: email , address: $address.wrappedValue, phoneNumber: phoneNumber, website: website, prayerTimes: $prayerTimes.wrappedValue, changeRequest: $selectedMasjid.wrappedValue.changeRequest)
-        return $selectedMasjid.wrappedValue != proposal
+        let email = email == Optional("") ? nil : email
+        let phoneNumber = phoneNumber == Optional("") ? nil : phoneNumber
+        let website = website == Optional("") ? nil : website
+        let proposal = Masjid(name: name, email: email , address: address, phoneNumber: phoneNumber, website: website, prayerTimes: prayerTimes, changeRequest: selectedMasjid.changeRequest)
+        return selectedMasjid != proposal
     }
     
     var body: some View {
@@ -62,15 +62,9 @@ struct MasjidChangeRequestView: View {
                         // header for voting on a changerequest
                         VStack {
                             Text(changeRequest.name)
-                                .font(.title)
-                                .bold()
-                                .frame(maxWidth: .infinity)
-                                .foregroundColor(.brandPrimary)
+                                .masjidTitle()
                             Text(changeRequest.address)
-                                .font(.caption)
-                                .foregroundColor(.brandSecondary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
+                                .masjidSubtitle()
                         }
                         Button {
                             withAnimation (.easeInOut) {
@@ -89,12 +83,12 @@ struct MasjidChangeRequestView: View {
                     HStack (alignment: .center ) {
                         // header for creatng a changerequest
                         VStack {
-                            Text($name.wrappedValue)
+                            Text(name)
                                 .font(.title)
                                 .bold()
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(.brandPrimary)
-                            Text($address.wrappedValue)
+                            Text(address)
                                 .font(.caption)
                                 .foregroundColor(.brandSecondary)
                                 .lineLimit(1)
@@ -103,10 +97,10 @@ struct MasjidChangeRequestView: View {
                         Button {
                             withAnimation (.easeInOut) {
                                 if isEdited {
-#warning("unable to set value for custom object inside binding")
+                                #warning("unable to set value for custom object inside binding")
                                     // TODO: implement viewModel
-                                    self.selectedMasjid.changeRequest = MasjidChangeRequest(name: $name.wrappedValue, email: $email.wrappedValue, address: $address.wrappedValue, phoneNumber: $phoneNumber.wrappedValue, website: $website.wrappedValue, prayerTimes: $prayerTimes.wrappedValue, yesVotes: 1, noVotes: 0, votesToPass: 2)
-                                    if let _ = $selectedMasjid.wrappedValue.changeRequest {
+                                    self.selectedMasjid.changeRequest = MasjidChangeRequest(name: name, email: email, address: address, phoneNumber: phoneNumber, website: website, prayerTimes: prayerTimes, yesVotes: 1, noVotes: 0, votesToPass: 2)
+                                    if let _ = selectedMasjid.changeRequest {
                                         dismiss()
                                     }
                                 } else {
@@ -214,7 +208,7 @@ struct MasjidChangeRequestView: View {
                                     Text("Juma \(index + 1) :")
                                 }
                                 Button (role: .destructive){
-                                    self.prayerTimes.juma.remove(at: index)
+                                    prayerTimes.juma.remove(at: index)
                                 } label: {
                                     Label("", systemImage: "trash")
                                 }
@@ -222,10 +216,10 @@ struct MasjidChangeRequestView: View {
                                 
                             }
                         }
-                        if $prayerTimes.wrappedValue.juma.count < 3 {
+                        if prayerTimes.juma.count < 3 {
                             Button {
                                 withAnimation (.easeOut) {
-                                    self.prayerTimes.juma.append($prayerTimes.wrappedValue.dhuhr)
+                                    self.prayerTimes.juma.append(prayerTimes.dhuhr)
                                 }
                             } label: {
                                 HStack {

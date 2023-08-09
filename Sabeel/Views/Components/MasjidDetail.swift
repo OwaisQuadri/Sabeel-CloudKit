@@ -12,23 +12,12 @@ struct MasjidDetail: View {
     @State private var showContactInfo: Bool = false
     @State private var showChangeTimingsView: Bool = false
     var body: some View {
-        if $selectedMasjid.wrappedValue != nil {
+        if selectedMasjid != nil {
             ZStack {
-                if !$showChangeTimingsView.wrappedValue {
+                if !showChangeTimingsView {
                     VStack(alignment: .center) {
                         HStack (alignment: .center ) {
-                            VStack {
-                                Text(selectedMasjid?.name ?? "Unknown")
-                                    .font(.title)
-                                    .bold()
-                                    .frame(maxWidth: .infinity)
-                                    .foregroundColor(.brandPrimary)
-                                Text(selectedMasjid?.address ?? "Unknown")
-                                    .font(.caption)
-                                    .foregroundColor(.brandSecondary)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
-                            }
+                            MasjidHeadline(selectedMasjid: selectedMasjid)
                             Button{
                                 withAnimation(.easeInOut){
                                     showContactInfo = true
@@ -42,15 +31,15 @@ struct MasjidDetail: View {
                                     Button("Send an Email") {
                                         print( "send to email")
                                     }
-                                    .disabled($selectedMasjid.wrappedValue?.email == nil)
+                                    .disabled(selectedMasjid?.email == nil)
                                     Button("Call") {
                                         print( "send to call")
                                     }
-                                    .disabled($selectedMasjid.wrappedValue?.phoneNumber == nil)
+                                    .disabled(selectedMasjid?.phoneNumber == nil)
                                     Button("Visit Website") {
                                         print( "send to website" )
                                     }
-                                    .disabled($selectedMasjid.wrappedValue?.website == nil)
+                                    .disabled(selectedMasjid?.website == nil)
                                     Button(role: .destructive) {
                                         withAnimation (.easeInOut) {
                                             self.showChangeTimingsView = true
@@ -96,41 +85,41 @@ struct MasjidDetail: View {
                                     Text("Fajr")
                                     Spacer()
                                     Divider().padding(.horizontal)
-                                    Text($selectedMasjid.wrappedValue!.prayerTimes.fajr)
+                                    Text(selectedMasjid!.prayerTimes.fajr)
                                 }
                                 HStack{
                                     Text("Dhuhr")
                                     Spacer()
                                     Divider().padding(.horizontal)
-                                    Text($selectedMasjid.wrappedValue!.prayerTimes.dhuhr)
+                                    Text(selectedMasjid!.prayerTimes.dhuhr)
                                 }
                                 HStack{
                                     Text("Asr")
                                     Spacer()
                                     Divider().padding(.horizontal)
-                                    Text($selectedMasjid.wrappedValue!.prayerTimes.asr)
+                                    Text(selectedMasjid!.prayerTimes.asr)
                                 }
                                 HStack{
                                     Text("Maghrib")
                                     Spacer()
                                     Divider().padding(.horizontal)
-                                    Text($selectedMasjid.wrappedValue!.prayerTimes.maghrib)
+                                    Text(selectedMasjid!.prayerTimes.maghrib)
                                 }
                                 HStack{
                                     Text("Isha")
                                     Spacer()
                                     Divider().padding(.horizontal)
-                                    Text($selectedMasjid.wrappedValue!.prayerTimes.isha)
+                                    Text(selectedMasjid!.prayerTimes.isha)
                                 }
                             }
                             Section("Juma"){
-                                ForEach( 0..<$selectedMasjid.wrappedValue!.prayerTimes.juma.count, id: \.self) { index in
+                                ForEach( 0..<selectedMasjid!.prayerTimes.juma.count, id: \.self) { index in
                                     
                                     HStack{
                                         Text("Juma \(index+1)")
                                         Spacer()
                                         Divider().padding(.horizontal)
-                                        Text($selectedMasjid.wrappedValue!.prayerTimes.juma[index])
+                                        Text(selectedMasjid!.prayerTimes.juma[index])
                                     }
                                 }
                             }

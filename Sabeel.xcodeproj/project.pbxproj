@@ -29,6 +29,12 @@
 		CDB075572A81D9980004DE7B /* Masjid.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075562A81D9980004DE7B /* Masjid.swift */; };
 		CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */; };
 		CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */; };
+		CDB0755D2A830AF20004DE7B /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */; };
+		CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */; };
+		CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075602A83305D0004DE7B /* PrayerStatsView.swift */; };
+		CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075622A8330C00004DE7B /* PersonalInfoView.swift */; };
+		CDB075672A8334510004DE7B /* View+CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075662A8334510004DE7B /* View+CustomModifiers.swift */; };
+		CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075682A83349E0004DE7B /* MasjidHeadline.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +83,12 @@
 		CDB075562A81D9980004DE7B /* Masjid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Masjid.swift; sourceTree = "<group>"; };
 		CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequest.swift; sourceTree = "<group>"; };
 		CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimes.swift; sourceTree = "<group>"; };
+		CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
+		CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandLargeBanner.swift; sourceTree = "<group>"; };
+		CDB075602A83305D0004DE7B /* PrayerStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerStatsView.swift; sourceTree = "<group>"; };
+		CDB075622A8330C00004DE7B /* PersonalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoView.swift; sourceTree = "<group>"; };
+		CDB075662A8334510004DE7B /* View+CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CustomModifiers.swift"; sourceTree = "<group>"; };
+		CDB075682A83349E0004DE7B /* MasjidHeadline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidHeadline.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +140,8 @@
 		CDB0750A2A7F4C860004DE7B /* Sabeel */ = {
 			isa = PBXGroup;
 			children = (
+				CDB0756D2A83375F0004DE7B /* Views */,
+				CDB0756A2A8336D00004DE7B /* Extensions */,
 				CDB075542A81D9840004DE7B /* Models */,
 				CDB0754F2A8006450004DE7B /* Helpers */,
 				CDB0753B2A7F4CDD0004DE7B /* Sabeel.entitlements */,
@@ -137,16 +151,6 @@
 				CDB075192A7F4C870004DE7B /* Info.plist */,
 				CDB075162A7F4C870004DE7B /* Sabeel.xcdatamodeld */,
 				CDB075112A7F4C870004DE7B /* Preview Content */,
-				CDB0753C2A7F4F120004DE7B /* Color+Ext.swift */,
-				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
-				CDB075402A7F53E50004DE7B /* SMapView.swift */,
-				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
-				CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */,
-				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
-				CDB075442A7F54220004DE7B /* SFeedView.swift */,
-				CDB075462A7F54390004DE7B /* SFriendsListView.swift */,
-				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
-				CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */,
 			);
 			path = Sabeel;
 			sourceTree = "<group>";
@@ -192,6 +196,68 @@
 				CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		CDB0756A2A8336D00004DE7B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0756B2A8336E00004DE7B /* General */,
+				CDB0756C2A8336E60004DE7B /* Other */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CDB0756B2A8336E00004DE7B /* General */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */,
+				CDB0753C2A7F4F120004DE7B /* Color+Ext.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		CDB0756C2A8336E60004DE7B /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075662A8334510004DE7B /* View+CustomModifiers.swift */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
+		CDB0756D2A83375F0004DE7B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075702A8337C40004DE7B /* Components */,
+				CDB0756F2A83376F0004DE7B /* Screens */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		CDB0756F2A83376F0004DE7B /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
+				CDB075442A7F54220004DE7B /* SFeedView.swift */,
+				CDB075402A7F53E50004DE7B /* SMapView.swift */,
+				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
+				CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */,
+				CDB075462A7F54390004DE7B /* SFriendsListView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		CDB075702A8337C40004DE7B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */,
+				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
+				CDB075682A83349E0004DE7B /* MasjidHeadline.swift */,
+				CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */,
+				CDB075622A8330C00004DE7B /* PersonalInfoView.swift */,
+				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
+				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -325,21 +391,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDB075412A7F53E50004DE7B /* SMapView.swift in Sources */,
+				CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */,
+				CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */,
 				CDB075452A7F54220004DE7B /* SFeedView.swift in Sources */,
+				CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */,
 				CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */,
 				CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */,
 				CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */,
 				CDB0753F2A7F53A60004DE7B /* STabView.swift in Sources */,
+				CDB0755D2A830AF20004DE7B /* NotificationSettingsView.swift in Sources */,
 				CDB075152A7F4C870004DE7B /* Persistence.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
 				CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */,
 				CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */,
 				CDB075572A81D9980004DE7B /* Masjid.swift in Sources */,
+				CDB075672A8334510004DE7B /* View+CustomModifiers.swift in Sources */,
 				CDB075432A7F53F00004DE7B /* SProfileView.swift in Sources */,
 				CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */,
 				CDB0750C2A7F4C860004DE7B /* SabeelApp.swift in Sources */,
 				CDB075182A7F4C870004DE7B /* Sabeel.xcdatamodeld in Sources */,
 				CDB0753D2A7F4F120004DE7B /* Color+Ext.swift in Sources */,
+				CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */,
 				CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
