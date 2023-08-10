@@ -35,6 +35,17 @@
 		CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075622A8330C00004DE7B /* PersonalInfoView.swift */; };
 		CDB075672A8334510004DE7B /* View+CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075662A8334510004DE7B /* View+CustomModifiers.swift */; };
 		CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075682A83349E0004DE7B /* MasjidHeadline.swift */; };
+		CDB075722A8348F70004DE7B /* SabeelProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075712A8348F70004DE7B /* SabeelProfile.swift */; };
+		CDB075742A834A780004DE7B /* PrayerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075732A834A780004DE7B /* PrayerStats.swift */; };
+		CDB075762A834DF40004DE7B /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075752A834DF40004DE7B /* MockData.swift */; };
+		CDB075792A83526A0004DE7B /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075782A83526A0004DE7B /* CloudKitManager.swift */; };
+		CDB0757C2A8353900004DE7B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0757B2A8353900004DE7B /* Constants.swift */; };
+		CDB0757E2A8356D80004DE7B /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0757D2A8356D80004DE7B /* CKRecord+Ext.swift */; };
+		CDB075862A849B560004DE7B /* MasjidChangeRequestVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075852A849B560004DE7B /* MasjidChangeRequestVM.swift */; };
+		CDB075882A849C7F0004DE7B /* SMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075872A849C7F0004DE7B /* SMapViewModel.swift */; };
+		CDB0758A2A849EC30004DE7B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075892A849EC30004DE7B /* LocationManager.swift */; };
+		CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */; };
+		CDB0758F2A84D3110004DE7B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0758E2A84D3110004DE7B /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +100,17 @@
 		CDB075622A8330C00004DE7B /* PersonalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoView.swift; sourceTree = "<group>"; };
 		CDB075662A8334510004DE7B /* View+CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CustomModifiers.swift"; sourceTree = "<group>"; };
 		CDB075682A83349E0004DE7B /* MasjidHeadline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidHeadline.swift; sourceTree = "<group>"; };
+		CDB075712A8348F70004DE7B /* SabeelProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SabeelProfile.swift; sourceTree = "<group>"; };
+		CDB075732A834A780004DE7B /* PrayerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerStats.swift; sourceTree = "<group>"; };
+		CDB075752A834DF40004DE7B /* MockData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockData.swift; sourceTree = "<group>"; };
+		CDB075782A83526A0004DE7B /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		CDB0757B2A8353900004DE7B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		CDB0757D2A8356D80004DE7B /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
+		CDB075852A849B560004DE7B /* MasjidChangeRequestVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequestVM.swift; sourceTree = "<group>"; };
+		CDB075872A849C7F0004DE7B /* SMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMapViewModel.swift; sourceTree = "<group>"; };
+		CDB075892A849EC30004DE7B /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidDetailViewModel.swift; sourceTree = "<group>"; };
+		CDB0758E2A84D3110004DE7B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,10 +162,9 @@
 		CDB0750A2A7F4C860004DE7B /* Sabeel */ = {
 			isa = PBXGroup;
 			children = (
+				CDB0757A2A83536C0004DE7B /* Utilities */,
 				CDB0756D2A83375F0004DE7B /* Views */,
-				CDB0756A2A8336D00004DE7B /* Extensions */,
 				CDB075542A81D9840004DE7B /* Models */,
-				CDB0754F2A8006450004DE7B /* Helpers */,
 				CDB0753B2A7F4CDD0004DE7B /* Sabeel.entitlements */,
 				CDB0750B2A7F4C860004DE7B /* SabeelApp.swift */,
 				CDB0750F2A7F4C870004DE7B /* Assets.xcassets */,
@@ -192,8 +213,11 @@
 			isa = PBXGroup;
 			children = (
 				CDB075562A81D9980004DE7B /* Masjid.swift */,
-				CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */,
 				CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */,
+				CDB075732A834A780004DE7B /* PrayerStats.swift */,
+				CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */,
+				CDB075712A8348F70004DE7B /* SabeelProfile.swift */,
+				CDB075752A834DF40004DE7B /* MockData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +236,7 @@
 			children = (
 				CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */,
 				CDB0753C2A7F4F120004DE7B /* Color+Ext.swift */,
+				CDB0757D2A8356D80004DE7B /* CKRecord+Ext.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -236,12 +261,15 @@
 		CDB0756F2A83376F0004DE7B /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CDB0758B2A84A70D0004DE7B /* MasjidDetail */,
+				CDB075842A849B2A0004DE7B /* MasjidChangeRequestView */,
+				CDB075832A849B040004DE7B /* SProfileView */,
+				CDB075822A849AF50004DE7B /* SMapView */,
 				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
 				CDB075442A7F54220004DE7B /* SFeedView.swift */,
-				CDB075402A7F53E50004DE7B /* SMapView.swift */,
-				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
 				CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */,
 				CDB075462A7F54390004DE7B /* SFriendsListView.swift */,
+				CDB0758E2A84D3110004DE7B /* OnboardingView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -250,14 +278,67 @@
 			isa = PBXGroup;
 			children = (
 				CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */,
-				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
 				CDB075682A83349E0004DE7B /* MasjidHeadline.swift */,
-				CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */,
 				CDB075622A8330C00004DE7B /* PersonalInfoView.swift */,
 				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
 				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		CDB075772A8352410004DE7B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075782A83526A0004DE7B /* CloudKitManager.swift */,
+				CDB075892A849EC30004DE7B /* LocationManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CDB0757A2A83536C0004DE7B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0754F2A8006450004DE7B /* Helpers */,
+				CDB0756A2A8336D00004DE7B /* Extensions */,
+				CDB075772A8352410004DE7B /* Services */,
+				CDB0757B2A8353900004DE7B /* Constants.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		CDB075822A849AF50004DE7B /* SMapView */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075402A7F53E50004DE7B /* SMapView.swift */,
+				CDB075872A849C7F0004DE7B /* SMapViewModel.swift */,
+			);
+			path = SMapView;
+			sourceTree = "<group>";
+		};
+		CDB075832A849B040004DE7B /* SProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
+			);
+			path = SProfileView;
+			sourceTree = "<group>";
+		};
+		CDB075842A849B2A0004DE7B /* MasjidChangeRequestView */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */,
+				CDB075852A849B560004DE7B /* MasjidChangeRequestVM.swift */,
+			);
+			path = MasjidChangeRequestView;
+			sourceTree = "<group>";
+		};
+		CDB0758B2A84A70D0004DE7B /* MasjidDetail */ = {
+			isa = PBXGroup;
+			children = (
+				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
+				CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */,
+			);
+			path = MasjidDetail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -393,13 +474,19 @@
 				CDB075412A7F53E50004DE7B /* SMapView.swift in Sources */,
 				CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */,
 				CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */,
+				CDB075762A834DF40004DE7B /* MockData.swift in Sources */,
+				CDB0758A2A849EC30004DE7B /* LocationManager.swift in Sources */,
+				CDB075722A8348F70004DE7B /* SabeelProfile.swift in Sources */,
 				CDB075452A7F54220004DE7B /* SFeedView.swift in Sources */,
 				CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */,
 				CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */,
+				CDB0757E2A8356D80004DE7B /* CKRecord+Ext.swift in Sources */,
 				CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */,
 				CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */,
 				CDB0753F2A7F53A60004DE7B /* STabView.swift in Sources */,
+				CDB0757C2A8353900004DE7B /* Constants.swift in Sources */,
 				CDB0755D2A830AF20004DE7B /* NotificationSettingsView.swift in Sources */,
+				CDB0758F2A84D3110004DE7B /* OnboardingView.swift in Sources */,
 				CDB075152A7F4C870004DE7B /* Persistence.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
 				CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */,
@@ -408,11 +495,16 @@
 				CDB075672A8334510004DE7B /* View+CustomModifiers.swift in Sources */,
 				CDB075432A7F53F00004DE7B /* SProfileView.swift in Sources */,
 				CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */,
+				CDB075742A834A780004DE7B /* PrayerStats.swift in Sources */,
 				CDB0750C2A7F4C860004DE7B /* SabeelApp.swift in Sources */,
+				CDB075862A849B560004DE7B /* MasjidChangeRequestVM.swift in Sources */,
 				CDB075182A7F4C870004DE7B /* Sabeel.xcdatamodeld in Sources */,
 				CDB0753D2A7F4F120004DE7B /* Color+Ext.swift in Sources */,
 				CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */,
 				CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */,
+				CDB075792A83526A0004DE7B /* CloudKitManager.swift in Sources */,
+				CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */,
+				CDB075882A849C7F0004DE7B /* SMapViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +667,9 @@
 				DEVELOPMENT_TEAM = 944MKRCGTA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -605,6 +700,9 @@
 				DEVELOPMENT_TEAM = 944MKRCGTA;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

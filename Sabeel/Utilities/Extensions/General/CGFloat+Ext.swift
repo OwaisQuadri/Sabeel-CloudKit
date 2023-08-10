@@ -12,7 +12,7 @@ extension CGFloat {
         case width
         case height
     }
-    static func relativeToScreen(_ dimension: Dimension, ratio: CGFloat) -> CGFloat {
+    static func relativeToScreen(_ dimension: Dimension, ratio: CGFloat = 1.0) -> CGFloat {
         switch dimension {
             case .width:
                 return UIScreen.main.bounds.size.width * ratio

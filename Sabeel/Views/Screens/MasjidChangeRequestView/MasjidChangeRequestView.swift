@@ -8,36 +8,14 @@
 import SwiftUI
 
 struct MasjidChangeRequestView: View {
+    @EnvironmentObject private var locationManager: LocationManager
+    
+    @StateObject private var vm = MasjidChangeRequestVM()
+    
     @Binding var isShowingThisView: Bool
-    @Binding var selectedMasjid: Masjid
     
-    @State var showNotEditedAlert = false
-    
-    @State var name: String = ""
-    @State var address: String = ""
-    @State var email: String = ""
-    @State var phoneNumber: String = ""
-    @State var website: String = ""
-    @State var prayerTimes: PrayerTimes = PrayerTimes()
-    
-    init(isShowingThisView: Binding<Bool>, selectedMasjid: Binding<Masjid>) {
-        self._selectedMasjid = selectedMasjid
-        self.name = selectedMasjid.wrappedValue.name
-        self.address = selectedMasjid.wrappedValue.address
-        self.email = selectedMasjid.wrappedValue.email ?? ""
-        self.phoneNumber = selectedMasjid.wrappedValue.phoneNumber ?? ""
-        self.website = selectedMasjid.wrappedValue.website ?? ""
-        self.prayerTimes = selectedMasjid.wrappedValue.prayerTimes
-        if let selectedChangeRequest = selectedMasjid.wrappedValue.changeRequest {
-            self.name = selectedChangeRequest.name
-            self.address = selectedChangeRequest.address
-            self.email = selectedChangeRequest.email ?? ""
-            self.phoneNumber = selectedChangeRequest.phoneNumber ?? ""
-            self.website = selectedChangeRequest.website ?? ""
-            self.prayerTimes = selectedChangeRequest.prayerTimes
-        }
-        
-        self._isShowingThisView = isShowingThisView
+    init(showChangeTimingsView: Binding<Bool>) {
+        self._isShowingThisView = showChangeTimingsView
     }
     
     func dismiss() {
@@ -46,81 +24,59 @@ struct MasjidChangeRequestView: View {
         }
     }
     
-    var isEdited: Bool { // TODO: have state variable for this later
-        let email = email == Optional("") ? nil : email
-        let phoneNumber = phoneNumber == Optional("") ? nil : phoneNumber
-        let website = website == Optional("") ? nil : website
-        let proposal = Masjid(name: name, email: email , address: address, phoneNumber: phoneNumber, website: website, prayerTimes: prayerTimes, changeRequest: selectedMasjid.changeRequest)
-        return selectedMasjid != proposal
-    }
-    
     var body: some View {
         VStack(alignment: .leading) {
-            Group {
-                if let changeRequest = selectedMasjid.changeRequest {
-                    HStack (alignment: .center ) {
-                        // header for voting on a changerequest
-                        VStack {
-                            Text(changeRequest.name)
-                                .masjidTitle()
-                            Text(changeRequest.address)
-                                .masjidSubtitle()
-                        }
-                        Button {
-                            withAnimation (.easeInOut) {
-                                self.isShowingThisView = false
+                if vm.isFromChangeRequest {
+                    Group {
+                        HStack (alignment: .center ) {
+                            // header for voting on a changerequest
+                            VStack {
+                                Text(vm.selectedChangeRequest!.name)
+                                    .masjidTitle()
+                                Text(vm.selectedChangeRequest!.address)
+                                    .masjidSubtitle()
                             }
-                        } label: {
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(.brandSecondary)
+                            Button {
+                                dismiss()
+                            } label: {
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(.brandSecondary)
+                            }
+                            .padding()
+                            
                         }
-                        .padding()
-                        
+                        .padding(.horizontal)
+                        .padding(.top)
                     }
-                    .padding(.horizontal)
-                    .padding(.top)
                 } else {
                     HStack (alignment: .center ) {
                         // header for creatng a changerequest
                         VStack {
-                            Text(name)
+                            Text(vm.name)
                                 .font(.title)
                                 .bold()
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(.brandPrimary)
-                            Text(address)
+                            Text(vm.address)
                                 .font(.caption)
                                 .foregroundColor(.brandSecondary)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.7)
                         }
                         Button {
-                            withAnimation (.easeInOut) {
-                                if isEdited {
-                                #warning("unable to set value for custom object inside binding")
-                                    // TODO: implement viewModel
-                                    self.selectedMasjid.changeRequest = MasjidChangeRequest(name: name, email: email, address: address, phoneNumber: phoneNumber, website: website, prayerTimes: prayerTimes, yesVotes: 1, noVotes: 0, votesToPass: 2)
-                                    if let _ = selectedMasjid.changeRequest {
-                                        dismiss()
-                                    }
-                                } else {
-                                    showNotEditedAlert = true
-                                }
-                            }
+                            vm.checkMarkButtonAction()
                         } label: {
                             Image(systemName: "checkmark")
                                 .foregroundColor(.brandPrimary)
                                 .fontWeight(.bold)
                             
                         }
-                        .alert("No Edits Made", isPresented: $showNotEditedAlert, actions: {
+                        .alert("No Edits Made", isPresented: $vm.showNotEditedAlert, actions: {
                             Button("OK", role: .cancel) {}
                         })
                         .padding()
                         Button {
-                            withAnimation (.easeInOut) {
-                                self.isShowingThisView = false
-                            }
+                            dismiss()
                         } label: {
                             Image(systemName: "chevron.down")
                                 .foregroundColor(.brandSecondary)
@@ -132,14 +88,15 @@ struct MasjidChangeRequestView: View {
                     .padding(.top)
                     // body for creating a changerequest
                     Group {
-                        TextField("Address", text: $address)
+                        TextField("Address", text: $vm.address)
                         HStack {
-                            TextField("Email", text: $email)
-                            TextField("Phone Number", text: $phoneNumber)
+                            TextField("Email", text: $vm.email)
+                            TextField("Phone Number", text: $vm.phoneNumber)
                         }
-                        TextField("Website", text: $website)
+                        TextField("Website", text: $vm.website)
                     }
                     .padding(.horizontal)
+                    Divider()
                     Group {
                         Text("Prayer Timings:")
                             .font(.caption)
@@ -147,7 +104,7 @@ struct MasjidChangeRequestView: View {
                         LabeledContent {
                             HStack{
                                 Spacer()
-                                TextField("Fajr", text: $prayerTimes.fajr)
+                                TextField("Fajr", text: $vm.prayerTimes.fajr)
                                     .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                             }
                         } label: {
@@ -156,7 +113,7 @@ struct MasjidChangeRequestView: View {
                         LabeledContent {
                             HStack{
                                 Spacer()
-                                TextField("Dhuhr", text: $prayerTimes.dhuhr)
+                                TextField("Dhuhr", text: $vm.prayerTimes.dhuhr)
                                     .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                             }
                         } label: {
@@ -165,7 +122,7 @@ struct MasjidChangeRequestView: View {
                         LabeledContent {
                             HStack{
                                 Spacer()
-                                TextField("Asr", text: $prayerTimes.asr)
+                                TextField("Asr", text: $vm.prayerTimes.asr)
                                     .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                             }
                         } label: {
@@ -174,7 +131,7 @@ struct MasjidChangeRequestView: View {
                         LabeledContent {
                             HStack{
                                 Spacer()
-                                TextField("Maghrib", text: $prayerTimes.maghrib)
+                                TextField("Maghrib", text: $vm.prayerTimes.maghrib)
                                     .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                             }
                         }label: {
@@ -183,7 +140,7 @@ struct MasjidChangeRequestView: View {
                         LabeledContent {
                             HStack{
                                 Spacer()
-                                TextField("Isha", text: $prayerTimes.isha)
+                                TextField("Isha", text: $vm.prayerTimes.isha)
                                     .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                             }
                         } label: {
@@ -196,19 +153,19 @@ struct MasjidChangeRequestView: View {
                         Text("Juma Timings:")
                             .font(.caption)
                             .foregroundColor(.brandSecondary)
-                        ForEach(prayerTimes.juma.indices, id: \.self) { index in
+                        ForEach(vm.prayerTimes.juma.indices, id: \.self) { index in
                             HStack {
                                 LabeledContent {
                                     HStack{
                                         Spacer()
-                                        TextField("Juma \(index + 1)", text: $prayerTimes.juma[index])
+                                        TextField("Juma \(index + 1)", text: $vm.prayerTimes.juma[index])
                                             .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
                                     }
                                 } label: {
                                     Text("Juma \(index + 1) :")
                                 }
                                 Button (role: .destructive){
-                                    prayerTimes.juma.remove(at: index)
+                                    vm.prayerTimes.juma.remove(at: index)
                                 } label: {
                                     Label("", systemImage: "trash")
                                 }
@@ -216,10 +173,10 @@ struct MasjidChangeRequestView: View {
                                 
                             }
                         }
-                        if prayerTimes.juma.count < 3 {
+                        if vm.prayerTimes.juma.count < 3 {
                             Button {
                                 withAnimation (.easeOut) {
-                                    self.prayerTimes.juma.append(prayerTimes.dhuhr)
+                                    vm.prayerTimes.juma.append(vm.prayerTimes.dhuhr)
                                 }
                             } label: {
                                 HStack {
@@ -236,7 +193,7 @@ struct MasjidChangeRequestView: View {
                     
                 }
                 
-            }
+            
             Spacer()
             
             
@@ -246,13 +203,16 @@ struct MasjidChangeRequestView: View {
         .cornerRadius(20).shadow(radius: 20)
         .padding()
         .textFieldStyle(.roundedBorder)
+        .onAppear {
+            vm.getChangeRequest(for: locationManager)
+        }
     }
 }
 
 struct MasjidChangeRequestView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            MasjidChangeRequestView(isShowingThisView: .constant(true), selectedMasjid: .constant(Masjid()))
+            MasjidChangeRequestView(showChangeTimingsView: .constant(true))
         }
         
     }

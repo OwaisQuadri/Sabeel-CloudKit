@@ -92,11 +92,8 @@ struct PrayerStatsHeaderView: View {
             Button {
                 hideStats.toggle()
             } label: {
-                HStack {
-                    Text(hideStats ? "SHOW" : "HIDE")
-                    Image(systemName: hideStats ? "eye.slash" : "eye")
-                }
-                .font(.callout)
+                Text(hideStats ? "SHOW" : "HIDE")
+                    .font(.callout)
             }
             .foregroundColor(.brandSecondary)
         }
@@ -114,7 +111,7 @@ struct StatsBackgroundView: View {
 struct PrayerStatsView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            PrayerStatsView(prayerStats: .constant(PrayerStats()))
+            PrayerStatsView(prayerStats: .constant(PrayerStats(record: MockData.prayerStats)))
         }
     }
 }
