@@ -30,7 +30,7 @@ struct PersonalInfoView: View {
                         .onSubmit {
                             dismissKeyboard()
                         }
-                    Button { if vm.isCreatingNewProfile {dismissKeyboard();vm.createProfile()} else { dismissKeyboard();vm.saveProfile()} } label: {Text(vm.isCreatingNewProfile ? "Create" : "Save")}
+                    Button { if vm.profileContext == .create {dismissKeyboard();vm.createProfile()} else { dismissKeyboard();vm.saveProfile()} } label: {Text(vm.profileContext == .create ? "Create" : "Save")}
                 }
                 .textFieldStyle(.roundedBorder)
             }

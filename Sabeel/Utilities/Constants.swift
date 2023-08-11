@@ -17,6 +17,5 @@ enum SabeelRecordType: String {
 
 enum UserDefaultsKey {
     static let kHasSeenOnboardingView = "hasSeenOnboardingView"
-    static let kIsCreatingNewProfile = "isCreatingNewProfile"
 }
 

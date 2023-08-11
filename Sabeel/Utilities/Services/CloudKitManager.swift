@@ -29,10 +29,9 @@ final class CloudKitManager {
     // MARK: - User Functions
     var isSignedIntoiCloud: Bool = false
     var userGivenName: String?
-    var profileRecordId: CKRecord.ID?
     var userProfile: SabeelProfile?
     
-    func getiCloudStatus(completion: @escaping (Result<Bool,Error>) -> Void) {
+    func getiCloudStatus(completion: @escaping (Result<Bool, Error>) -> Void) {
         container.accountStatus { status, err in
             switch status {
                 case .couldNotDetermine:
@@ -57,7 +56,7 @@ final class CloudKitManager {
         }
     }
     
-    func requestApplicationPermission (completion: @escaping (Result<Bool,Error>) -> Void) {
+    func requestApplicationPermission (completion: @escaping (Result<Bool, Error>) -> Void) {
         container.requestApplicationPermission([.userDiscoverability]) { status, err in
             if status == .granted {
                 completion(.success(true))
@@ -85,7 +84,7 @@ final class CloudKitManager {
         }
     }
     
-    func createProfile(records: [CKRecord], completion: @escaping (Result<[CKRecord],Error>) -> Void) {
+    func createProfile(records: [CKRecord], completion: @escaping (Result<[CKRecord], Error>) -> Void) {
         
         let operation = CKModifyRecordsOperation(recordsToSave: records)
         operation.modifyRecordsCompletionBlock = {recordsToSave, _, err in // _=deletedRecordIds
@@ -98,11 +97,16 @@ final class CloudKitManager {
         // add operation to db
         CKContainer.default().publicCloudDatabase.add(operation) // its like task.resume() to fire off operation
     }
-}
-extension CloudKitManager {
-    // MARK: - Fetch single record
-    func fetchRecord(with id: CKRecord.ID, completion: @escaping (Result<CKRecord,Error>) -> Void) {
-        CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, err in
+    // MARK: - Save and Fetch single records
+    func save(record: CKRecord, completion: @escaping (Result<CKRecord, Error>) -> Void) {
+        publicDB.save(record) { record, err in
+            guard let record = record, err == nil else { completion(.failure(err!)); return }
+            completion(.success(record))
+        }
+    }
+    
+    func fetchRecord(with id: CKRecord.ID, completion: @escaping (Result<CKRecord, Error>) -> Void) {
+        publicDB.fetch(withRecordID: id) { record, err in
             guard let record = record, err == nil else { completion(.failure(err!)); return }
             completion(.success(record))
         }
@@ -119,7 +123,7 @@ extension CloudKitManager {
         self.publicDB.add(operation)
     }
     
-    func create<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) {
+    func create<T:CKObject>(_ item: T,completion: @escaping (Result<Bool, Error>) -> Void) {
         
         // get record
         let record = item.record
@@ -128,7 +132,7 @@ extension CloudKitManager {
         save(record, completion: completion)
     }
     
-    func save(_ record: CKRecord, completion: @escaping (Result<Bool,Error>) -> Void) {
+    private func save(_ record: CKRecord, completion: @escaping (Result<Bool, Error>) -> Void) {
         publicDB.save(record) { returnedRecord, err in
             if let err = err { completion(.failure(err)) } else { completion(.success(true)) }
         }
@@ -202,16 +206,16 @@ extension CloudKitManager {
     }
     
     // MARK: UPDATE
-    func update<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) { create(item, completion: completion) }
+    func update<T:CKObject>(_ item: T,completion: @escaping (Result<Bool, Error>) -> Void) { create(item, completion: completion) }
     
     
     
     // MARK: DELETE
-    func delete<T:CKObject>(_ item: T, completion: @escaping (Result<Bool,Error>) -> Void) {
+    func delete<T:CKObject>(_ item: T, completion: @escaping (Result<Bool, Error>) -> Void) {
         self.delete(item.record, completion: completion)
     }
     
-    private func delete(_ record: CKRecord, completion: @escaping (Result<Bool,Error>) -> Void) {
+    private func delete(_ record: CKRecord, completion: @escaping (Result<Bool, Error>) -> Void) {
         publicDB.delete(withRecordID: record.recordID) { returnedRecordId, err in
             if let err = err {
                 completion(.failure(err))

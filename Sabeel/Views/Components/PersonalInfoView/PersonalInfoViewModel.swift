@@ -14,7 +14,13 @@ final class PersonalInfoViewModel: ObservableObject {
     @Published var name : String = ""
     @Published var handle : String = ""
     @Published var isSaved : Bool = true
-    @Published var isCreatingNewProfile: Bool = true
+    
+    private var existingProfileRecord: CKRecord? {
+        didSet {
+            profileContext = .update
+        }
+    }
+    var profileContext: ProfileContext = .create
     
     func startUpChecks() {
         CloudKitManager.shared.getiCloudStatus { status in
@@ -35,6 +41,25 @@ final class PersonalInfoViewModel: ObservableObject {
             // show alert
             alertItem = AlertContext.invalidProfile
             return
+        }
+        guard let profileRecord = existingProfileRecord else {
+            alertItem = AlertContext.unableToGetProfile
+            return
+        }
+        // update fields
+        profileRecord[SabeelProfile.kName] = name
+        profileRecord[SabeelProfile.kUsername] = handle
+        showLoadingView()
+        CloudKitManager.shared.save(record: profileRecord) { res in
+            DispatchQueue.main.async { [self] in
+                hideLoadingView()
+                switch res {
+                    case .success(_):
+                        alertItem = AlertContext.updateProfileSuccess
+                    case .failure(_):
+                        alertItem = AlertContext.updateProfileFailure
+                }
+            }
         }
     }
     
@@ -73,7 +98,10 @@ final class PersonalInfoViewModel: ObservableObject {
             DispatchQueue.main.async { [self] in
                 hideLoadingView()
                 switch res {
-                    case .success(_):
+                    case .success(let records):
+                        for record in records where record.recordType == SabeelRecordType.profile.rawValue {
+                            existingProfileRecord = record
+                        }
                         alertItem = AlertContext.accountCreatedSuccessfully
                     case .failure(let err):
                         alertItem = AlertContext.genericErrorAlert(for: err)
@@ -95,12 +123,10 @@ final class PersonalInfoViewModel: ObservableObject {
             DispatchQueue.main.async { [self] in
                 hideLoadingView()
                 switch res {
-                    case .success(let profileRecord):
+                    case .success(let record):
+                        existingProfileRecord = record
                         // update UI on main thread
-                        // we can set the "isCreatingNewProfile" UserDefaults key to false
-                        UserDefaults.standard.set(false, forKey: UserDefaultsKey.kIsCreatingNewProfile)
-                        isCreatingNewProfile = false
-                        let profile                         = SabeelProfile(record: profileRecord)
+                        let profile                         = SabeelProfile(record: record)
                         name                                = profile.name
                         handle                              = profile.username
                         CloudKitManager.shared.userProfile  = profile
@@ -115,3 +141,5 @@ final class PersonalInfoViewModel: ObservableObject {
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
 }
+
+enum ProfileContext { case create, update }

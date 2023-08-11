@@ -50,6 +50,21 @@ struct AlertContext {
         "Unable to Create Profile",
         "Dismiss"
     )
+    static let unableToGetProfile = AlertItem(
+        "Error",
+        "Unable to Get Profile",
+        "Dismiss"
+    )
+    static let updateProfileSuccess = AlertItem(
+        "Profile Update Success!",
+        "Your Sabeel Profile was saved successfully",
+        "Nice!"
+    )
+    static let updateProfileFailure = AlertItem(
+        "Unable to Save Profile",
+        "We were unable to save your profile at this time, Please try again later",
+        "Okay"
+    )
     // MARK: - AlertContext Template
     static let name = AlertItem(
         "",
