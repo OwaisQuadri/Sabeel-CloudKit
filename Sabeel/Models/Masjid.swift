@@ -17,50 +17,59 @@ struct Masjid {
     static let kPrayerTimes     = "prayerTimings"
     static let kChangeRequest   = "changeRequest"
     static let kLocation        = "location"
+    static let kIsConfirmed     = "isConfirmed"
     
     // structure
-    var record: CKRecord // must have
-    var name: String
-    var email: String!
-    var address: String
-    var phoneNumber : String!
-    var website : String!
-    var prayerTimes: CKRecord.Reference!
-    var changeRequest: CKRecord.Reference? = nil // TODO: create prepopulated values on the request maker when changing times for prayer + warn when leaving page if edits are made
-    var location: CLLocation!
+    var record          : CKRecord // must have
+    var name            : String
+    var email           : String!
+    var address         : String
+    var phoneNumber     : String!
+    var website         : String!
+    var prayerTimes     : CKRecord.Reference!
+    var changeRequest   : CKRecord.Reference? = nil
+    var location        : CLLocation!
+    var isConfirmed     : Bool
 }
 
 extension Masjid: CKObject {
     // create init befcause we want to create it using a record
     init(record: CKRecord) { // failable add ? after init
-        self.record      =    record
-        name        =          record[Masjid.kName] as? String ?? "Un-Named Mosque"
-        email       =         record[Masjid.kEmail] as? String
-        address     =       record[Masjid.kAddress] as? String ?? "Nowhere to be found"
-        phoneNumber =   record[Masjid.kPhoneNumber] as? String
-        website     =       record[Masjid.kWebsite] as? String
-        prayerTimes =   record[Masjid.kPrayerTimes] as? CKRecord.Reference
-        location    =      record[Masjid.kLocation] as? CLLocation
+        self.record     =   record
+        name            =   record          [Masjid.kName] as? String ?? "Un-Named Mosque"
+        email           =   record         [Masjid.kEmail] as? String
+        address         =   record       [Masjid.kAddress] as? String ?? "Nowhere to be found"
+        phoneNumber     =   record   [Masjid.kPhoneNumber] as? String
+        website         =   record       [Masjid.kWebsite] as? String
+        prayerTimes     =   record   [Masjid.kPrayerTimes] as? CKRecord.Reference
+        location        =   record      [Masjid.kLocation] as? CLLocation
+        changeRequest   =   record [Masjid.kChangeRequest] as? CKRecord.Reference
+        isConfirmed     =   record   [Masjid.kIsConfirmed] as? Bool ?? false
     }
-    // create memberwise init through record
+    
+    // create memberwise init by creating record and passing it through our other init
     init?(
-        name        : String,
-        email       : String?,
-        address     : String,
-        phoneNumber : String?,
-        website     : String?,
-        prayerTimes : PrayerTimes,
-        location    : CLLocation
+        name            : String,
+        email           : String?,
+        address         : String,
+        phoneNumber     : String?,
+        website         : String?,
+        prayerTimes     : PrayerTimes,
+        location        : CLLocation,
+        changeRequest   : MasjidChangeRequest? = nil,
+        isConfirmed     : Bool = false
     ) {
         let record = CKRecord(.masjid)
         
-        record[Masjid.kName]        = name
-        record[Masjid.kEmail]       = email
-        record[Masjid.kAddress]     = address
-        record[Masjid.kPhoneNumber] = phoneNumber
-        record[Masjid.kWebsite]     = website
-        record[Masjid.kPrayerTimes] = prayerTimes.record.reference(.deleteSelf)
-        record[Masjid.kLocation]    = location
+        record[Masjid.kName]            = name
+        record[Masjid.kEmail]           = email
+        record[Masjid.kAddress]         = address
+        record[Masjid.kPhoneNumber]     = phoneNumber
+        record[Masjid.kWebsite]         = website
+        record[Masjid.kPrayerTimes]     = prayerTimes.record.reference(.deleteSelf)
+        record[Masjid.kChangeRequest]   = changeRequest?.record.reference(.deleteSelf)
+        record[Masjid.kLocation]        = location
+        record[Masjid.kIsConfirmed]     = isConfirmed
         
         self.init(record: record)
     }

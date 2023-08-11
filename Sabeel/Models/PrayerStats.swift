@@ -76,6 +76,7 @@ extension PrayerStats: CKObject {
         
         self.init(record: record)
     }
+    // init empty TODO: can refactor to use memberwise init
     init (){
         let record = CKRecord(.prayerStats)
         

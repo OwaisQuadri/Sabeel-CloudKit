@@ -9,12 +9,12 @@ import CloudKit
 
 struct SabeelProfile {
     // create constants for cloudkit keys
-    static let kName = "name"
-    static let kUsername = "username"
-    static let kPrayerStats = "prayerStats"
-    static let kIsPremium = "isPremium"
-    static let kHomeAddress = "homeAddress"
-    static let kHomeLocation = "homeLocation"
+    static let kName            = "name"
+    static let kUsername        = "username"
+    static let kPrayerStats     = "prayerStats"
+    static let kIsPremium       = "isPremium"
+    static let kHomeAddress     = "homeAddress"
+    static let kHomeLocation    = "homeLocation"
     // editable to change schema^
         
     // structure
@@ -46,7 +46,7 @@ extension SabeelProfile: CKObject {
         homeAddress     : String?,
         homeLocation    : CLLocation?,
         isPremium       : Bool,
-        prayerStats     : PrayerStats
+        prayerStats     : PrayerStats = PrayerStats() // empty if not init'ed
         // editable to change schema^
     ) {
         let record = CKRecord(.profile)

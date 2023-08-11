@@ -16,31 +16,31 @@ struct PrayerTimes : Equatable {
     static let kIsha    = "isha"
     static let kJuma    = "juma"
     // structure
-    var record : CKRecord
-    var fajr       : String
-    var dhuhr      : String
-    var asr        : String
-    var maghrib    : String
-    var isha       : String   
-    var juma       : [String]
+    var record      :  CKRecord
+    var fajr        :  String
+    var dhuhr       :  String
+    var asr         :  String
+    var maghrib     :  String
+    var isha        :  String
+    var juma        : [String]
 }
 extension PrayerTimes: CKObject {
     // create extended init befcause we also want to create it using a record
     init(record: CKRecord) {
         self.record = record
-        fajr       = record[PrayerTimes.kFajr   ] as? String ?? "N/A"
-        dhuhr      = record[PrayerTimes.kDhuhr  ] as? String ?? "N/A"
-        asr        = record[PrayerTimes.kAsr    ] as? String ?? "N/A"
-        maghrib    = record[PrayerTimes.kMaghrib] as? String ?? "N/A"
-        isha       = record[PrayerTimes.kIsha   ] as? String ?? "N/A"
+        fajr       = record[PrayerTimes.kFajr   ] as?  String ?? "N/A"
+        dhuhr      = record[PrayerTimes.kDhuhr  ] as?  String ?? "N/A"
+        asr        = record[PrayerTimes.kAsr    ] as?  String ?? "N/A"
+        maghrib    = record[PrayerTimes.kMaghrib] as?  String ?? "N/A"
+        isha       = record[PrayerTimes.kIsha   ] as?  String ?? "N/A"
         juma       = record[PrayerTimes.kJuma   ] as? [String] ?? []
     }
     init(
-        fajr       : String,
-        dhuhr      : String,
-        asr        : String,
-        maghrib    : String,
-        isha       : String,
+        fajr       :  String,
+        dhuhr      :  String,
+        asr        :  String,
+        maghrib    :  String,
+        isha       :  String,
         juma       : [String]
     ) {
         let record = CKRecord(.prayerTimes)
