@@ -1,24 +1,23 @@
 //
-//  PersonalInfoView.swift
+//  PersonalInfoViewModel.swift
 //  Sabeel
 //
-//  Created by Owais on 2023-08-08.
+//  Created by Owais on 2023-08-10.
 //
 
-import SwiftUI
+import Foundation
 import CloudKit
 
-struct PersonalInfoView: View {
-    @State private var alertItem: AlertItem?
-    @State var name : String = ""
-    @State var handle : String = ""
-    @State var isSaved : Bool = true
-    @State var isCreatingNewProfile: Bool = true
-    let kIsCreatingNewProfile = "isCreatingNewProfile"
+final class PersonalInfoViewModel: ObservableObject {
     
-    var hasSeenOnboardView: Bool {
-        return UserDefaults.standard.bool(forKey: kIsCreatingNewProfile)
-    }
+    @Published var alertItem: AlertItem?
+    @Published var name : String = ""
+    @Published var handle : String = ""
+    @Published var isSaved : Bool = true
+    @Published var isCreatingNewProfile: Bool = true
+    
+    private let kIsCreatingNewProfile = "isCreatingNewProfile"
+    
     func startUpChecks() {
         CloudKitManager.shared.getiCloudStatus { status in
             switch status {
@@ -52,6 +51,7 @@ struct PersonalInfoView: View {
         else { return false }
         return true
     }
+    
     func createProfile() {
         guard isValidProfile() else {
             // show alert
@@ -98,47 +98,6 @@ struct PersonalInfoView: View {
             }
         }
     }
-    var body: some View {
-        VStack(alignment: .leading){
-            Text("Personal Info:")
-                .font(.caption)
-                .foregroundColor(.brandSecondary)
-            HStack {
-                TextField("Name", text: $name)
-                    .minimumScaleFactor(0.75)
-                
-                TextField("Username", text: $handle)
-                    .minimumScaleFactor(0.75)
-                    .bold()
-                    .foregroundColor(.brandPrimary)
-                    .frame(width: .relativeToScreen(.width, ratio: 0.3))
-                Button {
-                    isCreatingNewProfile ? createProfile() : saveProfile()
-                } label: {
-                    HStack{
-                        Text(isCreatingNewProfile ? "Create" : "Save" )
-                    }
-                }
-            }
-            .textFieldStyle(.roundedBorder)
-            
-        }
-        .onAppear {
-            startUpChecks()
-        }
-        .toolbar {
-            Button {
-                dismissKeyboard()
-            } label: {
-                Image(systemName: "keyboard.chevron.compact.down")
-                    .tint(.brandPrimary)
-            }
-            
-        }
-        .alert(item: $alertItem) { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-        }
-    }
     
     func getProfile() {
         // need user id to
@@ -163,12 +122,11 @@ struct PersonalInfoView: View {
                         return
                     }
                     // now i have my profile record
-                    
-                    // we can set the "isCreatingNewProfile" UserDefaults key to false
-                    UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
-                    isCreatingNewProfile = false
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [self] in
                         // update UI on main thread
+                        // we can set the "isCreatingNewProfile" UserDefaults key to false
+                        UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
+                        isCreatingNewProfile = false
                         let profile                         = SabeelProfile(record: profileRecord)
                         name                                = profile.name
                         handle                              = profile.username
@@ -180,13 +138,3 @@ struct PersonalInfoView: View {
         }
     }
 }
-
-
-struct PersonalInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            PersonalInfoView()
-        }
-    }
-}
-
