@@ -14,11 +14,11 @@ struct STabView: View {
         TabView {
             SFeedView()
                 .tabItem {
-                    Label("Feed", systemImage: "tray.fill")
+                    Label("Feed", systemImage: "tray.fill") // TODO: change to "friends" or "community"
                 }
             SMapView()
                 .tabItem {
-                    Label("Map", systemImage: "map")
+                    Label("Map", systemImage: "map")// TODO: Make default
                 }
             NavigationView {
                 SProfileView()

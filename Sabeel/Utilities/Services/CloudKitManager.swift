@@ -96,10 +96,8 @@ final class CloudKitManager {
         }
     }
     
-    let kIsCreatingNewProfile = "isCreatingNewProfile"
     func fetchUserProfile () {
         if let userProfileReference = userRecord?["userProfile"] as? CKRecord.Reference {
-            UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
             read(recordType: .profile, predicate: NSPredicate(format: "recordID = %@", userProfileReference.recordID)) { (items: [SabeelProfile]) in
                 if items.count == 1 {
                     let profile = items[0]

@@ -32,12 +32,7 @@ struct PersonalInfoView: View {
                     }
             }
         }
-        
-        CloudKitManager.shared.getUserRecord()
-        
-        // autofill if user is logged in
-        name = ""
-        handle = CloudKitManager.shared.userProfile?.username ?? ""
+        getProfile()
     }
     
     func saveProfile() {
@@ -101,55 +96,6 @@ struct PersonalInfoView: View {
                 CKContainer.default().publicCloudDatabase.add(operation) // its like task.resume() to fire off operation
                 
             }
-            
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        //create profile and send to CK
-        guard let profile = SabeelProfile (name: name, username: handle, homeAddress: nil, homeLocation: nil, isPremium: false, prayerStats: PrayerStats()) else {
-            self.alertItem = AlertItem("CKError", "some issue creating a profile object" , "bruh")
-            return
-        }
-        guard let userRecord = CloudKitManager.shared.userRecord else {
-            self.alertItem = AlertItem("CKError", "some issue getting user record" , "yikes")
-            return
-        }
-        // if userRecord already has a userProfile Reference:
-        let userProfileReference = CKRecord.Reference(record: CloudKitManager.shared.userProfile?.record ?? profile.record, action: .none)
-        userRecord["userProfile"] = userProfileReference
-        // check if this new username exists
-        CloudKitManager.shared.read(recordType: .profile, predicate: NSPredicate(format: "username = %@", handle)) { (profiles: [SabeelProfile]) in
-            if profiles.count > 0 {
-                // if it does: alert
-                DispatchQueue.main.async {
-                    self.alertItem = AlertItem("This username already exists within our system", "Please select a new username", "Okay")
-                }
-            } else {
-                // else: update record
-                CloudKitManager.shared.userProfile = SabeelProfile(record: CKRecord(recordType: SabeelRecordType.profile.rawValue , recordID: userProfileReference.recordID))
-                guard var userProfile = CloudKitManager.shared.userProfile else { return }
-                userProfile.name = self.name
-                userProfile.username = self.handle
-                
-                let operation = CKModifyRecordsOperation(recordsToSave: [userRecord, userProfile.record])
-                operation.modifyRecordsResultBlock = { res in
-                    switch res {
-                        case .success():
-                            // set iscreatingprofile to false
-                            self.isCreatingNewProfile = false
-                            UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
-                        case .failure(let err):
-                            self.alertItem = AlertItem("Error", err.localizedDescription, "Dismiss")
-                    }
-                }
-                CloudKitManager.shared.add(operation: operation)
-            }
         }
     }
     var body: some View {
@@ -196,12 +142,43 @@ struct PersonalInfoView: View {
     
     func getProfile() {
         // need user id to
-        
-        // get user record to
-        
-        // get user profile
+        CKContainer.default().fetchUserRecordID { recordId, err in
+            guard let recordId = recordId, err == nil else {
+                self.alertItem = AlertItem("recordId", err?.localizedDescription ?? "error" , "ok")
+                return
+            }
+            // get user record to
+            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordId) { userRecord, err in
+                guard let userRecord = userRecord, err == nil else {
+                    self.alertItem = AlertItem("userRecord", err?.localizedDescription ?? "error" , "ok")
+                    return
+                }
+                // grab reference from that
+                let profileReference = userRecord["userProfile"] as! CKRecord.Reference
+                let profileRecordID = profileReference.recordID
+                
+                CKContainer.default().publicCloudDatabase.fetch(withRecordID: profileRecordID) { profileRecord, err in
+                    guard let profileRecord = profileRecord, err == nil else {
+                        self.alertItem = AlertItem("profileRecord", err?.localizedDescription ?? "error" , "ok")
+                        return
+                    }
+                    // now i have my profile record
+                    
+                    // we can set the "isCreatingNewProfile" UserDefaults key to false
+                    UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
+                    isCreatingNewProfile = false
+                    DispatchQueue.main.async {
+                        // update UI on main thread
+                        let profile                         = SabeelProfile(record: profileRecord)
+                        name                                = profile.name
+                        handle                              = profile.username
+                        CloudKitManager.shared.userProfile  = profile
+                        
+                    }
+                }
+            }
+        }
     }
-
 }
 
 
