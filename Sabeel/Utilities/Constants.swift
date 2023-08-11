@@ -15,3 +15,8 @@ enum SabeelRecordType: String {
     case users = "Users"
 }
 
+enum UserDefaultsKey {
+    static let kHasSeenOnboardingView = "hasSeenOnboardingView"
+    static let kIsCreatingNewProfile = "isCreatingNewProfile"
+}
+

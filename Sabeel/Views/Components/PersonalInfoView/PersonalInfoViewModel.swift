@@ -16,8 +16,6 @@ final class PersonalInfoViewModel: ObservableObject {
     @Published var isSaved : Bool = true
     @Published var isCreatingNewProfile: Bool = true
     
-    private let kIsCreatingNewProfile = "isCreatingNewProfile"
-    
     func startUpChecks() {
         CloudKitManager.shared.getiCloudStatus { status in
             switch status {
@@ -125,7 +123,7 @@ final class PersonalInfoViewModel: ObservableObject {
                     DispatchQueue.main.async { [self] in
                         // update UI on main thread
                         // we can set the "isCreatingNewProfile" UserDefaults key to false
-                        UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
+                        UserDefaults.standard.set(false, forKey: UserDefaultsKey.kIsCreatingNewProfile)
                         isCreatingNewProfile = false
                         let profile                         = SabeelProfile(record: profileRecord)
                         name                                = profile.name

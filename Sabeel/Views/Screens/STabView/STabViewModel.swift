@@ -9,15 +9,14 @@ import Foundation
 
 final class STabViewModel: ObservableObject {
     @Published var isShowingOnboarding: Bool = false
-    let kHasSeenOnboardingView = "hasSeenOnboardingView"
     
     var hasSeenOnboardView: Bool {
-        return UserDefaults.standard.bool(forKey: kHasSeenOnboardingView)
+        return UserDefaults.standard.bool(forKey: UserDefaultsKey.kHasSeenOnboardingView)
     }
     func startUpChecks() {
         if !hasSeenOnboardView {
             isShowingOnboarding = true
-            UserDefaults.standard.set(true, forKey: kHasSeenOnboardingView)
+            UserDefaults.standard.set(true, forKey: UserDefaultsKey.kHasSeenOnboardingView)
         }
     }
 }
