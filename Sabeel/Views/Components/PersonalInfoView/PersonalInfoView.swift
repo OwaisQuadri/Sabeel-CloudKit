@@ -19,26 +19,21 @@ struct PersonalInfoView: View {
                 .foregroundColor(.brandSecondary)
             HStack {
                 TextField("Name", text: $vm.name).minimumScaleFactor(0.75)
+                    .submitLabel(.done)
                 TextField("Username", text: $vm.handle)
                     .minimumScaleFactor(0.75)
                     .bold()
                     .foregroundColor(.brandPrimary)
                     .frame(width: .relativeToScreen(.width, ratio: 0.3))
-                Button { vm.isCreatingNewProfile ? vm.createProfile() : vm.saveProfile() } label: {
-                    HStack{
-                        Text(vm.isCreatingNewProfile ? "Create" : "Save" )
+                    .submitLabel(.done)
+                    .onSubmit {
+                        dismissKeyboard()
                     }
-                }
+                Button { if vm.isCreatingNewProfile {dismissKeyboard();vm.createProfile()} else { dismissKeyboard();vm.saveProfile()} } label: {Text(vm.isCreatingNewProfile ? "Create" : "Save")}
             }
             .textFieldStyle(.roundedBorder)
         }
         .onAppear { vm.startUpChecks() }
-        .toolbar {
-            Button { dismissKeyboard() } label: {
-                Image(systemName: "keyboard.chevron.compact.down")
-                    .tint(.brandPrimary)
-            }
-        }
         .alert(item: $vm.alertItem) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }

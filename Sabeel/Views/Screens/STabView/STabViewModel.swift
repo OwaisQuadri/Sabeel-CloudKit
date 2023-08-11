@@ -18,5 +18,6 @@ final class STabViewModel: ObservableObject {
             isShowingOnboarding = true
             UserDefaults.standard.set(true, forKey: UserDefaultsKey.kHasSeenOnboardingView)
         }
+        CloudKitManager.shared.getUserRecord()
     }
 }

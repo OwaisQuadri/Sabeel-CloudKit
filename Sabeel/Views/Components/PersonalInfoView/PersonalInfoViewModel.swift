@@ -64,63 +64,39 @@ final class PersonalInfoViewModel: ObservableObject {
         }
         let profileRecord = createdProfile.record
         
-        CKContainer.default().fetchUserRecordID { recordId, err in
-            guard let recordId = recordId, err == nil else {
-                self.alertItem = AlertItem("recordId", err?.localizedDescription ?? "error" , "ok")
-                return
-            }
-            // get userrecord from pub db
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordId) { userRecord, err in
-                guard let userRecord = userRecord, err == nil else {
-                    self.alertItem = AlertItem("userRecord", err?.localizedDescription ?? "error" , "ok")
-                    return
-                }
-                // create reference on UserRecord to the SabeelProfile we created
-                userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
-                // honestly dont ever do .deleteself
-                
-                // create operation to save user and profile
-                let operation = CKModifyRecordsOperation(recordsToSave: [userRecord,profileRecord])
-                operation.modifyRecordsCompletionBlock = {recordsToSave, _, err in // _=deletedRecordIds
-                    guard let savedRecords = recordsToSave, err == nil else {
-                        self.alertItem = AlertItem("savedRecords", err?.localizedDescription ?? "error" , "ok")
-                        return
-                    }
-                    // print the saved records
-                    print(savedRecords)
-                    self.alertItem = AlertItem("Success", "\(savedRecords)" , "sick!!")
-                }
-                // add operation to db
-                CKContainer.default().publicCloudDatabase.add(operation) // its like task.resume() to fire off operation
-                
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            self.alertItem = AlertItem("Error", "User is not signed into iCloud", "Dismiss")
+            return
+        }
+        // create reference on UserRecord to the SabeelProfile we created
+        userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
+        
+        CloudKitManager.shared.createProfile(records: [userRecord,profileRecord]) { res in
+            switch res {
+                case .success(_):
+                    self.alertItem = AlertItem("Success", "Account Created Successfully!" , "Nice")
+                case .failure(let err):
+                    self.alertItem = AlertItem("savedRecords", err.localizedDescription , "ok")
             }
         }
     }
     
     func getProfile() {
-        // need user id to
-        CKContainer.default().fetchUserRecordID { recordId, err in
-            guard let recordId = recordId, err == nil else {
-                self.alertItem = AlertItem("recordId", err?.localizedDescription ?? "error" , "ok")
-                return
-            }
-            // get user record to
-            CKContainer.default().publicCloudDatabase.fetch(withRecordID: recordId) { userRecord, err in
-                guard let userRecord = userRecord, err == nil else {
-                    self.alertItem = AlertItem("userRecord", err?.localizedDescription ?? "error" , "ok")
-                    return
-                }
-                // grab reference from that
-                let profileReference = userRecord["userProfile"] as! CKRecord.Reference
-                let profileRecordID = profileReference.recordID
-                
-                CKContainer.default().publicCloudDatabase.fetch(withRecordID: profileRecordID) { profileRecord, err in
-                    guard let profileRecord = profileRecord, err == nil else {
-                        self.alertItem = AlertItem("profileRecord", err?.localizedDescription ?? "error" , "ok")
-                        return
-                    }
-                    // now i have my profile record
-                    DispatchQueue.main.async { [self] in
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            self.alertItem = AlertItem("Error", "User is not signed into iCloud", "Dismiss")
+            return
+        }
+        // grab reference from that
+        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else {
+            // TODO: show alert
+            return
+        }
+        let profileRecordID = profileReference.recordID
+        CloudKitManager.shared.fetchRecord(with: profileRecordID) { res in
+            DispatchQueue.main.async { [self] in
+                switch res {
+                    case .success(let profileRecord):
+                        
                         // update UI on main thread
                         // we can set the "isCreatingNewProfile" UserDefaults key to false
                         UserDefaults.standard.set(false, forKey: UserDefaultsKey.kIsCreatingNewProfile)
@@ -130,7 +106,9 @@ final class PersonalInfoViewModel: ObservableObject {
                         handle                              = profile.username
                         CloudKitManager.shared.userProfile  = profile
                         
-                    }
+                        
+                    case .failure(let err):
+                        self.alertItem = AlertItem("profileRecord", err.localizedDescription, "Dismiss" )
                 }
             }
         }

@@ -27,7 +27,6 @@ final class CloudKitManager {
     
     // MARK: - User Functions
     var isSignedIntoiCloud: Bool = false
-    var userRecord: CKRecord?
     var userGivenName: String?
     var profileRecordId: CKRecord.ID?
     var userProfile: SabeelProfile?
@@ -67,7 +66,9 @@ final class CloudKitManager {
         }
     }
     
-    func getUserRecord () {
+    var userRecord: CKRecord?
+    
+    func getUserRecord() { // called in background (on lauch, only need it if we need an account for some tasks)
         container.fetchUserRecordID { recordId, err in// get recordId
             guard let recordId = recordId, err == nil else {
                 print(err!.localizedDescription)
@@ -79,37 +80,33 @@ final class CloudKitManager {
                     return
                 }
                 self.userRecord = userRecord
-                if let profileReference = userRecord["userProfile"] as? CKRecord.Reference {
-                    self.profileRecordId = profileReference.recordID
-                }
             }
         }
     }
     
-    func fetchUserRecordId(completion: @escaping (Result<CKRecord.ID, Error>) -> Void) {
-        container.fetchUserRecordID { userRecordId, err in
-            if let id = userRecordId {
-                completion(.success(id))
-            } else {
+    func createProfile(records: [CKRecord], completion: @escaping (Result<[CKRecord],Error>) -> Void) {
+        
+        let operation = CKModifyRecordsOperation(recordsToSave: records)
+        operation.modifyRecordsCompletionBlock = {recordsToSave, _, err in // _=deletedRecordIds
+            guard let savedRecords = recordsToSave, err == nil else {
                 completion(.failure(err!))
+                return
             }
+            completion(.success(savedRecords))
         }
+        // add operation to db
+        CKContainer.default().publicCloudDatabase.add(operation) // its like task.resume() to fire off operation
     }
-    
-    func fetchUserProfile () {
-        if let userProfileReference = userRecord?["userProfile"] as? CKRecord.Reference {
-            read(recordType: .profile, predicate: NSPredicate(format: "recordID = %@", userProfileReference.recordID)) { (items: [SabeelProfile]) in
-                if items.count == 1 {
-                    let profile = items[0]
-                    DispatchQueue.main.async {
-                        CloudKitManager.shared.userProfile = profile
-                    }
-                }
-            }
+}
+extension CloudKitManager {
+    // MARK: - Fetch single record
+    func fetchRecord(with id: CKRecord.ID, completion: @escaping (Result<CKRecord,Error>) -> Void) {
+        CKContainer.default().publicCloudDatabase.fetch(withRecordID: id) { record, err in
+            guard let record = record, err == nil else { completion(.failure(err!)); return }
+            completion(.success(record))
         }
     }
 }
-
 
 
 // MARK: - CRUD Functions
