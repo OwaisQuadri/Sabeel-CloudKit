@@ -51,6 +51,6 @@ struct SMapView: View {
 
 struct SMapView_Previews: PreviewProvider {
     static var previews: some View {
-        SMapView()
+        SMapView().environmentObject(LocationManager([Masjid(record: MockData.masjid)]))
     }
 }

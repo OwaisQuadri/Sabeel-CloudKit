@@ -28,12 +28,12 @@ struct SabeelProfile {
     // editable to change schema^
 }
 
-extension SabeelProfile {
+extension SabeelProfile: CKObject {
     // create init befcause we want to create it using a record
     init(record: CKRecord) {
         self.record     = record
         name            = record[SabeelProfile.kName]           as? String ?? "N/A"
-        homeAddress     = record[SabeelProfile.kName]           as? String
+        homeAddress     = record[SabeelProfile.kHomeAddress]    as? String
         homeLocation    = record[SabeelProfile.kHomeLocation]   as? CLLocation
         username        = record[SabeelProfile.kUsername]       as? String ??  "N/A"
         isPremium       = record[SabeelProfile.kIsPremium]      as? Bool ?? false
@@ -52,10 +52,13 @@ extension SabeelProfile {
         let record = CKRecord(.profile)
         
         record[SabeelProfile.kName]         = name
-        record[SabeelProfile.kName]         = username
-        record[SabeelProfile.kHomeLocation] = homeAddress
-        record[SabeelProfile.kUsername]     = homeLocation
+        record[SabeelProfile.kUsername]     = username
+        record[SabeelProfile.kHomeAddress]  = homeAddress
+        record[SabeelProfile.kHomeLocation] = homeLocation
         record[SabeelProfile.kIsPremium]    = isPremium
+        
+        CloudKitManager.shared.create(prayerStats) { _ in
+        }
         record[SabeelProfile.kPrayerStats]  = prayerStats.record.reference(.deleteSelf)
         // editable to change schema^
         

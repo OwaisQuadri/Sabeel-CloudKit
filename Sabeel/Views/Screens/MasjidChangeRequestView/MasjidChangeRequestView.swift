@@ -213,6 +213,7 @@ struct MasjidChangeRequestView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MasjidChangeRequestView(showChangeTimingsView: .constant(true))
+                .environmentObject(LocationManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
         }
         
     }

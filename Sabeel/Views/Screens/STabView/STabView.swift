@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct STabView: View {
+    @ObservedObject private var vm = STabViewModel()
+    
     var body: some View {
         TabView {
             SFeedView()
@@ -25,8 +27,13 @@ struct STabView: View {
                 Label("mySabeel", systemImage: "person.crop.circle")
             }
         }
+        .onAppear{
+            vm.startUpChecks()
+        }
         .accentColor(.brandPrimary)
-        
+        .sheet(isPresented: $vm.isShowingOnboarding ) {
+            OnboardingView(isShowingOnboarding: $vm.isShowingOnboarding)
+        }
     }
 }
 

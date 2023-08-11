@@ -46,6 +46,10 @@
 		CDB0758A2A849EC30004DE7B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075892A849EC30004DE7B /* LocationManager.swift */; };
 		CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */; };
 		CDB0758F2A84D3110004DE7B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0758E2A84D3110004DE7B /* OnboardingView.swift */; };
+		CDBD626E2A85411A0079151E /* STabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD626D2A85411A0079151E /* STabViewModel.swift */; };
+		CDBD62702A85497C0079151E /* SProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD626F2A85497C0079151E /* SProfileViewModel.swift */; };
+		CDBD62722A854D3B0079151E /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62712A854D3B0079151E /* View+Ext.swift */; };
+		CDBD62742A854EE20079151E /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62732A854EE20079151E /* AlertItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +115,10 @@
 		CDB075892A849EC30004DE7B /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidDetailViewModel.swift; sourceTree = "<group>"; };
 		CDB0758E2A84D3110004DE7B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		CDBD626D2A85411A0079151E /* STabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STabViewModel.swift; sourceTree = "<group>"; };
+		CDBD626F2A85497C0079151E /* SProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SProfileViewModel.swift; sourceTree = "<group>"; };
+		CDBD62712A854D3B0079151E /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
+		CDBD62732A854EE20079151E /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */,
+				CDBD62732A854EE20079151E /* AlertItem.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -237,6 +246,7 @@
 				CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */,
 				CDB0753C2A7F4F120004DE7B /* Color+Ext.swift */,
 				CDB0757D2A8356D80004DE7B /* CKRecord+Ext.swift */,
+				CDBD62712A854D3B0079151E /* View+Ext.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -265,7 +275,7 @@
 				CDB075842A849B2A0004DE7B /* MasjidChangeRequestView */,
 				CDB075832A849B040004DE7B /* SProfileView */,
 				CDB075822A849AF50004DE7B /* SMapView */,
-				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
+				CDBD626C2A8541020079151E /* STabView */,
 				CDB075442A7F54220004DE7B /* SFeedView.swift */,
 				CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */,
 				CDB075462A7F54390004DE7B /* SFriendsListView.swift */,
@@ -319,6 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
+				CDBD626F2A85497C0079151E /* SProfileViewModel.swift */,
 			);
 			path = SProfileView;
 			sourceTree = "<group>";
@@ -339,6 +350,15 @@
 				CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */,
 			);
 			path = MasjidDetail;
+			sourceTree = "<group>";
+		};
+		CDBD626C2A8541020079151E /* STabView */ = {
+			isa = PBXGroup;
+			children = (
+				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
+				CDBD626D2A85411A0079151E /* STabViewModel.swift */,
+			);
+			path = STabView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -471,6 +491,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDBD62722A854D3B0079151E /* View+Ext.swift in Sources */,
 				CDB075412A7F53E50004DE7B /* SMapView.swift in Sources */,
 				CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */,
 				CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */,
@@ -489,6 +510,7 @@
 				CDB0758F2A84D3110004DE7B /* OnboardingView.swift in Sources */,
 				CDB075152A7F4C870004DE7B /* Persistence.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
+				CDBD626E2A85411A0079151E /* STabViewModel.swift in Sources */,
 				CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */,
 				CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */,
 				CDB075572A81D9980004DE7B /* Masjid.swift in Sources */,
@@ -500,10 +522,12 @@
 				CDB075862A849B560004DE7B /* MasjidChangeRequestVM.swift in Sources */,
 				CDB075182A7F4C870004DE7B /* Sabeel.xcdatamodeld in Sources */,
 				CDB0753D2A7F4F120004DE7B /* Color+Ext.swift in Sources */,
+				CDBD62742A854EE20079151E /* AlertItem.swift in Sources */,
 				CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */,
 				CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */,
 				CDB075792A83526A0004DE7B /* CloudKitManager.swift in Sources */,
 				CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */,
+				CDBD62702A85497C0079151E /* SProfileViewModel.swift in Sources */,
 				CDB075882A849C7F0004DE7B /* SMapViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

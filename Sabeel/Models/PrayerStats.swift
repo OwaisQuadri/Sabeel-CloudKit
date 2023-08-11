@@ -76,4 +76,20 @@ extension PrayerStats: CKObject {
         
         self.init(record: record)
     }
+    init (){
+        let record = CKRecord(.prayerStats)
+        
+        record[PrayerStats.kfajrAttended    ] = 0
+        record[PrayerStats.kfajrMissed      ] = 0
+        record[PrayerStats.kdhuhrAttended   ] = 0
+        record[PrayerStats.kdhuhrMissed     ] = 0
+        record[PrayerStats.kasrAttended     ] = 0
+        record[PrayerStats.kasrMissed       ] = 0
+        record[PrayerStats.kmaghribAttended ] = 0
+        record[PrayerStats.kmaghribMissed   ] = 0
+        record[PrayerStats.kishaAttended    ] = 0
+        record[PrayerStats.kishaMissed      ] = 0
+        
+        self.init(record: record)
+    }
 }

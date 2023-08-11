@@ -159,5 +159,6 @@ struct MasjidDetail: View {
 struct MasjidDetail_Previews: PreviewProvider {
     static var previews: some View {
         MasjidDetail()
+            .environmentObject(LocationManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
     }
 }

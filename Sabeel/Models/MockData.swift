@@ -34,15 +34,15 @@ struct MockData {
     }
     static var prayerStats: CKRecord {
         let record = CKRecord(.prayerStats)
-        record[PrayerStats.kfajrAttended    ] = 0
+        record[PrayerStats.kfajrAttended    ] = 1
         record[PrayerStats.kfajrMissed      ] = 0
-        record[PrayerStats.kdhuhrAttended   ] = 0
-        record[PrayerStats.kdhuhrMissed     ] = 0
-        record[PrayerStats.kasrAttended     ] = 0
+        record[PrayerStats.kdhuhrAttended   ] = 1
+        record[PrayerStats.kdhuhrMissed     ] = 1
+        record[PrayerStats.kasrAttended     ] = 1
         record[PrayerStats.kasrMissed       ] = 0
-        record[PrayerStats.kmaghribAttended ] = 0
+        record[PrayerStats.kmaghribAttended ] = 1
         record[PrayerStats.kmaghribMissed   ] = 0
-        record[PrayerStats.kishaAttended    ] = 0
+        record[PrayerStats.kishaAttended    ] = 1
         record[PrayerStats.kishaMissed      ] = 0
         return record
     }

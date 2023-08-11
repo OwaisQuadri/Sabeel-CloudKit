@@ -24,7 +24,7 @@ final class MasjidDetailViewModel: ObservableObject {
     func fetchPrayerTimes(for locationManager: LocationManager) {
         
         if let selectedMasjid = locationManager.selectedMasjid {
-            CloudKitManager.shared.fetch(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
+            CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
                 DispatchQueue.main.async {
                     if prayerTimes.count == 1 {
                         print(prayerTimes)

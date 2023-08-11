@@ -40,7 +40,7 @@ final class SMapViewModel: NSObject, ObservableObject {
         }
     }
     func getMasjids(for locationManager: LocationManager){
-        CloudKitManager.shared.fetch(recordType: .masjid, predicate: NSPredicate(value: true), resultsLimit: 1) {items in
+        CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true), resultsLimit: 1) {items in
             DispatchQueue.main.async {
                 locationManager.masjids = items
             }

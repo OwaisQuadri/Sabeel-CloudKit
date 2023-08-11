@@ -9,13 +9,13 @@ import SwiftUI
 
 struct SProfileView: View {
     
-    @State var prayerStats: PrayerStats = PrayerStats(record: MockData.prayerStats)
+    @StateObject var vm = SProfileViewModel()
     
     var body: some View {
         List {
             Section {
                 PersonalInfoView()
-                PrayerStatsView(prayerStats: $prayerStats)
+                PrayerStatsView()
             }
             SSettingsView()
         }

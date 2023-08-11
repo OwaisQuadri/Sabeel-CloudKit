@@ -30,6 +30,7 @@ final class CloudKitManager {
     var userRecord: CKRecord?
     var userGivenName: String?
     var profileRecordId: CKRecord.ID?
+    var userProfile: SabeelProfile?
     
     func getiCloudStatus(completion: @escaping (Result<Bool,Error>) -> Void) {
         container.accountStatus { status, err in
@@ -95,25 +96,17 @@ final class CloudKitManager {
         }
     }
     
-    func discoverUserIdentity (id: CKRecord.ID, completion: @escaping (Result<String, Error>) -> Void) {
-        container.discoverUserIdentity(withUserRecordID: id) { identity, err in
-            if let name = identity?.nameComponents?.givenName {
-                self.userGivenName = name
-                completion(.success(name))
-            } else {
-                completion(.failure(err!))
-            }
-        }
-    }
-    
-    func fetchUserGivenName(completion: @escaping (Result<String, Error>) -> Void) {
-        fetchUserRecordId { userRecordId in
-            switch userRecordId {
-                case .success(let id):
-                    self.discoverUserIdentity(id: id, completion: completion)
-                    break
-                case .failure(let failure):
-                    completion(.failure(failure))
+    let kIsCreatingNewProfile = "isCreatingNewProfile"
+    func fetchUserProfile () {
+        if let userProfileReference = userRecord?["userProfile"] as? CKRecord.Reference {
+            UserDefaults.standard.set(false, forKey: kIsCreatingNewProfile)
+            read(recordType: .profile, predicate: NSPredicate(format: "recordID = %@", userProfileReference.recordID)) { (items: [SabeelProfile]) in
+                if items.count == 1 {
+                    let profile = items[0]
+                    DispatchQueue.main.async {
+                        CloudKitManager.shared.userProfile = profile
+                    }
+                }
             }
         }
     }
@@ -126,11 +119,11 @@ extension CloudKitManager {
     
     
     // MARK: CREATE
-    private func add(operation: CKDatabaseOperation) {
+    func add(operation: CKDatabaseOperation) {
         self.publicDB.add(operation)
     }
     
-    func add<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) {
+    func create<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) {
         
         // get record
         let record = item.record
@@ -145,7 +138,7 @@ extension CloudKitManager {
         }
     }
     // MARK: READ
-    func fetch<T:CKObject>(
+    func read<T:CKObject>(
         recordType: SabeelRecordType,
         predicate: NSPredicate,
         sortDescriptors: [NSSortDescriptor]? = nil,
@@ -213,7 +206,7 @@ extension CloudKitManager {
     }
     
     // MARK: UPDATE
-    func update<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) { add(item, completion: completion) }
+    func update<T:CKObject>(_ item: T,completion: @escaping (Result<Bool,Error>) -> Void) { create(item, completion: completion) }
     
     
     

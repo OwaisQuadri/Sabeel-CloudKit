@@ -37,7 +37,7 @@ final class MasjidChangeRequestVM: ObservableObject {
     
     func getChangeRequest(for locationManager: LocationManager) {
         if let changeRequest = locationManager.selectedMasjid?.changeRequest {
-            CloudKitManager.shared.fetch(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequest.recordID) , resultsLimit: 1) { [self] (changeReq: [MasjidChangeRequest]) in
+            CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequest.recordID) , resultsLimit: 1) { [self] (changeReq: [MasjidChangeRequest]) in
                 DispatchQueue.main.async {
                     if changeReq.count == 1 {
                         // populate from change request
@@ -49,7 +49,7 @@ final class MasjidChangeRequestVM: ObservableObject {
                         self.email = changeRequest.email ?? ""
                         self.phoneNumber = changeRequest.phoneNumber ?? ""
                         self.website = changeRequest.website ?? ""
-                        CloudKitManager.shared.fetch(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", changeRequest.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
+                        CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", changeRequest.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
                             DispatchQueue.main.async {
                                 self.prayerTimes = prayerTimes[0]
                             }
@@ -63,7 +63,7 @@ final class MasjidChangeRequestVM: ObservableObject {
                             self.email = masjid.email ?? ""
                             self.phoneNumber = masjid.phoneNumber ?? ""
                             self.website = masjid.website ?? ""
-                            CloudKitManager.shared.fetch(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", masjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
+                            CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", masjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
                                 DispatchQueue.main.async {
                                     self.prayerTimes = prayerTimes[0]
                                 }
