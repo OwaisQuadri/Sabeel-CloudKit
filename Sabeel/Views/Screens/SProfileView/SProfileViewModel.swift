@@ -11,5 +11,4 @@ final class SProfileViewModel: ObservableObject {
 
     @Published var prayerStats: PrayerStats = PrayerStats(record: MockData.prayerStats)
     
-    
 }

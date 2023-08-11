@@ -5,7 +5,7 @@
 //  Created by Owais on 2023-08-10.
 //
 
-import Foundation
+import SwiftUI
 import CloudKit
 
 final class PersonalInfoViewModel: ObservableObject {
@@ -20,12 +20,10 @@ final class PersonalInfoViewModel: ObservableObject {
         CloudKitManager.shared.getiCloudStatus { status in
             switch status {
                 case .success(_):
+                    break
+                case .failure(let err):
                     DispatchQueue.main.async {
-                        self.alertItem = AlertItem("iCloud logged in!", "Successfully logged in with iCloud.", "OK")
-                    }
-                case .failure(_):
-                    DispatchQueue.main.async {
-                        self.alertItem = AlertItem("iCloud Status Issue", "Please visit settings and ensure you are logged in with iCloud", "OK")
+                        self.alertItem = AlertContext.genericErrorAlert(for: err)
                     }
             }
         }
@@ -59,44 +57,45 @@ final class PersonalInfoViewModel: ObservableObject {
         // Create CKRecord from profile view
         let createdProfile = SabeelProfile(name: name, username: handle, homeAddress: nil, homeLocation: nil, isPremium: false, prayerStats: PrayerStats())
         guard let createdProfile = createdProfile else {
-            self.alertItem = AlertItem("createdProfile", "unable to create profile" , "ok")
+            self.alertItem = AlertContext.unableToCreateProfile
             return
         }
         let profileRecord = createdProfile.record
         
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            self.alertItem = AlertItem("Error", "User is not signed into iCloud", "Dismiss")
+            self.alertItem = AlertContext.noUserRecord
             return
         }
         // create reference on UserRecord to the SabeelProfile we created
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
-        
+        showLoadingView()
         CloudKitManager.shared.createProfile(records: [userRecord,profileRecord]) { res in
-            switch res {
-                case .success(_):
-                    self.alertItem = AlertItem("Success", "Account Created Successfully!" , "Nice")
-                case .failure(let err):
-                    self.alertItem = AlertItem("savedRecords", err.localizedDescription , "ok")
+            DispatchQueue.main.async { [self] in
+                hideLoadingView()
+                switch res {
+                    case .success(_):
+                        alertItem = AlertContext.accountCreatedSuccessfully
+                    case .failure(let err):
+                        alertItem = AlertContext.genericErrorAlert(for: err)
+                }
             }
         }
     }
     
     func getProfile() {
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            self.alertItem = AlertItem("Error", "User is not signed into iCloud", "Dismiss")
+            self.alertItem = AlertContext.noUserRecord
             return
         }
         // grab reference from that
-        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else {
-            // TODO: show alert
-            return
-        }
+        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
         let profileRecordID = profileReference.recordID
+        showLoadingView()
         CloudKitManager.shared.fetchRecord(with: profileRecordID) { res in
             DispatchQueue.main.async { [self] in
+                hideLoadingView()
                 switch res {
                     case .success(let profileRecord):
-                        
                         // update UI on main thread
                         // we can set the "isCreatingNewProfile" UserDefaults key to false
                         UserDefaults.standard.set(false, forKey: UserDefaultsKey.kIsCreatingNewProfile)
@@ -105,12 +104,14 @@ final class PersonalInfoViewModel: ObservableObject {
                         name                                = profile.name
                         handle                              = profile.username
                         CloudKitManager.shared.userProfile  = profile
-                        
-                        
                     case .failure(let err):
-                        self.alertItem = AlertItem("profileRecord", err.localizedDescription, "Dismiss" )
+                        self.alertItem = AlertContext.genericErrorAlert(for: err)
                 }
             }
         }
     }
+    
+    @Published var isLoading: Bool = false
+    private func showLoadingView() { isLoading = true }
+    private func hideLoadingView() { isLoading = false }
 }

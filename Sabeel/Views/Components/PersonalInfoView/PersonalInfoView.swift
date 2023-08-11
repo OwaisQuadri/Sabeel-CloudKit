@@ -13,25 +13,28 @@ struct PersonalInfoView: View {
     @ObservedObject private var vm = PersonalInfoViewModel()
     
     var body: some View {
-        VStack(alignment: .leading){
-            Text("Personal Info:")
-                .font(.caption)
-                .foregroundColor(.brandSecondary)
-            HStack {
-                TextField("Name", text: $vm.name).minimumScaleFactor(0.75)
-                    .submitLabel(.done)
-                TextField("Username", text: $vm.handle)
-                    .minimumScaleFactor(0.75)
-                    .bold()
-                    .foregroundColor(.brandPrimary)
-                    .frame(width: .relativeToScreen(.width, ratio: 0.3))
-                    .submitLabel(.done)
-                    .onSubmit {
-                        dismissKeyboard()
-                    }
-                Button { if vm.isCreatingNewProfile {dismissKeyboard();vm.createProfile()} else { dismissKeyboard();vm.saveProfile()} } label: {Text(vm.isCreatingNewProfile ? "Create" : "Save")}
+        ZStack {
+            VStack(alignment: .leading){
+                Text("Personal Info:")
+                    .font(.caption)
+                    .foregroundColor(.brandSecondary)
+                HStack {
+                    TextField("Name", text: $vm.name).minimumScaleFactor(0.75)
+                        .submitLabel(.done)
+                    TextField("Username", text: $vm.handle)
+                        .minimumScaleFactor(0.75)
+                        .bold()
+                        .foregroundColor(.brandPrimary)
+                        .frame(width: .relativeToScreen(.width, ratio: 0.3))
+                        .submitLabel(.done)
+                        .onSubmit {
+                            dismissKeyboard()
+                        }
+                    Button { if vm.isCreatingNewProfile {dismissKeyboard();vm.createProfile()} else { dismissKeyboard();vm.saveProfile()} } label: {Text(vm.isCreatingNewProfile ? "Create" : "Save")}
+                }
+                .textFieldStyle(.roundedBorder)
             }
-            .textFieldStyle(.roundedBorder)
+            if vm.isLoading { LoadingView() }
         }
         .onAppear { vm.startUpChecks() }
         .alert(item: $vm.alertItem) { alertItem in

@@ -51,6 +51,7 @@
 		CDBD62722A854D3B0079151E /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62712A854D3B0079151E /* View+Ext.swift */; };
 		CDBD62742A854EE20079151E /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62732A854EE20079151E /* AlertItem.swift */; };
 		CDBD62772A85C47D0079151E /* PersonalInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62762A85C47D0079151E /* PersonalInfoViewModel.swift */; };
+		CDBD62792A85D5A80079151E /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62782A85D5A80079151E /* LoadingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +122,7 @@
 		CDBD62712A854D3B0079151E /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		CDBD62732A854EE20079151E /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		CDBD62762A85C47D0079151E /* PersonalInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoViewModel.swift; sourceTree = "<group>"; };
+		CDBD62782A85D5A80079151E /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -294,6 +296,7 @@
 				CDBD62752A85C4690079151E /* PersonalInfoView */,
 				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
 				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
+				CDBD62782A85D5A80079151E /* LoadingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -330,8 +333,8 @@
 		CDB075832A849B040004DE7B /* SProfileView */ = {
 			isa = PBXGroup;
 			children = (
-				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
 				CDBD626F2A85497C0079151E /* SProfileViewModel.swift */,
+				CDB075422A7F53F00004DE7B /* SProfileView.swift */,
 			);
 			path = SProfileView;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */,
 				CDB0757E2A8356D80004DE7B /* CKRecord+Ext.swift in Sources */,
 				CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */,
+				CDBD62792A85D5A80079151E /* LoadingView.swift in Sources */,
 				CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */,
 				CDB0753F2A7F53A60004DE7B /* STabView.swift in Sources */,
 				CDB0757C2A8353900004DE7B /* Constants.swift in Sources */,

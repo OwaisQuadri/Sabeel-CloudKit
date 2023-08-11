@@ -22,5 +22,38 @@ extension AlertItem {
 
 struct AlertContext {
     // MARK - Profile Alerts
-    static let invalidProfile = AlertItem(title: Text("Unable to save"), message: Text("Please ensure that the fields are not blank,\nthe username should not be more than 20 characters,\nand the username should only include letters and numbers").foregroundColor(.red), dismissButton: .default(Text("OK")))
+    static let invalidProfile = AlertItem("Unable to save", "Please ensure that the fields are not blank,\nthe username should not be more than 20 characters,\nand the username should only include letters and numbers", "Dismiss")
+    static let noUserRecord = AlertItem(
+        "No User Record",
+        "You must log into iCloud on your phone in order to utilize your Sabeel Profile. Please log in on your iCloud Settings.",
+        "Dismiss"
+    )
+    static let accountCreatedSuccessfully = AlertItem(
+        "Success",
+        "Account Created Successfully!",
+        "OK"
+    )
+    static let genericErrorAlert = AlertItem(
+        "Error",
+        "Something went wrong",
+        "Dismiss"
+    )
+    static func genericErrorAlert(for err: Error) -> AlertItem {
+        AlertItem(
+            "Error",
+            err.localizedDescription,
+            "Dismiss"
+        )
+    }
+    static let unableToCreateProfile = AlertItem(
+        "Error",
+        "Unable to Create Profile",
+        "Dismiss"
+    )
+    // MARK: - AlertContext Template
+    static let name = AlertItem(
+        "",
+        "",
+        ""
+    )
 }
