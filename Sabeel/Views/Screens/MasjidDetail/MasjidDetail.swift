@@ -12,7 +12,7 @@ struct MasjidDetail: View {
     @EnvironmentObject var locationManager: LocationManager
     
     @StateObject private var vm = MasjidDetailViewModel()
-    
+    // when you need an init for a vm, user observed object
     var body: some View {
             ZStack {
                 if let selectedMasjid = locationManager.selectedMasjid, vm.isShowingThisView {
@@ -34,15 +34,14 @@ struct MasjidDetail: View {
                                 .padding(.leading)
                                 .confirmationDialog("Actions", isPresented: $vm.showContactInfo, titleVisibility: .visible) {
                                     Button("Send an Email") {
-                                        print( "send to email")
                                     }
                                     .disabled(selectedMasjid.email == nil)
                                     Button("Call") {
-                                        print( "send to call")
+                                        vm.callMasjid(with: locationManager)
                                     }
                                     .disabled(selectedMasjid.phoneNumber == nil)
                                     Button("Visit Website") {
-                                        print( "send to website" )
+                                        vm.visitWebsite(with: locationManager)
                                     }
                                     .disabled(selectedMasjid.website == nil)
                                     Button(role: .destructive) {
@@ -73,6 +72,7 @@ struct MasjidDetail: View {
                                 Spacer()
                                 Button {
                                     // send to google maps
+                                    vm.getDirectionsToLocation(with: locationManager)
                                 } label: {
                                     Label("5 mins", systemImage: "car")
                                 }
@@ -151,6 +151,9 @@ struct MasjidDetail: View {
                 }
             }.onAppear {
                 vm.fetchPrayerTimes(for: locationManager)
+            }
+            .alert(item: $vm.alertItem) { alertItem in
+                Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
             }
         
     }
