@@ -291,9 +291,9 @@
 		CDB075702A8337C40004DE7B /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CDBD62752A85C4690079151E /* PersonalInfoView */,
 				CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */,
 				CDB075682A83349E0004DE7B /* MasjidHeadline.swift */,
-				CDBD62752A85C4690079151E /* PersonalInfoView */,
 				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
 				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
 				CDBD62782A85D5A80079151E /* LoadingView.swift */,
@@ -324,8 +324,8 @@
 		CDB075822A849AF50004DE7B /* SMapView */ = {
 			isa = PBXGroup;
 			children = (
-				CDB075402A7F53E50004DE7B /* SMapView.swift */,
 				CDB075872A849C7F0004DE7B /* SMapViewModel.swift */,
+				CDB075402A7F53E50004DE7B /* SMapView.swift */,
 			);
 			path = SMapView;
 			sourceTree = "<group>";
@@ -351,8 +351,8 @@
 		CDB0758B2A84A70D0004DE7B /* MasjidDetail */ = {
 			isa = PBXGroup;
 			children = (
-				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
 				CDB0758C2A84A7200004DE7B /* MasjidDetailViewModel.swift */,
+				CDB075522A8007000004DE7B /* MasjidDetail.swift */,
 			);
 			path = MasjidDetail;
 			sourceTree = "<group>";
@@ -369,8 +369,8 @@
 		CDBD62752A85C4690079151E /* PersonalInfoView */ = {
 			isa = PBXGroup;
 			children = (
-				CDB075622A8330C00004DE7B /* PersonalInfoView.swift */,
 				CDBD62762A85C47D0079151E /* PersonalInfoViewModel.swift */,
+				CDB075622A8330C00004DE7B /* PersonalInfoView.swift */,
 			);
 			path = PersonalInfoView;
 			sourceTree = "<group>";

@@ -10,10 +10,17 @@ import MapKit
 
 final class SMapViewModel: NSObject, ObservableObject {
     @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.8924901, longitude: -78.8649466), span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
+    @Published var alertItem: AlertItem?
     
     var userLocationManager: CLLocationManager?
     
-    func checkIfLocationServicesEnabled() {
+    func onAppear(with locationManager: LocationManager){
+        initLocationManager()
+        getMasjids(with: locationManager)
+        print(locationManager.masjids)
+    }
+    
+    func initLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
             userLocationManager = CLLocationManager()
 //            userLocationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -29,9 +36,9 @@ final class SMapViewModel: NSObject, ObservableObject {
             case .notDetermined:
                 userLocationManager.requestWhenInUseAuthorization()
             case .restricted:
-                print("restricted")
+                alertItem = AlertContext.genericErrorAlert // TODO: add custom alert message
             case .denied:
-                print("denied, goto settings to change")
+                alertItem = AlertContext.genericErrorAlert // TODO: add alert
             case .authorizedAlways, .authorizedWhenInUse:
                 // nice
                 break
@@ -39,14 +46,13 @@ final class SMapViewModel: NSObject, ObservableObject {
                 break
         }
     }
-    func getMasjids(for locationManager: LocationManager){
-        CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true), resultsLimit: 1) {items in
+    func getMasjids(with locationManager: LocationManager){
+        CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
             DispatchQueue.main.async {
-                locationManager.masjids = items
+                locationManager.masjids = masjids
             }
         }
     }
-    
 }
 
 extension SMapViewModel: CLLocationManagerDelegate {

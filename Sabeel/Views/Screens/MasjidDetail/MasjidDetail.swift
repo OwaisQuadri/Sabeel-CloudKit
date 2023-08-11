@@ -14,9 +14,10 @@ struct MasjidDetail: View {
     @StateObject private var vm = MasjidDetailViewModel()
     // when you need an init for a vm, user observed object
     var body: some View {
-            ZStack {
-                if let selectedMasjid = locationManager.selectedMasjid, vm.isShowingThisView {
-                    if !vm.showChangeTimingsView {
+        ZStack {
+            if let selectedMasjid = locationManager.selectedMasjid, vm.isShowingThisView {
+                if !vm.showChangeTimingsView {
+                    ZStack{
                         VStack(alignment: .center) {
                             HStack (alignment: .center ) {
                                 Spacer()
@@ -34,6 +35,7 @@ struct MasjidDetail: View {
                                 .padding(.leading)
                                 .confirmationDialog("Actions", isPresented: $vm.showContactInfo, titleVisibility: .visible) {
                                     Button("Send an Email") {
+                                        vm.sendEmail(with: locationManager)
                                     }
                                     .disabled(selectedMasjid.email == nil)
                                     Button("Call") {
@@ -85,43 +87,43 @@ struct MasjidDetail: View {
                             
                             List {
                                 if let prayerTimes = vm.prayerTimes {
-                                Section("Prayer Times") {
-                                    Group {
+                                    Section("Prayer Times") {
+                                        Group {
+                                            HStack{
+                                                Text("Fajr")
+                                                Spacer()
+                                                Divider().padding(.horizontal)
+                                                Text(prayerTimes.fajr)
+                                            }
+                                        }
+                                        Group {
+                                            HStack{
+                                                Text("Dhuhr")
+                                                Spacer()
+                                                Divider().padding(.horizontal)
+                                                Text(prayerTimes.dhuhr)
+                                            }
+                                        }
                                         HStack{
-                                            Text("Fajr")
+                                            Text("Asr")
                                             Spacer()
                                             Divider().padding(.horizontal)
-                                            Text(prayerTimes.fajr)
+                                            Text(prayerTimes.asr)
                                         }
-                                    }
-                                    Group {
                                         HStack{
-                                            Text("Dhuhr")
+                                            Text("Maghrib")
                                             Spacer()
                                             Divider().padding(.horizontal)
-                                            Text(prayerTimes.dhuhr)
+                                            Text(prayerTimes.maghrib)
+                                        }
+                                        HStack{
+                                            Text("Isha")
+                                            Spacer()
+                                            Divider().padding(.horizontal)
+                                            Text(prayerTimes.isha)
                                         }
                                     }
-                                    HStack{
-                                        Text("Asr")
-                                        Spacer()
-                                        Divider().padding(.horizontal)
-                                        Text(prayerTimes.asr)
-                                    }
-                                    HStack{
-                                        Text("Maghrib")
-                                        Spacer()
-                                        Divider().padding(.horizontal)
-                                        Text(prayerTimes.maghrib)
-                                    }
-                                    HStack{
-                                        Text("Isha")
-                                        Spacer()
-                                        Divider().padding(.horizontal)
-                                        Text(prayerTimes.isha)
-                                    }
-                                }
-                                
+                                    
                                     Section("Juma"){
                                         ForEach( 0..<prayerTimes.juma.count, id: \.self) { index in
                                             
@@ -139,22 +141,24 @@ struct MasjidDetail: View {
                             }
                             
                         }
-                        .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.35))
-                        .background(Color.brandBackground)
-                        .cornerRadius(20).shadow(radius: 20)
-                        .padding()
-                        
+                        if vm.isLoading { LoadingView() }
                     }
-                    else {
-                        MasjidChangeRequestView(showChangeTimingsView: $vm.showChangeTimingsView)
-                    }
+                    .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.35))
+                    .background(Color.brandBackground)
+                    .cornerRadius(20).shadow(radius: 20)
+                    .padding()
+                    
                 }
-            }.onAppear {
-                vm.fetchPrayerTimes(for: locationManager)
+                else {
+                    MasjidChangeRequestView(showChangeTimingsView: $vm.showChangeTimingsView)
+                }
             }
-            .alert(item: $vm.alertItem) { alertItem in
-                Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-            }
+        }.onAppear {
+            vm.onAppear(with: locationManager)
+        }
+        .alert(item: $vm.alertItem) { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+        }
         
     }
 }

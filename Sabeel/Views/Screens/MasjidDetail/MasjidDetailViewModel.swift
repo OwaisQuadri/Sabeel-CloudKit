@@ -16,6 +16,10 @@ final class MasjidDetailViewModel: ObservableObject {
     @Published var isShowingThisView: Bool = true
     @Published var alertItem: AlertItem?
     
+    func onAppear(with locationManager: LocationManager) {
+        fetchPrayerTimes(for: locationManager)
+    }
+    
     func dismiss(with locationManager: LocationManager) {
         withAnimation(.easeInOut) {
             isShowingThisView = false
@@ -33,7 +37,7 @@ final class MasjidDetailViewModel: ObservableObject {
     func sendEmail(with locationManager: LocationManager) {
         guard
             let masjidEmail = locationManager.selectedMasjid?.email,
-            let url = URL(string: "mailto://\(masjidEmail)")
+            let url = URL(string: "mailto:\(masjidEmail)")
         else {
             alertItem = AlertContext.genericErrorAlert
             return
@@ -55,7 +59,7 @@ final class MasjidDetailViewModel: ObservableObject {
     func visitWebsite(with locationManager: LocationManager) {
         guard
             let masjidWebsite = locationManager.selectedMasjid?.website,
-            let url = URL(string: masjidWebsite)
+            let url = URL(string: "https://\(masjidWebsite)")
         else {
             alertItem = AlertContext.genericErrorAlert
             return
@@ -66,15 +70,20 @@ final class MasjidDetailViewModel: ObservableObject {
     func fetchPrayerTimes(for locationManager: LocationManager) {
         
         if let selectedMasjid = locationManager.selectedMasjid {
+            showLoadingView()
             CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [self] in
+                    self.hideLoadingView()
                     if prayerTimes.count == 1 {
-                        print(prayerTimes)
                         self.prayerTimes = prayerTimes[0]
                     }
                 }
             }
         }
     }
+    
+    @Published var isLoading: Bool = true
+    private func showLoadingView() { isLoading = true }
+    private func hideLoadingView() { isLoading = false }
     
 }

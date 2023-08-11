@@ -14,7 +14,7 @@ struct MockData {
         record[Masjid.kName]        = "Oshawa Masjid"
         record[Masjid.kEmail]       = "owaisquadri01+Sabeel@gmail.com"
         record[Masjid.kAddress]     = "23 Lloyd St, Oshawa, ON L1H 1X2"
-        record[Masjid.kPhoneNumber] = "12899438996"
+        record[Masjid.kPhoneNumber] = "2899438996"
         record[Masjid.kWebsite]     = "www.google.com"
         record[Masjid.kLocation]    = CLLocation(latitude: 43.8924901, longitude: -78.8649466)
         let prayerTimes = PrayerTimes(record: MockData.prayerTimes)

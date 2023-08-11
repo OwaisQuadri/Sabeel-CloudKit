@@ -6,26 +6,33 @@
 //
 
 import SwiftUI
-
+enum Tab: String, CaseIterable, Identifiable {
+    case feedView, mapView, profileView
+    
+    var id: Self { self }
+}
 struct STabView: View {
     @ObservedObject private var vm = STabViewModel()
-    
+    @State private var tab = Tab.mapView
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             SFeedView()
                 .tabItem {
                     Label("Feed", systemImage: "tray.fill") // TODO: change to "friends" or "community"
                 }
+                .tag(Tab.feedView)
             SMapView()
                 .tabItem {
                     Label("Map", systemImage: "map")// TODO: Make default
                 }
+                .tag(Tab.mapView)
             NavigationView {
                 SProfileView()
             }
             .tabItem {
                 Label("mySabeel", systemImage: "person.crop.circle")
             }
+            .tag(Tab.profileView)
         }
         .onAppear{
             vm.startUpChecks()

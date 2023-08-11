@@ -18,9 +18,10 @@ struct SMapView: View {
             Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: locationManager.masjids, annotationContent: { masjid in
                 MapAnnotation(coordinate: masjid.location.coordinate) {
                     VStack {
-                        Image("masjidOnMap")
+                        Image("masjidOnMap") //masjid.isConfirmed ? "masjidOnMap" : "questionmark")
                             .resizable()
-//                            .background(Color.brandPrimary)
+                            //.background(Color.brandPrimary)
+                            //.foregroundColor(.brandBackground)
                             .scaledToFit()
                             .frame(width: .relativeToScreen(.width, ratio: 0.075))
                             .clipShape(Circle())
@@ -28,23 +29,20 @@ struct SMapView: View {
                     }
                     .onTapGesture {
                         locationManager.selectedMasjid = masjid
-//                        vm.recenter(around: masjid.location.coordinate)
+//                       TODO: vm.recenter(around: masjid.location.coordinate)
                     }
                 }
             })
             .ignoresSafeArea(edges: .top)
-            .onAppear {
-                vm.checkIfLocationServicesEnabled()
-            }
+            .onAppear { vm.onAppear(with: locationManager) }
             VStack {
                 BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
                 Spacer()
                 if locationManager.selectedMasjid != nil { MasjidDetail() }
             }
-            .onAppear {
-                vm.getMasjids(for: locationManager)
-            }
-        
+        }
+        .alert(item: $vm.alertItem) { alertItem in
+            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
     }
 }
