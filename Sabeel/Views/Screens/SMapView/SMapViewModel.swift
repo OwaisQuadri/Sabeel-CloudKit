@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 final class SMapViewModel: NSObject, ObservableObject {
-    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43, longitude: -79) , span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
     @Published var alertItem: AlertItem?
     
     var userLocationManager: CLLocationManager?
@@ -40,6 +40,9 @@ final class SMapViewModel: NSObject, ObservableObject {
                 alertItem = AlertContext.genericErrorAlert // TODO: add alert
             case .authorizedAlways, .authorizedWhenInUse:
                 // nice
+                if let userLocationCoord = userLocationManager.location?.coordinate {
+                    region.center = userLocationCoord
+                }
                 break
             @unknown default:
                 userLocationManager.requestAlwaysAuthorization()

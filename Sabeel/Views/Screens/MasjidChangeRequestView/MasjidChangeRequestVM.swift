@@ -142,7 +142,7 @@ final class MasjidChangeRequestVM: ObservableObject {
             
             if changeRequestObject.userRecordIdVotedNo.contains(userRecord.reference()) {
                 // you have already voted
-                //return
+                // return
             }
             // add user to list
             let userVotesList = (changeRequestObject.userRecordIdVotedNo + [userRecord.reference()])
@@ -223,7 +223,7 @@ final class MasjidChangeRequestVM: ObservableObject {
             
             if changeRequestObject.userRecordIdVotedYes.contains(userRecord.reference()) {
                 // you have already voted
-                //return
+                // return
             }
             // add user to list
             let userVotesList = (changeRequestObject.userRecordIdVotedYes + [userRecord.reference()])
