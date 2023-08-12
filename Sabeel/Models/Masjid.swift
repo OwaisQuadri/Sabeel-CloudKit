@@ -66,8 +66,8 @@ extension Masjid: CKObject {
         record[Masjid.kAddress]         = address
         record[Masjid.kPhoneNumber]     = phoneNumber
         record[Masjid.kWebsite]         = website
-        record[Masjid.kPrayerTimes]     = prayerTimes.record.reference(.deleteSelf)
-        record[Masjid.kChangeRequest]   = changeRequest?.record.reference(.deleteSelf)
+        record[Masjid.kPrayerTimes]     = prayerTimes.record.reference()
+        record[Masjid.kChangeRequest]   = changeRequest?.record.reference()
         record[Masjid.kLocation]        = location
         record[Masjid.kIsConfirmed]     = isConfirmed
         

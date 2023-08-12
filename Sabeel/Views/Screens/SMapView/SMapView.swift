@@ -9,13 +9,13 @@ import SwiftUI
 import MapKit
 
 struct SMapView: View {
-    @EnvironmentObject private var locationManager: MasjidManager
+    @EnvironmentObject private var masjidManager: MasjidManager
     
     @StateObject private var vm = SMapViewModel()
     
     var body: some View {
         ZStack{
-            Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: locationManager.masjids, annotationContent: { masjid in
+            Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: masjidManager.masjids, annotationContent: { masjid in
                 MapAnnotation(coordinate: masjid.location.coordinate) {
                     VStack {
                         Image("masjidOnMap") //masjid.isConfirmed ? "masjidOnMap" : "questionmark")
@@ -28,20 +28,21 @@ struct SMapView: View {
                             .opacity(0.7)
                     }
                     .onTapGesture {
-                        locationManager.selectedMasjid = masjid
+                        masjidManager.selectedMasjid = masjid
 //                       TODO: vm.recenter(around: masjid.location.coordinate)
                     }
                 }
             })
             .ignoresSafeArea(edges: .top)
-            .onAppear { vm.onAppear(with: locationManager) }
+            .onAppear { vm.onAppear(with: masjidManager) }
             VStack {
                 BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
                 Spacer()
-                if locationManager.selectedMasjid != nil {
+                if masjidManager.selectedMasjid != nil {
                     MasjidDetail()
                         .transition(.slide)
                         .animation(.easeOut)
+                        .onDisappear { vm.getMasjids(with: masjidManager) }
                 }
             }
         }

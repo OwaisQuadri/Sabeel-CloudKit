@@ -35,11 +35,10 @@ final class MasjidChangeRequestVM: ObservableObject {
         // upload both to cloudkit
         masjid.record[Masjid.kChangeRequest] = newChangeRequest.record.reference()
         
-        CloudKitManager.shared.batchSave(records: [newPrayerTimes.record,newChangeRequest.record, masjid.record]) { res in
+        CloudKitManager.shared.batchSave(records: [newPrayerTimes.record, newChangeRequest.record, masjid.record]) { res in
             switch res {
                 case .success(let saved):
-                    DispatchQueue.main.async { //[self] in // TODO: we will use it dont worry
-                        
+                    DispatchQueue.main.async { [self] in // TODO: we will use it dont worry
                         // alert successful submission
                         print(saved)
                         masjidManager.selectedMasjid = nil
@@ -47,6 +46,7 @@ final class MasjidChangeRequestVM: ObservableObject {
                     break
                 case .failure(_):
                     // alert fail
+                    masjidManager.selectedMasjid = nil
                     break
             }
         }
@@ -119,53 +119,165 @@ final class MasjidChangeRequestVM: ObservableObject {
     
     func denyChangeRequest(with masjidManager: MasjidManager) {
         guard
-            let masjid = masjidManager.selectedMasjid,
-            let changeRequest = masjid.changeRequest
+            var masjid = masjidManager.selectedMasjid,
+            let changeRequestReference = masjid.changeRequest
         else {
             // alert : no masjid : generic : edge case
             return
         }
+        // get user ID
+        CloudKitManager.shared.getUserRecord()
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            // show alert
+            return
+        }
         // get change requests
-        
-        // check if there are votesToPass-1 votes already
-            // if there are, delete the changerequest and put the reference to it in masjid.record to nil
-        
-        // fetch URID
-            // if there is no URID, send alert saying to go sign in
-        
-        // check if user is one of them
-        
-            // if they are send an alert (u cant vote twice!)
-        
-            // if they arent add them to list
-        
-        // save masjid record and changerequest record if not deleted
-        
+        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+            if changeRequests.count != 1 {
+                // something went terribly wrong
+                return
+            }
+            // use changeRequests[0]
+            let changeRequestObject = changeRequests[0]
+            
+            if changeRequestObject.userRecordIdVotedNo.contains(userRecord.reference()) {
+                // you have already voted
+                //return
+            }
+            // add user to list
+            let userVotesList = (changeRequestObject.userRecordIdVotedNo + [userRecord.reference()])
+            changeRequestObject.record[MasjidChangeRequest.kuserRecordsThatVotedNo] = userVotesList
+            
+            if userVotesList.count >= changeRequestObject.votesToPass {
+                // if there are, delete the changerequest and put the reference to it in masjid.record to nil
+                
+                CloudKitManager.shared.delete(changeRequestObject) { res in
+                    switch res {
+                        case .success(let success):
+                            //deleted
+                            print(success)
+                            break
+                        case .failure(let fail):
+                            // unable to delete
+                            print(fail)
+                            break
+                    }
+                }
+                masjid.record[Masjid.kChangeRequest] = nil
+                CloudKitManager.shared.batchSave(records: [masjid.record]) { res in
+                    switch res {
+                        case .success(let saved):
+                            print(saved)
+                            break
+                        case .failure(_):
+                            // unable to save
+                            break
+                    }
+                }
+                DispatchQueue.main.async {
+                    masjidManager.selectedMasjid = nil
+                }
+            }
+            else {
+                // save masjid record and changerequest record if not deleted
+                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) { res in
+                    switch res {
+                        case .success(let saved):
+                            print(saved)
+                            break
+                        case .failure(let err):
+                            print(err)
+                            break
+                    }
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) {
+                masjidManager.selectedMasjid = nil
+            }
+        }
     }
     
     func acceptChangeRequest(with masjidManager: MasjidManager) {
+        
         guard
             let masjid = masjidManager.selectedMasjid,
-            let changeRequest = masjid.changeRequest
+            let changeRequestReference = masjid.changeRequest
         else {
             // alert : no masjid : generic : edge case
             return
         }
+        // get user ID
+        CloudKitManager.shared.getUserRecord()
+        guard let userRecord = CloudKitManager.shared.userRecord else {
+            // show alert
+            return
+        }
         // get change requests
-        
-        // fetch URID
-            // if there is no URID, send alert saying to go sign in
-        
-        // check if user is one of them
-        
-            // if they are send an alert (u cant vote twice!)
+        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+            if changeRequests.count != 1 {
+                // something went terribly wrong
+                return
+            }
+            // use changeRequests[0]
+            let changeRequestObject = changeRequests[0]
             
-            // if they arent
-                // check if there are votesToPass-1 votes already
-                    // if there are, update masjid with changerequest values and CKM update
-                    // then, delete the changerequest and put the reference to it in masjid.record to nil
-                // add them to list
-        
-        // save masjid record and changerequest record if not deleted
+            if changeRequestObject.userRecordIdVotedYes.contains(userRecord.reference()) {
+                // you have already voted
+                //return
+            }
+            // add user to list
+            let userVotesList = (changeRequestObject.userRecordIdVotedYes + [userRecord.reference()])
+            changeRequestObject.record[MasjidChangeRequest.kuserRecordsThatVotedYes] = userVotesList
+            
+            if userVotesList.count >= changeRequestObject.votesToPass {
+                // if there are, update masjid with changerequest values and CKM update
+                masjid.record[Masjid.kName]            = changeRequestObject.name
+                masjid.record[Masjid.kEmail]           = changeRequestObject.email
+                masjid.record[Masjid.kAddress]         = changeRequestObject.address
+                masjid.record[Masjid.kPhoneNumber]     = changeRequestObject.phoneNumber
+                masjid.record[Masjid.kWebsite]         = changeRequestObject.website
+                masjid.record[Masjid.kPrayerTimes]     = changeRequestObject.prayerTimes
+                masjid.record[Masjid.kIsConfirmed]     = true
+                // then, delete the changerequest and put the reference to it in masjid.record to nil
+                CloudKitManager.shared.delete(changeRequestObject) { res in
+                    switch res {
+                        case .success(let success):
+                            //deleted
+                            print(success)
+                            break
+                        case .failure(let fail):
+                            // unable to delete
+                            print(fail)
+                            break
+                    }
+                }
+                masjid.record[Masjid.kChangeRequest]   = nil
+                CloudKitManager.shared.batchSave(records: [masjid.record]) { res in
+                    switch res {
+                        case .success(let saved):
+                            print(saved)
+                            break
+                        case .failure(_):
+                            // unable to save
+                            break
+                    }
+                }
+            } else {
+                // save masjid record and changerequest record if not deleted
+                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) { res in
+                    switch res {
+                        case .success(let saved):
+                            print(saved)
+                            break
+                        case .failure(let err):
+                            print(err)
+                            break
+                    }
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0 ) {
+                masjidManager.selectedMasjid = nil
+            }
+        }
     }
 }

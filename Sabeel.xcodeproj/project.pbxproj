@@ -716,6 +716,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -754,6 +755,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

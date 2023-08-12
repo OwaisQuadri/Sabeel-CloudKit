@@ -9,15 +9,15 @@ import SwiftUI
 import MapKit
 
 final class SMapViewModel: NSObject, ObservableObject {
-    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.8924901, longitude: -78.8649466), span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
+    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
     @Published var alertItem: AlertItem?
     
     var userLocationManager: CLLocationManager?
     
     func onAppear(with locationManager: MasjidManager){
         initLocationManager()
+        checkLocationAuth()
         getMasjids(with: locationManager)
-        print(locationManager.masjids)
     }
     
     func initLocationManager() {
@@ -28,10 +28,12 @@ final class SMapViewModel: NSObject, ObservableObject {
     }
     
     private func checkLocationAuth() {
-        guard let userLocationManager = userLocationManager else { return }
+        guard let userLocationManager = userLocationManager else {
+            alertItem = AlertItem("Err", "unable to use any location services. Please update your iPhone settings", "Dismiss")
+            return }
         switch userLocationManager.authorizationStatus {
             case .notDetermined:
-                userLocationManager.requestWhenInUseAuthorization()
+                userLocationManager.requestAlwaysAuthorization()
             case .restricted:
                 alertItem = AlertContext.genericErrorAlert // TODO: add custom alert message
             case .denied:
@@ -40,13 +42,13 @@ final class SMapViewModel: NSObject, ObservableObject {
                 // nice
                 break
             @unknown default:
-                break
+                userLocationManager.requestAlwaysAuthorization()
         }
     }
-    func getMasjids(with locationManager: MasjidManager){
+    func getMasjids(with masjidManager: MasjidManager){
         CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
             DispatchQueue.main.async {
-                locationManager.masjids = masjids
+                masjidManager.masjids = masjids
             }
         }
     }

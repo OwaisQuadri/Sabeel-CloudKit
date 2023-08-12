@@ -15,8 +15,8 @@ struct MasjidChangeRequest {
     static let kphoneNumber             = "phoneNumber"
     static let kwebsite                 = "website"
     static let kprayerTimes             = "prayerTimes"
-    static let kuserRecordIdVotedYes    = "userRecordIdVotedYes"
-    static let kuserRecordIdVotedNo     = "userRecordIdVotedNo"
+    static let kuserRecordsThatVotedYes = "userRecordsThatVotedYes"
+    static let kuserRecordsThatVotedNo  = "userRecordsThatVotedNo"
     static let klocation                = "location"
     static let kvotesToPass             = "votesToPass"
     
@@ -30,8 +30,8 @@ struct MasjidChangeRequest {
     var phoneNumber             : String?
     var website                 : String?
     var prayerTimes             : CKRecord.Reference!
-    var userRecordIdVotedYes    : [String]
-    var userRecordIdVotedNo     : [String]
+    var userRecordIdVotedYes    : [CKRecord.Reference]
+    var userRecordIdVotedNo     : [CKRecord.Reference]
     var votesToPass             : Int
     var location                : CLLocation!
 }
@@ -47,8 +47,8 @@ extension MasjidChangeRequest: CKObject {
         phoneNumber             = (record[MasjidChangeRequest.kphoneNumber         ] as? String)
         website                 = (record[MasjidChangeRequest.kwebsite             ] as? String)
         prayerTimes             = record[MasjidChangeRequest.kprayerTimes         ] as? CKRecord.Reference
-        userRecordIdVotedYes    = record[MasjidChangeRequest.kuserRecordIdVotedYes] as? [String] ?? []
-        userRecordIdVotedNo     = record[MasjidChangeRequest.kuserRecordIdVotedNo ] as? [String] ?? []
+        userRecordIdVotedYes    = record[MasjidChangeRequest.kuserRecordsThatVotedYes] as? [CKRecord.Reference] ?? []
+        userRecordIdVotedNo     = record[MasjidChangeRequest.kuserRecordsThatVotedNo ] as? [CKRecord.Reference] ?? []
         votesToPass             = record[MasjidChangeRequest.kvotesToPass         ] as? Int ?? Constants.numberOfVotesToPassMasjidChangeRequest
         location                = record[MasjidChangeRequest.klocation            ] as? CLLocation
     }
@@ -60,9 +60,9 @@ extension MasjidChangeRequest: CKObject {
         phoneNumber         : String?,
         website             : String?,
         prayerTimes         : PrayerTimes,
-        userRecordIdVotedYes: [String] = [],
-        userRecordIdVotedNo : [String] = [],
-        votesToPass         : Int = 3,
+        userRecordsThatVotedYes : [CKRecord.Reference] = [],
+        userRecordsThatVotedNo : [CKRecord.Reference] = [],
+        votesToPass         : Int = Constants.numberOfVotesToPassMasjidChangeRequest,
         location            : CLLocation
     ){
         // if string only spaces, send nil
@@ -74,9 +74,9 @@ extension MasjidChangeRequest: CKObject {
         record[MasjidChangeRequest.kaddress             ] = address
         record[MasjidChangeRequest.kphoneNumber         ] = phoneNumber
         record[MasjidChangeRequest.kwebsite             ] = website
-        record[MasjidChangeRequest.kprayerTimes         ] = prayerTimes.record.reference(.deleteSelf)
-        record[MasjidChangeRequest.kuserRecordIdVotedYes] = userRecordIdVotedYes
-        record[MasjidChangeRequest.kuserRecordIdVotedNo ] = userRecordIdVotedNo
+        record[MasjidChangeRequest.kprayerTimes         ] = prayerTimes.record.reference()
+        record[MasjidChangeRequest.kuserRecordsThatVotedYes] = userRecordsThatVotedYes
+        record[MasjidChangeRequest.kuserRecordsThatVotedNo ] = userRecordsThatVotedNo
         record[MasjidChangeRequest.kvotesToPass         ] = votesToPass
         record[MasjidChangeRequest.klocation            ] = location
         self.init(record: record)

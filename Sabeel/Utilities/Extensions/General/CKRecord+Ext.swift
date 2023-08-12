@@ -26,7 +26,7 @@ extension CKRecord.Reference {
         var cROutput: MasjidChangeRequest? = nil
         var pTOutput: PrayerTimes? = nil
         let changeRequestID = self.recordID
-        CloudKitManager.shared.read(recordType: .changeRequest, predicate: .equalToRecordId(of: changeRequestID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
             if changeRequests.count != 1 {
                 // something went terribly wrong
                 return
@@ -35,7 +35,8 @@ extension CKRecord.Reference {
             cROutput = changeRequests[0]
             
             // get prayertimes from changereq
-            guard let cROutput = cROutput else { return }
+            guard let cROutput = cROutput else
+            { return }
             cROutput.prayerTimes.convertToPrayerTimes { pT in
                 pTOutput = pT
             }
