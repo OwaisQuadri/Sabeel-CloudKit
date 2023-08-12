@@ -32,7 +32,7 @@ struct MasjidChangeRequest {
     var prayerTimes             : CKRecord.Reference!
     var userRecordIdVotedYes    : [String]
     var userRecordIdVotedNo     : [String]
-    var votesToPass             : Int = 3
+    var votesToPass             : Int
     var location                : CLLocation!
 }
 
@@ -49,7 +49,7 @@ extension MasjidChangeRequest: CKObject {
         prayerTimes             = record[MasjidChangeRequest.kprayerTimes         ] as? CKRecord.Reference
         userRecordIdVotedYes    = record[MasjidChangeRequest.kuserRecordIdVotedYes] as? [String] ?? []
         userRecordIdVotedNo     = record[MasjidChangeRequest.kuserRecordIdVotedNo ] as? [String] ?? []
-        votesToPass             = record[MasjidChangeRequest.kvotesToPass         ] as? Int ?? 3
+        votesToPass             = record[MasjidChangeRequest.kvotesToPass         ] as? Int ?? Constants.numberOfVotesToPassMasjidChangeRequest
         location                = record[MasjidChangeRequest.klocation            ] as? CLLocation
     }
     // membawize

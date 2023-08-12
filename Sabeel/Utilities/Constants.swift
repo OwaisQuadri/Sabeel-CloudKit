@@ -19,3 +19,7 @@ enum UserDefaultsKey {
     static let kHasSeenOnboardingView = "hasSeenOnboardingView"
 }
 
+enum Constants {
+    static let numberOfVotesToPassMasjidChangeRequest = 1 // 5 in future
+    static let jumaTimesTitle = "Juma Times"
+}

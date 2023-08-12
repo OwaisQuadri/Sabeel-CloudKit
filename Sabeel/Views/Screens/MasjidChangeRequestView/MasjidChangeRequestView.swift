@@ -49,7 +49,8 @@ struct MasjidChangeRequestView: View {
                                 
                             }
                             .padding(.top)
-                            HStack {
+                            Divider()
+                            HStack (alignment: .center) {
                                 Text(vm.phoneNumber)
                                     .masjidSubtitle()
                                 Divider()
@@ -60,9 +61,9 @@ struct MasjidChangeRequestView: View {
                                     .masjidSubtitle()
                             }
                             .padding(.horizontal)
-                            .padding(.top)
                             Group {
                                 Group {
+                                    Divider()
                                     Text("Prayer Times").foregroundColor(.brandSecondary).bold().font(.headline)
                                     Group {
                                         Divider()
@@ -77,11 +78,10 @@ struct MasjidChangeRequestView: View {
                                     PrayerCell(title: "Maghrib", time: $vm.prayerTimes.maghrib)
                                     Divider()
                                     PrayerCell(title: "Isha", time: $vm.prayerTimes.isha)
-                                    Divider()
                                 }
                                 Group {
-                                    Text("Juma Times").foregroundColor(.brandSecondary).bold().font(.headline).padding(.top)
                                     ForEach( 0..<vm.prayerTimes.juma.count, id: \.self) { index in
+                                        if index == 0 { Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline).padding(.top) }
                                         Divider()
                                         PrayerCell(title: "Juma \(index+1)", time: $vm.prayerTimes.juma[index])
                                     }

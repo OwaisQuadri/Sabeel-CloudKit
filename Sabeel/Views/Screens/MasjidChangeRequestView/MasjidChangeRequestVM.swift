@@ -144,9 +144,28 @@ final class MasjidChangeRequestVM: ObservableObject {
     }
     
     func acceptChangeRequest(with masjidManager: MasjidManager) {
-        guard let masjid = masjidManager.selectedMasjid else {
+        guard
+            let masjid = masjidManager.selectedMasjid,
+            let changeRequest = masjid.changeRequest
+        else {
             // alert : no masjid : generic : edge case
             return
         }
+        // get change requests
+        
+        // fetch URID
+            // if there is no URID, send alert saying to go sign in
+        
+        // check if user is one of them
+        
+            // if they are send an alert (u cant vote twice!)
+            
+            // if they arent
+                // check if there are votesToPass-1 votes already
+                    // if there are, update masjid with changerequest values and CKM update
+                    // then, delete the changerequest and put the reference to it in masjid.record to nil
+                // add them to list
+        
+        // save masjid record and changerequest record if not deleted
     }
 }
