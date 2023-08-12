@@ -28,6 +28,15 @@ struct STabView: View {
                 .tag(Tab.mapView)
             NavigationView {
                 SProfileView()
+                    .toolbar(content: {
+                        Button {
+                            vm.isShowingOnboarding = true
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .imageScale(.large)
+                        }
+                        .padding()
+                    })
             }
             .tabItem {
                 Label("mySabeel", systemImage: "person.crop.circle")
@@ -40,6 +49,9 @@ struct STabView: View {
         .accentColor(.brandPrimary)
         .sheet(isPresented: $vm.isShowingOnboarding ) {
             OnboardingView(isShowingOnboarding: $vm.isShowingOnboarding)
+                .onDisappear {
+                    tab = Tab.profileView
+                }
         }
     }
 }

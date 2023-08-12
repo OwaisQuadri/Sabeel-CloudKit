@@ -9,12 +9,13 @@ import SwiftUI
 
 
 struct MasjidHeadline: View {
-    @State var selectedMasjid: Masjid?
+    @State var name     : String
+    @State var address  : String
     var body: some View {
         VStack {
-            Text(selectedMasjid?.name ?? "Unknown")
+            Text(name)
                 .masjidTitle()
-            Text(selectedMasjid?.address ?? "Unknown")
+            Text(address)
                 .masjidSubtitle()
         }
     }
@@ -22,6 +23,6 @@ struct MasjidHeadline: View {
 
 struct MasjidHeadline_Previews: PreviewProvider {
     static var previews: some View {
-        MasjidHeadline()
+        MasjidHeadline(name: "Masjid", address: "someplace")
     }
 }

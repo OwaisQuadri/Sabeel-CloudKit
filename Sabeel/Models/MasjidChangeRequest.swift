@@ -42,10 +42,10 @@ extension MasjidChangeRequest: CKObject {
     init(record: CKRecord) {
         self.record             = record
         name                    = record[MasjidChangeRequest.kname                ] as? String ?? "N/A"
-        email                   = record[MasjidChangeRequest.kemail               ] as? String
+        email                   = (record[MasjidChangeRequest.kemail               ] as? String)
         address                 = record[MasjidChangeRequest.kaddress             ] as? String ?? "N/A"
-        phoneNumber             = record[MasjidChangeRequest.kphoneNumber         ] as? String
-        website                 = record[MasjidChangeRequest.kwebsite             ] as? String
+        phoneNumber             = (record[MasjidChangeRequest.kphoneNumber         ] as? String)
+        website                 = (record[MasjidChangeRequest.kwebsite             ] as? String)
         prayerTimes             = record[MasjidChangeRequest.kprayerTimes         ] as? CKRecord.Reference
         userRecordIdVotedYes    = record[MasjidChangeRequest.kuserRecordIdVotedYes] as? [String] ?? []
         userRecordIdVotedNo     = record[MasjidChangeRequest.kuserRecordIdVotedNo ] as? [String] ?? []
@@ -53,7 +53,7 @@ extension MasjidChangeRequest: CKObject {
         location                = record[MasjidChangeRequest.klocation            ] as? CLLocation
     }
     // membawize
-    init? (
+    init (
         name                : String,
         email               : String?,
         address             : String,
@@ -65,6 +65,9 @@ extension MasjidChangeRequest: CKObject {
         votesToPass         : Int = 3,
         location            : CLLocation
     ){
+        // if string only spaces, send nil
+        
+        
         let record = CKRecord(.changeRequest)
         record[MasjidChangeRequest.kname                ] = name
         record[MasjidChangeRequest.kemail               ] = email

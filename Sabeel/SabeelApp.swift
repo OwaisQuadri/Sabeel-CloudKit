@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct SabeelApp: App {
     let persistenceController = PersistenceController.shared
-    let locationManager = LocationManager()
+    let locationManager = MasjidManager()
     var body: some Scene {
         WindowGroup {
             STabView()

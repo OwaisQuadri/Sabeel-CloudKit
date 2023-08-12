@@ -7,7 +7,7 @@
 
 import MapKit
 
-final class LocationManager: ObservableObject {
+final class MasjidManager: ObservableObject {
     @Published var masjids: [Masjid] = []
     @Published var selectedMasjid: Masjid? = nil
     

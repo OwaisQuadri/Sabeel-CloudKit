@@ -14,20 +14,17 @@ final class SMapViewModel: NSObject, ObservableObject {
     
     var userLocationManager: CLLocationManager?
     
-    func onAppear(with locationManager: LocationManager){
+    func onAppear(with locationManager: MasjidManager){
         initLocationManager()
         getMasjids(with: locationManager)
         print(locationManager.masjids)
     }
     
     func initLocationManager() {
-        if CLLocationManager.locationServicesEnabled() {
-            userLocationManager = CLLocationManager()
-//            userLocationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-            userLocationManager!.delegate = self
-        } else {
-            
-        }
+        userLocationManager = CLLocationManager()
+        //            userLocationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        userLocationManager!.delegate = self
+        
     }
     
     private func checkLocationAuth() {
@@ -46,7 +43,7 @@ final class SMapViewModel: NSObject, ObservableObject {
                 break
         }
     }
-    func getMasjids(with locationManager: LocationManager){
+    func getMasjids(with locationManager: MasjidManager){
         CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
             DispatchQueue.main.async {
                 locationManager.masjids = masjids

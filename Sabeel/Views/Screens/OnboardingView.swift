@@ -25,16 +25,13 @@ struct OnboardingView: View {
                         .bold()// remove when you get an image
                         .frame(height: .relativeToScreen(.height, ratio: 0.2))
                         .background(Color.brandSecondary) // remove when you get an image
-                    Text("").masjidTitle()
                 }.padding(.bottom)
                 Group  {
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "uihadiahfud", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "tesaiduwh aoiuwdh adoijw aoiwjdt", bodyText: "othiuaygwdiu aiwudhi iauhdiuwh iaudhwiud iauhdwiuh aiuhwduha iuahdwiuher" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "uihadiahfud", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "tesaiduwh aoiuwdh adoijw aoiwjdt", bodyText: "othiuaygwdiu aiwudhi iauhdiuwh iaudhwiud iauhdwiuh aiuhwduha iuahdwiuher" )
+                    Text("Overview").masjidTitle()
                     OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
                     OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
+                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
+                    Text("What's New?").masjidTitle()
                     OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
                     OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
                     OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )

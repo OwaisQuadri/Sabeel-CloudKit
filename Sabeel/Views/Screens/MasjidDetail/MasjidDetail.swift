@@ -9,19 +9,19 @@ import SwiftUI
 import CloudKit
 
 struct MasjidDetail: View {
-    @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var masjidManager: MasjidManager
     
     @StateObject private var vm = MasjidDetailViewModel()
     // when you need an init for a vm, user observed object
     var body: some View {
         ZStack {
-            if let selectedMasjid = locationManager.selectedMasjid, vm.isShowingThisView {
+            if let selectedMasjid = masjidManager.selectedMasjid, vm.isShowingThisView {
                 if !vm.showChangeTimingsView {
                     ZStack{
                         VStack(alignment: .center) {
                             HStack (alignment: .center ) {
                                 Spacer()
-                                MasjidHeadline(selectedMasjid: locationManager.selectedMasjid)
+                                MasjidHeadline(name: selectedMasjid.name, address: selectedMasjid.address)
                                 Spacer()
                                 Button{
                                     withAnimation(.easeInOut){
@@ -35,15 +35,15 @@ struct MasjidDetail: View {
                                 .padding(.leading)
                                 .confirmationDialog("Actions", isPresented: $vm.showContactInfo, titleVisibility: .visible) {
                                     Button("Send an Email") {
-                                        vm.sendEmail(with: locationManager)
+                                        vm.sendEmail(with: masjidManager)
                                     }
                                     .disabled(selectedMasjid.email == nil)
                                     Button("Call") {
-                                        vm.callMasjid(with: locationManager)
+                                        vm.callMasjid(with: masjidManager)
                                     }
                                     .disabled(selectedMasjid.phoneNumber == nil)
                                     Button("Visit Website") {
-                                        vm.visitWebsite(with: locationManager)
+                                        vm.visitWebsite(with: masjidManager)
                                     }
                                     .disabled(selectedMasjid.website == nil)
                                     Button(role: .destructive) {
@@ -56,7 +56,7 @@ struct MasjidDetail: View {
                                     }
                                 }
                                 Button{
-                                    vm.dismiss(with: locationManager)
+                                    vm.dismiss(with: masjidManager)
                                 } label: {
                                     Image(systemName: "xmark")
                                         .foregroundColor(.brandSecondary)
@@ -74,7 +74,7 @@ struct MasjidDetail: View {
                                 Spacer()
                                 Button {
                                     // send to google maps
-                                    vm.getDirectionsToLocation(with: locationManager)
+                                    vm.getDirectionsToLocation(with: masjidManager)
                                 } label: {
                                     Label("5 mins", systemImage: "car")
                                 }
@@ -83,7 +83,6 @@ struct MasjidDetail: View {
                                 
                             }
                             .padding(.horizontal)
-                            // TODO: View timings button, contact (alert sheet with website, email and/or phone)
                             
                             List {
                                 if let prayerTimes = vm.prayerTimes {
@@ -143,29 +142,34 @@ struct MasjidDetail: View {
                         }
                         if vm.isLoading { LoadingView() }
                     }
-                    .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.35))
+                    .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.5))
                     .background(Color.brandBackground)
-                    .cornerRadius(20).shadow(radius: 20)
+                    .cornerRadius(20).shadow(color: .black, radius: 250)
                     .padding()
                     
                 }
                 else {
                     MasjidChangeRequestView(showChangeTimingsView: $vm.showChangeTimingsView)
+                        .onDisappear { vm.updateInfo(with: masjidManager) }
                 }
             }
         }.onAppear {
-            vm.onAppear(with: locationManager)
+            vm.onAppear(with: masjidManager)
         }
         .alert(item: $vm.alertItem) { alertItem in
             Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
         }
+        
         
     }
 }
 
 struct MasjidDetail_Previews: PreviewProvider {
     static var previews: some View {
-        MasjidDetail()
-            .environmentObject(LocationManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
+        VStack {
+            Spacer()
+            MasjidDetail()
+                .environmentObject(MasjidManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
+        }
     }
 }

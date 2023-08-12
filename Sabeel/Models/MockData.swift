@@ -18,8 +18,23 @@ struct MockData {
         record[Masjid.kWebsite]     = "www.google.com"
         record[Masjid.kLocation]    = CLLocation(latitude: 43.8924901, longitude: -78.8649466)
         let prayerTimes = PrayerTimes(record: MockData.prayerTimes)
-        let prayerTimesRecordReference = CKRecord.Reference(record: prayerTimes.record , action: .deleteSelf)
-        record[Masjid.kPrayerTimes] = prayerTimesRecordReference
+        record[Masjid.kPrayerTimes] = prayerTimes.record.reference(.deleteSelf)
+        return record
+    }
+    static var masjidWithChangeRequest: CKRecord {
+        let record = CKRecord(.masjid)
+        record[Masjid.kName]        = "Oshawa Masjid"
+        record[Masjid.kEmail]       = "owaisquadri01+Sabeel@gmail.com"
+        record[Masjid.kAddress]     = "23 Lloyd St, Oshawa, ON L1H 1X2"
+        record[Masjid.kPhoneNumber] = "2899438996"
+        record[Masjid.kWebsite]     = "www.google.com"
+        record[Masjid.kLocation]    = CLLocation(latitude: 43.8924901, longitude: -78.8649466)
+        let prayerTimes = PrayerTimes(record: MockData.prayerTimes)
+        record[Masjid.kPrayerTimes] = prayerTimes.record.reference(.deleteSelf)
+        let changeReq = MasjidChangeRequest(name: "Oshawa Mosque", email: "owaisquadri01+Sabeel@gmail.com", address: "some random place in canada", phoneNumber: "2899438996", website: "www.anothersite.com", prayerTimes: PrayerTimes(record: MockData.changeRequestPrayerTimes),
+                                            location: CLLocation(latitude: 43.8924901, longitude: -78.8649466))
+        record[Masjid.kChangeRequest] = changeReq.record.reference(.deleteSelf)
+        
         return record
     }
     static var prayerTimes: CKRecord {
@@ -32,6 +47,18 @@ struct MockData {
         record[PrayerTimes.kJuma]    = ["5:25pm"]
         return record
     }
+    
+    static var changeRequestPrayerTimes: CKRecord {
+        let record = CKRecord(.prayerTimes)
+        record[PrayerTimes.kFajr]    = "5:25am"
+        record[PrayerTimes.kDhuhr]   = "5:25am"
+        record[PrayerTimes.kAsr]     = "5:25am"
+        record[PrayerTimes.kMaghrib] = "5:25am"
+        record[PrayerTimes.kIsha]    = "5:25am"
+        record[PrayerTimes.kJuma]    = ["5:25am","5:25am"]
+        return record
+    }
+    
     static var prayerStats: CKRecord {
         let record = CKRecord(.prayerStats)
         record[PrayerStats.kfajrAttended    ] = 1

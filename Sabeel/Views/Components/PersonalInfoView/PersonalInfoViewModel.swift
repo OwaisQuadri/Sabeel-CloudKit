@@ -94,7 +94,7 @@ final class PersonalInfoViewModel: ObservableObject {
         // create reference on UserRecord to the SabeelProfile we created
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
         showLoadingView()
-        CloudKitManager.shared.createProfile(records: [userRecord,profileRecord]) { res in
+        CloudKitManager.shared.batchSave(records: [userRecord,profileRecord]) { res in
             DispatchQueue.main.async { [self] in
                 hideLoadingView()
                 switch res {

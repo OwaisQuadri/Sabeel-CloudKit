@@ -84,7 +84,7 @@ final class CloudKitManager {
         }
     }
     
-    func createProfile(records: [CKRecord], completion: @escaping (Result<[CKRecord], Error>) -> Void) {
+    func batchSave(records: [CKRecord], completion: @escaping (Result<[CKRecord], Error>) -> Void) {
         
         let operation = CKModifyRecordsOperation(recordsToSave: records)
         operation.modifyRecordsCompletionBlock = {recordsToSave, _, err in // _=deletedRecordIds

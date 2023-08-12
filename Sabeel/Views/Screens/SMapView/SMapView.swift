@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct SMapView: View {
-    @EnvironmentObject private var locationManager: LocationManager
+    @EnvironmentObject private var locationManager: MasjidManager
     
     @StateObject private var vm = SMapViewModel()
     
@@ -38,7 +38,11 @@ struct SMapView: View {
             VStack {
                 BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
                 Spacer()
-                if locationManager.selectedMasjid != nil { MasjidDetail() }
+                if locationManager.selectedMasjid != nil {
+                    MasjidDetail()
+                        .transition(.slide)
+                        .animation(.easeOut)
+                }
             }
         }
         .alert(item: $vm.alertItem) { alertItem in
@@ -49,6 +53,6 @@ struct SMapView: View {
 
 struct SMapView_Previews: PreviewProvider {
     static var previews: some View {
-        SMapView().environmentObject(LocationManager([Masjid(record: MockData.masjid)]))
+        SMapView().environmentObject(MasjidManager([Masjid(record: MockData.masjid)]))
     }
 }
