@@ -27,6 +27,14 @@ final class SMapViewModel: NSObject, ObservableObject {
         
     }
     
+    func setFocus(_ location : CLLocation){
+        let newLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.025, longitude: location.coordinate.longitude)
+        withAnimation(.easeInOut){
+            region.center = newLocation
+            region.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        }
+    }
+    
     private func checkLocationAuth() {
         guard let userLocationManager = userLocationManager else {
             alertItem = AlertItem("Err", "unable to use any location services. Please update your iPhone settings", "Dismiss")

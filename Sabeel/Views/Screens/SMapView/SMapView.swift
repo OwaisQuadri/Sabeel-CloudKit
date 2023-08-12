@@ -28,6 +28,9 @@ struct SMapView: View {
                             .opacity(0.7)
                     }
                     .onTapGesture {
+                        withAnimation(.easeInOut){
+                            vm.setFocus(masjid.location)
+                        }
                         masjidManager.selectedMasjid = masjid
 //                       TODO: vm.recenter(around: masjid.location.coordinate)
                     }
