@@ -17,7 +17,7 @@ final class MasjidChangeRequestVM: ObservableObject {
     @Published var email                : String = ""
     @Published var phoneNumber          : String = ""
     @Published var website              : String = ""
-    @Published var prayerTimes          : PrayerTimes = PrayerTimes(fajr: "?", dhuhr: "?", asr: "?", maghrib: "?", isha: "?", juma: ["?"])
+    @Published var prayerTimes          : PrayerTimes = PrayerTimes(fajr: "", dhuhr: "", asr: "", maghrib: "", isha: "", juma: [])
     @Published var isFromChangeRequest  : Bool = false
     
     func onAppear(with masjidManager: MasjidManager) {

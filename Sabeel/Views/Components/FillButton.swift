@@ -10,6 +10,7 @@ import SwiftUI
 struct FillButton: View {
     let backgroundColor : Color
     let systemImage: String
+    let scale: Double
     var onClick: () -> Void
     var body: some View {
         Button {
@@ -19,6 +20,7 @@ struct FillButton: View {
                 backgroundColor
                 Image(systemName: systemImage)
                     .scaledToFill()
+                    .scaleEffect(scale)
                     .foregroundColor(.brandBackground)
             }
             .cornerRadius(10)
@@ -30,7 +32,7 @@ struct FillButton: View {
 
 struct FillButton_Previews: PreviewProvider {
     static var previews: some View {
-        FillButton(backgroundColor: .brandGreen, systemImage: "checkmark" ) {
+        FillButton(backgroundColor: .brandGreen, systemImage: "checkmark", scale: 2.0 ) {
             print("click")
         }
     }

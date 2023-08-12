@@ -89,10 +89,10 @@ struct MasjidChangeRequestView: View {
                                 Divider()
                                 Group {
                                     HStack(spacing: 25) {
-                                        FillButton(backgroundColor: .brandRed.opacity(0.9), systemImage: "xmark") {
+                                        FillButton(backgroundColor: .brandRed.opacity(0.9), systemImage: "xmark", scale: 2) {
                                             vm.denyChangeRequest(with: masjidManager)
                                         }
-                                        FillButton(backgroundColor: .brandGreen.opacity(0.9), systemImage: "checkmark") {
+                                        FillButton(backgroundColor: .brandGreen.opacity(0.9), systemImage: "checkmark", scale: 2) {
                                             vm.acceptChangeRequest(with: masjidManager)
                                         }
                                     }
