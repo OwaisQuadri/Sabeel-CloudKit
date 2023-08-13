@@ -21,7 +21,7 @@ final class MasjidDetailViewModel: ObservableObject {
     }
     
     
-    func dismiss(with locationManager: MasjidManager) { locationManager.selectedMasjid = nil }
+    func dismiss(with locationManager: MasjidManager) { withAnimation(.easeInOut) { locationManager.selectedMasjid = nil } }
     
     
     func getDirectionsToLocation(with locationManager: MasjidManager) {

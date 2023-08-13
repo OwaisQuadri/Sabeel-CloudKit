@@ -94,9 +94,11 @@ struct MasjidChangeRequestView: View {
                                     HStack(spacing: 25) {
                                         FillButton(backgroundColor: .brandRed.opacity(0.9), systemImage: "xmark", scale: 2) {
                                             vm.denyChangeRequest(with: masjidManager)
+                                            playHaptic(.warning)
                                         }
                                         FillButton(backgroundColor: .brandGreen.opacity(0.9), systemImage: "checkmark", scale: 2) {
                                             vm.acceptChangeRequest(with: masjidManager)
+                                            playHaptic(.success)
                                         }
                                     }
                                     .frame(height: .relativeToScreen(.height, ratio: 0.1))
@@ -118,6 +120,7 @@ struct MasjidChangeRequestView: View {
                             }
                             Button {
                                 vm.checkMarkButtonAction(using: masjidManager)
+                                playHaptic(.success)
                             } label: {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(.brandPrimary)

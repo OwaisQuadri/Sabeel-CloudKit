@@ -18,41 +18,32 @@ struct SMapView: View {
             Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: masjidManager.masjids, annotationContent: { masjid in
                 
                 MapAnnotation(coordinate: masjid.location.coordinate) {
-                    VStack {
-                        Image("masjidOnMap") //masjid.isConfirmed ? "masjidOnMap" : "questionmark")
-                            .resizable()
-                            //.background(Color.brandPrimary)
-                            //.foregroundColor(.brandBackground)
-                            .scaledToFit()
-                            .frame(width: .relativeToScreen(.width, ratio: 0.075))
-                            .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
-                            .shadow(radius: 5)
-                    }
-                    .onTapGesture {
-                        withAnimation(.easeInOut){
-                            vm.setFocus(masjid.location)
-                            masjidManager.selectedMasjid = masjid
-                        }
-//                       TODO: vm.recenter(around: masjid.location.coordinate)
-                    }
+                    Image("masjidOnMap") // TODO: masjid.isConfirmed ? "masjidOnMap" : "questionmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: .relativeToScreen(.width, ratio: 0.075))
+                        .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
+                        .shadow(radius: 5)
+                        .onTapGesture { vm.select(masjid: masjid, for: masjidManager) }
+                        .transition(.scale)
                 }
             })
             .ignoresSafeArea(edges: .top)
             .onAppear { vm.onAppear(with: masjidManager) }
             VStack {
-                BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
-                Spacer()
                 if masjidManager.selectedMasjid != nil {
+                    Spacer()
                     MasjidDetail()
-                        .transition(.slide)
-                        .animation(.easeInOut)
+                        .transition(.move(edge: .bottom))
                         .onDisappear { vm.getMasjids(with: masjidManager) }
+                } else {
+                    BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
+                        .transition(.scale)
+                    Spacer()
                 }
             }
         }
-        .alert(item: $vm.alertItem) { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-        }
+        .alert(item: $vm.alertItem) { $0.alert }
     }
 }
 

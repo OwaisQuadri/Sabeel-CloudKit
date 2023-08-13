@@ -11,6 +11,8 @@ struct AlertItem: Identifiable {
     var title: Text
     var message: Text
     var dismissButton: Alert.Button
+    
+    var alert: Alert { Alert(title: title, message: message, dismissButton: dismissButton) }
 }
 extension AlertItem {
     init(_ titleString: String, _ messageString: String, _ dismissBtnString: String) {

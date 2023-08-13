@@ -6,53 +6,41 @@
 //
 
 import SwiftUI
-enum Tab: String, CaseIterable, Identifiable {
-    case feedView, mapView, profileView
-    
-    var id: Self { self }
-}
+
 struct STabView: View {
+    
     @ObservedObject private var vm = STabViewModel()
-    @State private var tab = Tab.mapView
+    
     var body: some View {
-        TabView(selection: $tab) {
+        TabView(selection: $vm.tab) {
+            
             SFeedView()
-                .tabItem {
-                    Label("Feed", systemImage: "tray.fill") // TODO: change to "friends" or "community"
-                }
-                .tag(Tab.feedView)
+                .tabItem { Label("Community", systemImage: "person.3.fill") } .tag(Tab.feedView)
+            
             SMapView()
-                .tabItem {
-                    Label("Map", systemImage: "map")// TODO: Make default
-                }
-                .tag(Tab.mapView)
+                .tabItem { Label("Map", systemImage: "map") } .tag(Tab.mapView)
+            
+            
             NavigationView {
                 SProfileView()
                     .toolbar(content: {
-                        Button {
-                            vm.isShowingOnboarding = true
-                        } label: {
+                        Button { vm.isShowingOnboarding = true } label: {
                             Image(systemName: "info.circle")
                                 .imageScale(.large)
                         }
                         .padding()
                     })
             }
-            .tabItem {
-                Label("mySabeel", systemImage: "person.crop.circle")
-            }
-            .tag(Tab.profileView)
+            .tabItem { Label("Profile", systemImage: "person") } .tag(Tab.profileView)
+            
         }
-        .onAppear{
-            vm.startUpChecks()
-        }
+        .onAppear{ vm.startUpChecks() }
         .accentColor(.brandPrimary)
         .sheet(isPresented: $vm.isShowingOnboarding ) {
             OnboardingView(isShowingOnboarding: $vm.isShowingOnboarding)
-                .onDisappear {
-                    tab = Tab.profileView
-                }
+                .onDisappear { vm.tab = Tab.profileView }
         }
+        
     }
 }
 

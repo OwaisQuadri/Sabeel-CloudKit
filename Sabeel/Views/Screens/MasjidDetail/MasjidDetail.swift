@@ -153,14 +153,9 @@ struct MasjidDetail: View {
                         .onDisappear { vm.updateInfo(with: masjidManager) }
                 }
             }
-        }.onAppear {
-            vm.onAppear(with: masjidManager)
         }
-        .alert(item: $vm.alertItem) { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-        }
-        
-        
+        .onAppear { vm.onAppear(with: masjidManager) }
+        .alert(item: $vm.alertItem) { $0.alert }
     }
 }
 

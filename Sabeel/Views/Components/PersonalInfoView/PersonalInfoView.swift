@@ -37,9 +37,7 @@ struct PersonalInfoView: View {
             if vm.isLoading { LoadingView() }
         }
         .onAppear { vm.startUpChecks() }
-        .alert(item: $vm.alertItem) { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
-        }
+        .alert(item: $vm.alertItem) { $0.alert }
     }
 }
 

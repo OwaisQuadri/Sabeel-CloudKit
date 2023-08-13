@@ -20,11 +20,16 @@ final class SMapViewModel: NSObject, ObservableObject {
         getMasjids(with: locationManager)
     }
     
+    func select(masjid: Masjid, for masjidManager: MasjidManager) {
+        withAnimation(.easeInOut) {
+            setFocus(masjid.location)
+            masjidManager.selectedMasjid = masjid
+        }
+    }
+    
     func initLocationManager() {
         userLocationManager = CLLocationManager()
-        //            userLocationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         userLocationManager!.delegate = self
-        
     }
     
     func setFocus(_ location : CLLocation){
@@ -57,9 +62,11 @@ final class SMapViewModel: NSObject, ObservableObject {
         }
     }
     func getMasjids(with masjidManager: MasjidManager){
-        CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
-            DispatchQueue.main.async {
-                masjidManager.masjids = masjids
+        withAnimation(.easeInOut) {
+            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
+                DispatchQueue.main.async {
+                    masjidManager.masjids = masjids
+                }
             }
         }
     }

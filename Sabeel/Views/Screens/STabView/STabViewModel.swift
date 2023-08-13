@@ -5,19 +5,26 @@
 //  Created by Owais on 2023-08-10.
 //
 
-import Foundation
+import SwiftUI
 
-final class STabViewModel: ObservableObject {
-    @Published var isShowingOnboarding: Bool = false
-    
-    var hasSeenOnboardView: Bool {
-        return UserDefaults.standard.bool(forKey: UserDefaultsKey.kHasSeenOnboardingView)
-    }
-    func startUpChecks() {
-        if !hasSeenOnboardView {
-            isShowingOnboarding = true
-            UserDefaults.standard.set(true, forKey: UserDefaultsKey.kHasSeenOnboardingView)
+extension STabView {
+    final class STabViewModel: ObservableObject {
+        @AppStorage(UserDefaultsKey.kHasSeenOnboardingView) var hasSeenOnboardView = false { didSet { isShowingOnboarding = hasSeenOnboardView } }
+        
+        @Published var tab = Tab.mapView
+        @Published var isShowingOnboarding: Bool = false
+        
+        func startUpChecks() {
+            if !hasSeenOnboardView {
+                hasSeenOnboardView = true
+            }
+            CloudKitManager.shared.getUserRecord()
         }
-        CloudKitManager.shared.getUserRecord()
+    }
+
+    enum Tab: String, CaseIterable, Identifiable {
+        case feedView, mapView, profileView
+        
+        var id: Self { self }
     }
 }
