@@ -366,8 +366,8 @@
 		CDBD626C2A8541020079151E /* STabView */ = {
 			isa = PBXGroup;
 			children = (
-				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
 				CDBD626D2A85411A0079151E /* STabViewModel.swift */,
+				CDB0753E2A7F53A60004DE7B /* STabView.swift */,
 			);
 			path = STabView;
 			sourceTree = "<group>";

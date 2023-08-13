@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct SMapView: View {
+    
     @EnvironmentObject private var masjidManager: MasjidManager
     
     @StateObject private var vm = SMapViewModel()
@@ -19,13 +20,12 @@ struct SMapView: View {
                 
                 MapAnnotation(coordinate: masjid.location.coordinate) {
                     Image("masjidOnMap") // TODO: masjid.isConfirmed ? "masjidOnMap" : "questionmark")
-                        .resizable()
-                        .scaledToFit()
+                        .resizable() .scaledToFit()
                         .frame(width: .relativeToScreen(.width, ratio: 0.075))
                         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
                         .shadow(radius: 5)
-                        .onTapGesture { vm.select(masjid: masjid, for: masjidManager) }
                         .transition(.scale)
+                        .onTapGesture { vm.select(masjid: masjid, for: masjidManager) }
                 }
             })
             .ignoresSafeArea(edges: .top)
@@ -33,12 +33,10 @@ struct SMapView: View {
             VStack {
                 if masjidManager.selectedMasjid != nil {
                     Spacer()
-                    MasjidDetail()
-                        .transition(.move(edge: .bottom))
+                    MasjidDetail() .transition(.move(edge: .bottom))
                         .onDisappear { vm.getMasjids(with: masjidManager) }
                 } else {
-                    BrandLargeBanner().shadow(color: .brandPrimary, radius: 5)
-                        .transition(.scale)
+                    BrandLargeBanner().shadow(color: .brandPrimary, radius: 5) .transition(.scale)
                     Spacer()
                 }
             }

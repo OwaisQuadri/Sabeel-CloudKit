@@ -9,10 +9,12 @@ import SwiftUI
 import MapKit
 
 final class SMapViewModel: NSObject, ObservableObject {
+    
     @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43, longitude: -79) , span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
     @Published var alertItem: AlertItem?
     
-    var userLocationManager: CLLocationManager?
+    private var userLocationManager: CLLocationManager?
+    
     
     func onAppear(with locationManager: MasjidManager){
         initLocationManager()
@@ -20,25 +22,12 @@ final class SMapViewModel: NSObject, ObservableObject {
         getMasjids(with: locationManager)
     }
     
-    func select(masjid: Masjid, for masjidManager: MasjidManager) {
-        withAnimation(.easeInOut) {
-            setFocus(masjid.location)
-            masjidManager.selectedMasjid = masjid
-        }
-    }
     
-    func initLocationManager() {
+    private func initLocationManager() {
         userLocationManager = CLLocationManager()
         userLocationManager!.delegate = self
     }
     
-    func setFocus(_ location : CLLocation){
-        let newLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.025, longitude: location.coordinate.longitude)
-        withAnimation(.easeInOut){
-            region.center = newLocation
-            region.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
-        }
-    }
     
     private func checkLocationAuth() {
         guard let userLocationManager = userLocationManager else {
@@ -61,6 +50,8 @@ final class SMapViewModel: NSObject, ObservableObject {
                 userLocationManager.requestAlwaysAuthorization()
         }
     }
+    
+    
     func getMasjids(with masjidManager: MasjidManager){
         withAnimation(.easeInOut) {
             CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
@@ -70,10 +61,30 @@ final class SMapViewModel: NSObject, ObservableObject {
             }
         }
     }
+    
+    
+    func select(masjid: Masjid, for masjidManager: MasjidManager) {
+        withAnimation(.easeInOut) {
+            setFocus(masjid.location)
+            masjidManager.selectedMasjid = masjid
+        }
+    }
+    
+    
+    private func setFocus(_ location : CLLocation){
+        let newLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.025, longitude: location.coordinate.longitude)
+        withAnimation(.easeInOut){
+            region.center = newLocation
+            region.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+        }
+    }
+    
 }
 
 extension SMapViewModel: CLLocationManagerDelegate {
+    
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkLocationAuth()
     }
+    
 }

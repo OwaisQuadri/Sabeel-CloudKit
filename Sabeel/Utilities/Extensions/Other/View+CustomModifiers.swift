@@ -8,14 +8,20 @@
 import SwiftUI
 
 extension View {
+    
     func masjidTitle() -> some View {
         self.modifier(MasjidTitle())
     }
+    
+    
     func masjidSubtitle() -> some View {
         self.modifier(MasjidSubtitle())
     }
+    
 }
+
 struct MasjidTitle: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.title)
@@ -24,8 +30,11 @@ struct MasjidTitle: ViewModifier {
             .minimumScaleFactor(0.75)
             .lineLimit(1)
     }
+    
 }
+
 struct MasjidSubtitle: ViewModifier {
+    
     func body(content: Content) -> some View {
         content
             .font(.caption)
@@ -33,4 +42,5 @@ struct MasjidSubtitle: ViewModifier {
             .lineLimit(1)
             .minimumScaleFactor(0.75)
     }
+    
 }
