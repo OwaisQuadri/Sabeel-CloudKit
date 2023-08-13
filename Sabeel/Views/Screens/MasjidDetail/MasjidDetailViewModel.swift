@@ -14,10 +14,16 @@ final class MasjidDetailViewModel: ObservableObject {
     @Published var showContactInfo: Bool = false
     @Published var showChangeTimingsView: Bool = false
     @Published var isShowingThisView: Bool = true
-    @Published var alertItem: AlertItem?
+    @Binding var alertItem: AlertItem?
+    
+    init(_ alertItem: Binding<AlertItem?>) {
+        self._alertItem = alertItem
+    }
     
     func onAppear(with locationManager: MasjidManager) {
-        updateInfo(with: locationManager)
+        load {
+            updateInfo(with: locationManager)
+        }
     }
     
     
@@ -84,10 +90,8 @@ final class MasjidDetailViewModel: ObservableObject {
     func fetchPrayerTimes(for locationManager: MasjidManager) {
         
         if let selectedMasjid = locationManager.selectedMasjid {
-            showLoadingView()
             CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
                 DispatchQueue.main.async { [self] in
-                    self.hideLoadingView()
                     if prayerTimes.count == 1 {
                         self.prayerTimes = prayerTimes[0]
                     }
@@ -96,8 +100,14 @@ final class MasjidDetailViewModel: ObservableObject {
         }
     }
     
-    @Published var isLoading: Bool = true
+    @Published var isLoading: Bool = false
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
+    
+    func load(completion: () -> Void) {
+        showLoadingView()
+        completion()
+        hideLoadingView()
+    }
     
 }

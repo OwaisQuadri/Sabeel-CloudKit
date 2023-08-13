@@ -16,6 +16,7 @@ struct SabeelApp: App {
             STabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(locationManager)
+                .addKeyboardVisibilityToEnvironment()
         }
     }
 }

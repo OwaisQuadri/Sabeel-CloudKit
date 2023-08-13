@@ -17,9 +17,14 @@ enum SabeelRecordType: String {
 
 enum UserDefaultsKey {
     static let kHasSeenOnboardingView = "hasSeenOnboardingView"
+    static let isFirstLoad = "isFirstLoad"
 }
 
 enum Constants {
-    static let numberOfVotesToPassMasjidChangeRequest = 1 // 5 in future
-    static let jumaTimesTitle = "Juma Times"
+    // MARK: Ints
+    static let numberOfVotesToPassMasjidChangeRequest   :    Int = 1 // 5 in future
+    static let maxNumberOfJumas                         :    Int = 3
+    // MARK: Strings
+    static let jumaTimesTitle                           : String = "Juma Times"
+    static let prayerTimesTitle                         : String = "Prayer Times"
 }

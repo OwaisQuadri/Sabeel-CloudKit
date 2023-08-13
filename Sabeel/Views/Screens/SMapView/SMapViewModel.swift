@@ -9,18 +9,25 @@ import SwiftUI
 import MapKit
 
 final class SMapViewModel: NSObject, ObservableObject {
-    
-    @Published var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43, longitude: -79) , span: MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)) // TODO: Ideally we want the users location
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.95, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @Published var alertItem: AlertItem?
     
     private var userLocationManager: CLLocationManager?
     
     
-    func onAppear(with locationManager: MasjidManager){
+    func onAppear(with masjidManager: MasjidManager) {
         initLocationManager()
         checkLocationAuth()
-        getMasjids(with: locationManager)
+        getMasjids(with: masjidManager)
     }
+    
+    
+    func reload(with masjidManager: MasjidManager){
+        onAppear(with: masjidManager)
+    }
+    
+    
+    private func initializeRegion () { focusUser() }
     
     
     private func initLocationManager() {
@@ -28,7 +35,13 @@ final class SMapViewModel: NSObject, ObservableObject {
         userLocationManager!.delegate = self
     }
     
-    
+    func focusUser(){
+        if
+            let userLocationCoord = userLocationManager?.location?.coordinate
+        {
+            setFocus(userLocationCoord)
+        }
+    }
     private func checkLocationAuth() {
         guard let userLocationManager = userLocationManager else {
             alertItem = AlertItem("Err", "unable to use any location services. Please update your iPhone settings", "Dismiss")
@@ -42,9 +55,7 @@ final class SMapViewModel: NSObject, ObservableObject {
                 alertItem = AlertContext.genericErrorAlert // TODO: add alert
             case .authorizedAlways, .authorizedWhenInUse:
                 // nice
-                if let userLocationCoord = userLocationManager.location?.coordinate {
-                    region.center = userLocationCoord
-                }
+                focusUser()
                 break
             @unknown default:
                 userLocationManager.requestAlwaysAuthorization()
@@ -65,17 +76,16 @@ final class SMapViewModel: NSObject, ObservableObject {
     
     func select(masjid: Masjid, for masjidManager: MasjidManager) {
         withAnimation(.easeInOut) {
-            setFocus(masjid.location)
+            setFocus(CLLocationCoordinate2D(latitude: masjid.location.coordinate.latitude - 0.005, longitude: masjid.location.coordinate.longitude))
             masjidManager.selectedMasjid = masjid
         }
     }
     
     
-    private func setFocus(_ location : CLLocation){
-        let newLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude - 0.025, longitude: location.coordinate.longitude)
-        withAnimation(.easeInOut){
-            region.center = newLocation
-            region.span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
+    private func setFocus(_ location : CLLocationCoordinate2D){
+        let newLocation = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+        withAnimation(.easeInOut){ [self] in
+                region = MKCoordinateRegion(center: newLocation, latitudinalMeters: 2_000, longitudinalMeters: 2_000)
         }
     }
     

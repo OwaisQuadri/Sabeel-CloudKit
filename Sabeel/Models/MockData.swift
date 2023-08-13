@@ -18,7 +18,7 @@ struct MockData {
         record[Masjid.kWebsite]     = "www.google.com"
         record[Masjid.kLocation]    = CLLocation(latitude: 43.8924901, longitude: -78.8649466)
         let prayerTimes = PrayerTimes(record: MockData.prayerTimes)
-        record[Masjid.kPrayerTimes] = prayerTimes.record.reference(.deleteSelf)
+        record[Masjid.kPrayerTimes] = prayerTimes.record.reference()
         return record
     }
     static var masjidWithChangeRequest: CKRecord {
@@ -30,10 +30,10 @@ struct MockData {
         record[Masjid.kWebsite]     = "www.google.com"
         record[Masjid.kLocation]    = CLLocation(latitude: 43.8924901, longitude: -78.8649466)
         let prayerTimes = PrayerTimes(record: MockData.prayerTimes)
-        record[Masjid.kPrayerTimes] = prayerTimes.record.reference(.deleteSelf)
+        record[Masjid.kPrayerTimes] = prayerTimes.record.reference()
         let changeReq = MasjidChangeRequest(name: "Oshawa Mosque", email: "owaisquadri01+Sabeel@gmail.com", address: "some random place in canada", phoneNumber: "2899438996", website: "www.anothersite.com", prayerTimes: PrayerTimes(record: MockData.changeRequestPrayerTimes),
                                             location: CLLocation(latitude: 43.8924901, longitude: -78.8649466))
-        record[Masjid.kChangeRequest] = changeReq.record.reference(.deleteSelf)
+        record[Masjid.kChangeRequest] = changeReq.record.reference()
         
         return record
     }

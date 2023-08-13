@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SProfileView: View {
     
-    @StateObject var vm = SProfileViewModel()
+    @ObservedObject private var vm = SProfileViewModel()
     
     var body: some View {
         List {

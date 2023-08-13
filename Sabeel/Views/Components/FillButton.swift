@@ -21,7 +21,7 @@ struct FillButton: View {
                 Image(systemName: systemImage)
                     .scaledToFill()
                     .scaleEffect(scale)
-                    .foregroundColor(.brandBackground)
+                    .foregroundColor(.white.opacity(0.8))
             }
             .cornerRadius(10)
         }

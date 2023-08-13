@@ -6,6 +6,7 @@
 //
 
 import MapKit
+import SwiftUI
 
 final class MasjidManager: ObservableObject {
     @Published var masjids: [Masjid] = []
@@ -15,4 +16,13 @@ final class MasjidManager: ObservableObject {
         self.masjids = masjids
         self.selectedMasjid = masjid
     }
+    
+    func getMasjids(){
+            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
+                DispatchQueue.main.async { [self] in
+                    self.masjids = masjids
+                }
+        }
+    }
+    
 }

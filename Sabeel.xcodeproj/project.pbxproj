@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD9733132A8880EF006D8991 /* PrayerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9733122A8880EF006D8991 /* PrayerCell.swift */; };
+		CD9733152A8887DE006D8991 /* Keyboard Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD9733142A8887DE006D8991 /* Keyboard Helper.swift */; };
 		CDB0750C2A7F4C860004DE7B /* SabeelApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0750B2A7F4C860004DE7B /* SabeelApp.swift */; };
 		CDB075102A7F4C870004DE7B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDB0750F2A7F4C870004DE7B /* Assets.xcassets */; };
 		CDB075132A7F4C870004DE7B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDB075122A7F4C870004DE7B /* Preview Assets.xcassets */; };
@@ -24,7 +26,6 @@
 		CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075482A7F54430004DE7B /* SSettingsView.swift */; };
 		CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */; };
 		CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */; };
-		CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */; };
 		CDB075532A8007000004DE7B /* MasjidDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075522A8007000004DE7B /* MasjidDetail.swift */; };
 		CDB075572A81D9980004DE7B /* Masjid.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075562A81D9980004DE7B /* Masjid.swift */; };
 		CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */; };
@@ -74,6 +75,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CD9733122A8880EF006D8991 /* PrayerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCell.swift; sourceTree = "<group>"; };
+		CD9733142A8887DE006D8991 /* Keyboard Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Keyboard Helper.swift"; sourceTree = "<group>"; };
 		CDB075082A7F4C860004DE7B /* Sabeel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sabeel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDB0750B2A7F4C860004DE7B /* SabeelApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SabeelApp.swift; sourceTree = "<group>"; };
 		CDB0750F2A7F4C870004DE7B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -97,7 +100,6 @@
 		CDB0754A2A7F617A0004DE7B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Ext.swift"; sourceTree = "<group>"; };
 		CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequestView.swift; sourceTree = "<group>"; };
-		CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulPreviewWrapper.swift; sourceTree = "<group>"; };
 		CDB075522A8007000004DE7B /* MasjidDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidDetail.swift; sourceTree = "<group>"; };
 		CDB075562A81D9980004DE7B /* Masjid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Masjid.swift; sourceTree = "<group>"; };
 		CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequest.swift; sourceTree = "<group>"; };
@@ -220,8 +222,8 @@
 		CDB0754F2A8006450004DE7B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				CDB075502A8006620004DE7B /* StatefulPreviewWrapper.swift */,
 				CDBD62732A854EE20079151E /* AlertItem.swift */,
+				CD9733142A8887DE006D8991 /* Keyboard Helper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -303,6 +305,7 @@
 				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
 				CDBD62782A85D5A80079151E /* LoadingView.swift */,
 				CDC3AEF12A8741E900EA6FB9 /* FillButton.swift */,
+				CD9733122A8880EF006D8991 /* PrayerCell.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				CDB075412A7F53E50004DE7B /* SMapView.swift in Sources */,
 				CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */,
 				CDB075692A83349E0004DE7B /* MasjidHeadline.swift in Sources */,
+				CD9733132A8880EF006D8991 /* PrayerCell.swift in Sources */,
 				CDB075762A834DF40004DE7B /* MockData.swift in Sources */,
 				CDBD62772A85C47D0079151E /* PersonalInfoViewModel.swift in Sources */,
 				CDC3AEF02A87305800EA6FB9 /* NSPredicate+Ext.swift in Sources */,
@@ -522,9 +526,9 @@
 				CDB075722A8348F70004DE7B /* SabeelProfile.swift in Sources */,
 				CDB075452A7F54220004DE7B /* SFeedView.swift in Sources */,
 				CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */,
-				CDB075512A8006620004DE7B /* StatefulPreviewWrapper.swift in Sources */,
 				CDB0757E2A8356D80004DE7B /* CKRecord+Ext.swift in Sources */,
 				CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */,
+				CD9733152A8887DE006D8991 /* Keyboard Helper.swift in Sources */,
 				CDBD62792A85D5A80079151E /* LoadingView.swift in Sources */,
 				CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */,
 				CDB0753F2A7F53A60004DE7B /* STabView.swift in Sources */,
