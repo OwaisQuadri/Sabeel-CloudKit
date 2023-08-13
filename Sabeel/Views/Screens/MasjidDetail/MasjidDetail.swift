@@ -144,7 +144,7 @@ struct MasjidDetail: View {
                     }
                     .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.5))
                     .background(Color.brandBackground)
-                    .cornerRadius(20).shadow(color: .black, radius: 250)
+                    .cornerRadius(20).shadow(radius: 15)
                     .padding()
                     
                 }

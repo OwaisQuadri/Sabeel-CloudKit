@@ -16,6 +16,7 @@ struct SMapView: View {
     var body: some View {
         ZStack{
             Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: masjidManager.masjids, annotationContent: { masjid in
+                
                 MapAnnotation(coordinate: masjid.location.coordinate) {
                     VStack {
                         Image("masjidOnMap") //masjid.isConfirmed ? "masjidOnMap" : "questionmark")
@@ -24,14 +25,14 @@ struct SMapView: View {
                             //.foregroundColor(.brandBackground)
                             .scaledToFit()
                             .frame(width: .relativeToScreen(.width, ratio: 0.075))
-                            .clipShape(Circle())
-                            .opacity(0.7)
+                            .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
+                            .shadow(radius: 5)
                     }
                     .onTapGesture {
                         withAnimation(.easeInOut){
                             vm.setFocus(masjid.location)
+                            masjidManager.selectedMasjid = masjid
                         }
-                        masjidManager.selectedMasjid = masjid
 //                       TODO: vm.recenter(around: masjid.location.coordinate)
                     }
                 }
@@ -44,7 +45,7 @@ struct SMapView: View {
                 if masjidManager.selectedMasjid != nil {
                     MasjidDetail()
                         .transition(.slide)
-                        .animation(.easeOut)
+                        .animation(.easeInOut)
                         .onDisappear { vm.getMasjids(with: masjidManager) }
                 }
             }

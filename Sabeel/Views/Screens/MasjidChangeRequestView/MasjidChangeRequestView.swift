@@ -28,6 +28,9 @@ struct MasjidChangeRequestView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 if masjidManager.selectedMasjid?.changeRequest != nil {
+                    
+                    // TODO: when the value is a changed value, render as brandPrimary else brandSecondary
+                    
                         Group {
                             HStack (alignment: .center ) {
                                 // header for voting on a changerequest

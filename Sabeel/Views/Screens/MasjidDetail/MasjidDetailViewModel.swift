@@ -20,12 +20,10 @@ final class MasjidDetailViewModel: ObservableObject {
         updateInfo(with: locationManager)
     }
     
-    func dismiss(with locationManager: MasjidManager) {
-        withAnimation(.easeInOut) {
-            isShowingThisView = false
-            locationManager.selectedMasjid = nil
-        }
-    }
+    
+    func dismiss(with locationManager: MasjidManager) { locationManager.selectedMasjid = nil }
+    
+    
     func getDirectionsToLocation(with locationManager: MasjidManager) {
         guard let masjid = locationManager.selectedMasjid else { return }
         let placemark = MKPlacemark(coordinate: masjid.location.coordinate)
