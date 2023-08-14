@@ -94,7 +94,7 @@ final class SMapViewModel: NSObject, ObservableObject {
                     alertItem = AlertContext.genericErrorAlert(for: err!) // TODO: change
                     return
                 }
-                timeToMasjid = res.expectedTravelTime
+                timeToMasjid = res.expectedTravelTime != 0 ? res.expectedTravelTime : nil
             }
         }
     }

@@ -75,13 +75,13 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     
     func fetchMasjidMetaData(for locationManager: MasjidManager) {
         if let selectedMasjid = locationManager.selectedMasjid {
-                CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.record.recordID)) {(masjids: [Masjid]) in
-                    onMainThread {
-                        if masjids.count == 1 {
-                            locationManager.selectedMasjid = masjids[0]
-                        }
+            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.record.recordID)) {(masjids: [Masjid]) in
+                onMainThread {
+                    if masjids.count == 1 {
+                        locationManager.selectedMasjid = masjids[0]
                     }
                 }
+            }
         }
     }
     
@@ -102,16 +102,31 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     @Binding var alertItem: AlertItem?
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
-    var nextPrayer: Date?
-    {
+    var nextPrayer: Date? {
         guard let prayerTimes = prayerTimes else { return nil }
-        let now = Date()
+        let today = Date.now
         var prayers = [prayerTimes.fajr, prayerTimes.asr, prayerTimes.maghrib, prayerTimes.isha ]
-        if now.formatted(Date.FormatStyle().weekday(.wide)) == "Friday" { prayers.append(contentsOf: prayerTimes.juma) } else { prayers.append(prayerTimes.dhuhr) }
-        let times = prayers.compactMap({ timeString in
-            return Date.from(string: timeString)
+        if today.formatted(Date.FormatStyle().weekday(.wide)) == "Friday" { prayers.append(contentsOf: prayerTimes.juma) } else { prayers.append(prayerTimes.dhuhr) }
+        let times: [Date] = prayers.compactMap( { timeString in
+            let calendar = Calendar(identifier: .gregorian)
+            let todayComponents = calendar.dateComponents([.day,.year,.month], from: today)
+            if let parsedTime = Date.from(string: timeString) {
+                let currentPrayerDateComponents = calendar.dateComponents([.hour, .minute], from: parsedTime)
+                let time = calendar.date(from: DateComponents(
+                    year: todayComponents.year,
+                    month: todayComponents.month,
+                    day: todayComponents.day,
+                    hour: currentPrayerDateComponents.hour,
+                    minute: currentPrayerDateComponents.minute
+                ))
+                
+                return time
+            }
+            return nil
         })
-        return times.min(by: { $0.distance(to: now ).magnitude < $1.distance(to: now ).magnitude })
+        return times.min(by: {
+            return $0.distance(to: today ).magnitude < $1.distance(to: today ).magnitude
+        })
     }
     
     

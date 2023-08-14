@@ -15,18 +15,15 @@ struct MasjidDetailView: View {
     
     @Binding var secondsToMasjid: TimeInterval?
     
-    var departAt: Date? {
+    var departAt: Date {
         guard let secondsToMasjid = secondsToMasjid, let nextPrayer = vm.nextPrayer else {
-            return nil
+            return Date()
         }
         return nextPrayer.addingTimeInterval(secondsToMasjid * -1)
     }
     
-    var departAtString: String? {
-        guard let departAt = departAt  else {
-            return nil
-        }
-        return departAt.formatted(date: .omitted, time: .shortened)
+    var departAtString: String {
+        return departAt.formatted(date: .abbreviated, time: .shortened)
     }
     
     var body: some View {
@@ -82,15 +79,19 @@ struct MasjidDetailView: View {
                         .padding(.top)
                         HStack(alignment: .center) {
                             Spacer()
-                            if let departAtString = departAtString {
-                                Text("Depart at ") +
-                                Text(departAtString)
-                                    .bold().foregroundColor((Date.now.distance(to: departAt! ) > 0) ?  .brandPrimary : .brandRed )
-                            }
-                            else {
-                                Text("Find it on the map")
-                                Image(systemName: "arrow.right")
-                                    .foregroundColor(.brandPrimary)
+                            VStack (alignment: .center) {
+                                if secondsToMasjid != nil {
+                                    
+                                    Text("Depart:")
+                                    Text(departAtString)
+                                        .bold().foregroundColor((Date.now.distance(to: departAt ) > 0) ?  .brandPrimary : .brandRed )
+                                    
+                                }
+                                else if let nextPrayer = vm.nextPrayer {
+                                    Text("Nearest Prayer:")
+                                    Text(nextPrayer.formatted(date: .abbreviated, time: .shortened))
+                                        .bold().foregroundColor((Date.now.distance(to: nextPrayer ) > 0) ?  .brandPrimary : .brandRed )
+                                }
                             }
                             Spacer()
                             Button {
@@ -98,7 +99,7 @@ struct MasjidDetailView: View {
                                 vm.getDirectionsToLocation(with: masjidManager)
                             } label: {
                                 HStack{
-                                    Image(systemName: "figure.run")
+                                    Image(systemName: "arrowshape.turn.up.right.fill")
                                     if let secondsToMasjid = secondsToMasjid?.convertSecondsToString() {
                                         Text(secondsToMasjid)
                                     } else {
