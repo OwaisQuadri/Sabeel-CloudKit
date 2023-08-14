@@ -4,6 +4,7 @@
 //
 //  Created by Owais on 2023-08-08.
 //
+// PROJECT REUSABLE - for view modifier template
 
 import SwiftUI
 
@@ -44,3 +45,24 @@ struct MasjidSubtitle: ViewModifier {
     }
     
 }
+
+
+/*
+ // Template
+ extension View {
+ 
+ func viewModifierName() -> some View {
+ self.modifier(ViewModifierName())
+ }
+ 
+ }
+ 
+ struct ViewModifierName: ViewModifier {
+ 
+ func body(content: Content) -> some View {
+ content
+ .whatever modifiers u want ...
+ }
+ 
+ }
+ */

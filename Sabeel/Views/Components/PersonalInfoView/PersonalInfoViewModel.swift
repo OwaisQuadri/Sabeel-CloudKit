@@ -28,7 +28,7 @@ final class PersonalInfoViewModel: ObservableObject {
                 case .success(_):
                     break
                 case .failure(let err):
-                    DispatchQueue.main.async {
+                    onMainThread {
                         self.alertItem = AlertContext.genericErrorAlert(for: err)
                     }
             }
@@ -51,7 +51,7 @@ final class PersonalInfoViewModel: ObservableObject {
         profileRecord[SabeelProfile.kUsername] = handle
         showLoadingView()
         CloudKitManager.shared.save(record: profileRecord) { res in
-            DispatchQueue.main.async { [self] in
+            onMainThread { [self] in
                 hideLoadingView()
                 switch res {
                     case .success(_):
@@ -95,7 +95,7 @@ final class PersonalInfoViewModel: ObservableObject {
         userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
         showLoadingView()
         CloudKitManager.shared.batchSave(records: [userRecord,profileRecord]) { res in
-            DispatchQueue.main.async { [self] in
+            onMainThread { [self] in
                 hideLoadingView()
                 switch res {
                     case .success(let records):
@@ -120,7 +120,7 @@ final class PersonalInfoViewModel: ObservableObject {
         let profileRecordID = profileReference.recordID
         showLoadingView()
         CloudKitManager.shared.fetchRecord(with: profileRecordID) { res in
-            DispatchQueue.main.async { [self] in
+            onMainThread { [self] in
                 hideLoadingView()
                 switch res {
                     case .success(let record):

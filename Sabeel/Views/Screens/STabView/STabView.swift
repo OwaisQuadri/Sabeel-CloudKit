@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct STabView: View {
-    
+    @EnvironmentObject var masjidManager: MasjidManager
     @ObservedObject private var vm = STabViewModel()
+    private let mapViewModel = SMapViewModel()
     
     var body: some View {
         TabView(selection: $vm.tab) {
@@ -17,8 +18,13 @@ struct STabView: View {
             SFeedView()
                 .tabItem { Label("Community", systemImage: "person.3.fill") } .tag(Tab.feedView)
             
-            SMapView()
-                .tabItem { Label("Map", systemImage: "map") } .tag(Tab.mapView)
+            SMapView(vm: mapViewModel)
+                .tabItem {
+                    Label("Map", systemImage: "map")
+                        .onTapGesture {
+                            mapViewModel.focusUser()
+                        }
+                } .tag(Tab.mapView)
             
             
             NavigationView {
@@ -47,5 +53,6 @@ struct STabView: View {
 struct STabView_Previews: PreviewProvider {
     static var previews: some View {
         STabView()
+            .environmentObject(MasjidManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
     }
 }

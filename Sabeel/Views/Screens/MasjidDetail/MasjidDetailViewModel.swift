@@ -8,17 +8,14 @@
 import SwiftUI
 import MapKit
 
-final class MasjidDetailViewModel: ObservableObject {
+final class MasjidDetailViewModel: NSObject, ObservableObject {
     
     @Published var prayerTimes: PrayerTimes?
     @Published var showContactInfo: Bool = false
     @Published var showChangeTimingsView: Bool = false
     @Published var isShowingThisView: Bool = true
-    @Binding var alertItem: AlertItem?
+    let timeToMasjidString: String = "Go"
     
-    init(_ alertItem: Binding<AlertItem?>) {
-        self._alertItem = alertItem
-    }
     
     func onAppear(with locationManager: MasjidManager) {
         load {
@@ -43,7 +40,7 @@ final class MasjidDetailViewModel: ObservableObject {
             let masjidEmail = locationManager.selectedMasjid?.email,
             let url = URL(string: "mailto:\(masjidEmail)")
         else {
-            alertItem = AlertContext.genericErrorAlert
+            alertItem = AlertContext.unableToSendEmail
             return
         }
         UIApplication.shared.open(url)
@@ -54,7 +51,7 @@ final class MasjidDetailViewModel: ObservableObject {
             let masjidPhoneNumber = locationManager.selectedMasjid?.phoneNumber,
             let url = URL(string: "tel://\(masjidPhoneNumber)")
         else {
-            alertItem = AlertContext.genericErrorAlert
+            alertItem = AlertContext.unableToMakePhoneCall
             return
         }
         UIApplication.shared.open(url)
@@ -65,25 +62,26 @@ final class MasjidDetailViewModel: ObservableObject {
             let masjidWebsite = locationManager.selectedMasjid?.website,
             let url = URL(string: "https://\(masjidWebsite)")
         else {
-            alertItem = AlertContext.genericErrorAlert
+            alertItem = AlertContext.unableToOpenWebsiteURL
             return
         }
         UIApplication.shared.open(url)
     }
-    func updateInfo(with locationManager: MasjidManager) {
-        fetchMasjidMetaData(for: locationManager)
-        fetchPrayerTimes(for: locationManager)
+    func updateInfo(with masjidManager: MasjidManager) {
+        fetchMasjidMetaData(for: masjidManager)
+        fetchPrayerTimes(for: masjidManager)
     }
+    
     
     func fetchMasjidMetaData(for locationManager: MasjidManager) {
         if let selectedMasjid = locationManager.selectedMasjid {
-            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.record.recordID)) {(masjids: [Masjid]) in
-                DispatchQueue.main.async {
-                    if masjids.count == 1 {
-                        locationManager.selectedMasjid = masjids[0]
+                CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.record.recordID)) {(masjids: [Masjid]) in
+                    onMainThread {
+                        if masjids.count == 1 {
+                            locationManager.selectedMasjid = masjids[0]
+                        }
                     }
                 }
-            }
         }
     }
     
@@ -91,7 +89,7 @@ final class MasjidDetailViewModel: ObservableObject {
         
         if let selectedMasjid = locationManager.selectedMasjid {
             CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
-                DispatchQueue.main.async { [self] in
+                onMainThread { [self] in
                     if prayerTimes.count == 1 {
                         self.prayerTimes = prayerTimes[0]
                     }
@@ -101,13 +99,31 @@ final class MasjidDetailViewModel: ObservableObject {
     }
     
     @Published var isLoading: Bool = false
+    @Binding var alertItem: AlertItem?
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
+    var nextPrayer: Date?
+    {
+        guard let prayerTimes = prayerTimes else { return nil }
+        let now = Date()
+        var prayers = [prayerTimes.fajr, prayerTimes.asr, prayerTimes.maghrib, prayerTimes.isha ]
+        if now.formatted(Date.FormatStyle().weekday(.wide)) == "Friday" { prayers.append(contentsOf: prayerTimes.juma) } else { prayers.append(prayerTimes.dhuhr) }
+        let times = prayers.compactMap({ timeString in
+            return Date.from(string: timeString)
+        })
+        return times.min(by: { $0.distance(to: now ).magnitude < $1.distance(to: now ).magnitude })
+    }
+    
     
     func load(completion: () -> Void) {
         showLoadingView()
         completion()
         hideLoadingView()
+    }
+    
+    init(_ alertItem: Binding<AlertItem?>) {
+        self._alertItem = alertItem
+        super.init()
     }
     
 }

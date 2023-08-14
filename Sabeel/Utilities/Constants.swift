@@ -4,8 +4,11 @@
 //
 //  Created by Owais on 2023-08-09.
 //
+// PROJECT REUSABLE
 
 import CloudKit
+
+// CloudKit
 enum SabeelRecordType: String {
     case masjid = "Masjid"
     case profile = "SabeelProfile"
@@ -15,6 +18,7 @@ enum SabeelRecordType: String {
     case users = "Users"
 }
 
+// UserDefaults (@AppStorage)
 enum UserDefaultsKey {
     static let kHasSeenOnboardingView = "hasSeenOnboardingView"
     static let isFirstLoad = "isFirstLoad"

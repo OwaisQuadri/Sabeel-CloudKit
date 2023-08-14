@@ -4,6 +4,7 @@
 //
 //  Created by Owais on 2023-08-10.
 //
+// PROJECT REUSABLE
 
 import SwiftUI
 
@@ -30,7 +31,66 @@ extension AlertItem {
 }
 
 struct AlertContext {
-    // MARK - Profile Alerts
+    // MARK: - Masjid Change Request Alerts
+    
+    static let changeRequestCreationSuccess = AlertItem(
+        "Success",
+        "Masjid change request created.",
+        "Dismiss"
+    )
+
+    static let changeRequestCreationFailure = AlertItem(
+        "Error",
+        "Masjid change request failed to initialize. Please try again later.",
+        "Dismiss"
+    )
+
+    static let votedAlready = AlertItem(
+        "Unable to vote",
+        "You've voted already!",
+        "Dismiss"
+    )
+
+    static let genericUnableToVote = AlertItem(
+        "Unable to vote",
+        "We were unable to process your vote. Please try again later.",
+        "Dismiss"
+    )
+
+    static let votedSuccess = AlertItem(
+        "Success",
+        "Thanks, your vote was processed. The Masjid will be updated once all votes are processed",
+        "Dismiss"
+    )
+
+    // MARK: - Masjid Detail Alerts
+    
+    static let masjidDNE = AlertItem(
+        "Error",
+        "There is no masjid selected. Select a masjid and try again.",
+        "Dismiss"
+    )
+
+    static let unableToSendEmail = AlertItem(
+        "Error",
+        "There was an issue onpening your preferred email application. Check the email format and try again later.",
+        "Dismiss"
+    )
+    
+    static let unableToMakePhoneCall = AlertItem(
+        "Error",
+        "There was an issue onpening your Phone application. Check the format and try again later.",
+        "Dismiss"
+    )
+    
+    static let unableToOpenWebsiteURL = AlertItem(
+        "Error",
+        "There was an issue onpening your preferred web browsing application. Check the website format and try again later.",
+        "Dismiss"
+    )
+
+
+    // MARK: - Profile Alerts
     static let invalidProfile = AlertItem("Unable to save", "Please ensure that the fields are not blank,\nthe username should not be more than 20 characters,\nand the username should only include letters and numbers", "Dismiss")
     
     static let noUserRecord = AlertItem(
@@ -83,11 +143,4 @@ struct AlertContext {
             "Dismiss"
         )
     }
-    
-    // MARK: - AlertContext Template
-    static let name = AlertItem(
-        "",
-        "",
-        ""
-    )
 }

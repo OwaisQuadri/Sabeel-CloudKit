@@ -17,7 +17,7 @@ struct PrayerStatsView: View {
             if let prayerStats = prayerStats {
                 if !hideStats {
                     ZStack{
-                        StatsBackgroundView()
+                        SecondaryBackgroundView()
                         ProgressView(value: prayerStats.fajrAttended, total: prayerStats.fajrAttended + prayerStats.fajrMissed) {
                             HStack {
                                 Text("Fajr")
@@ -29,7 +29,7 @@ struct PrayerStatsView: View {
                         .padding()
                     }
                     ZStack{
-                        StatsBackgroundView()
+                        SecondaryBackgroundView()
                         ProgressView(value: prayerStats.dhuhrAttended, total: prayerStats.dhuhrAttended + prayerStats.dhuhrMissed) {
                             HStack {
                                 Text("Dhuhr")
@@ -41,7 +41,7 @@ struct PrayerStatsView: View {
                         .padding()
                     }
                     ZStack{
-                        StatsBackgroundView()
+                        SecondaryBackgroundView()
                         ProgressView(value: prayerStats.asrAttended, total: prayerStats.asrAttended + prayerStats.asrMissed) {
                             HStack {
                                 Text("Asr")
@@ -53,7 +53,7 @@ struct PrayerStatsView: View {
                         .padding()
                     }
                     ZStack{
-                        StatsBackgroundView()
+                        SecondaryBackgroundView()
                         ProgressView(value: prayerStats.maghribAttended, total: prayerStats.maghribAttended + prayerStats.maghribMissed) {
                             HStack {
                                 Text("Maghrib")
@@ -65,7 +65,7 @@ struct PrayerStatsView: View {
                         .padding()
                     }
                     ZStack{
-                        StatsBackgroundView()
+                        SecondaryBackgroundView()
                         ProgressView(value: prayerStats.ishaAttended, total: prayerStats.ishaAttended + prayerStats.ishaMissed) {
                             HStack {
                                 Text("Isha")
@@ -102,14 +102,6 @@ struct PrayerStatsHeaderView: View {
             }
             .foregroundColor(.brandSecondary)
         }
-    }
-}
-
-struct StatsBackgroundView: View {
-    var body: some View {
-        Color(uiColor: .secondarySystemBackground)
-            .frame(height: .relativeToScreen(.height, ratio: 0.09))
-            .cornerRadius(10)
     }
 }
 

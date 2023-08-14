@@ -21,18 +21,12 @@ final class MasjidChangeRequestVM: ObservableObject {
     @Published var isFromChangeRequest  : Bool                  = false
     
     @Binding var isShowingThisView: Bool
-    @Binding var alertItem: AlertItem?
     
     
     func dismiss() {
         withAnimation(.easeInOut) {
             isShowingThisView = false
         }
-    }
-    
-    init(showChangeTimingsView: Binding<Bool>, _ alertItem: Binding<AlertItem?>) {
-        self._alertItem = alertItem
-        self._isShowingThisView = showChangeTimingsView
     }
     
     
@@ -44,7 +38,7 @@ final class MasjidChangeRequestVM: ObservableObject {
     func createNewChangeRequest(using masjidManager: MasjidManager) {
         // create changeRequest
         guard let masjid = masjidManager.selectedMasjid else {
-            // alert : no masjid : generic : edge case
+            alertItem = AlertContext.masjidDNE
             return
         }
         let newPrayerTimes = PrayerTimes(fajr: prayerTimes.fajr, dhuhr: prayerTimes.dhuhr, asr: prayerTimes.asr, maghrib: prayerTimes.maghrib, isha: prayerTimes.isha, juma: prayerTimes.juma)
@@ -53,12 +47,12 @@ final class MasjidChangeRequestVM: ObservableObject {
         masjid.record[Masjid.kChangeRequest] = newChangeRequest.record.reference()
         
         CloudKitManager.shared.batchSave(records: [newPrayerTimes.record, newChangeRequest.record, masjid.record]) { res in
-            DispatchQueue.main.async { [self] in
+            onMainThread { [self] in
                 switch res {
                     case .success(_):
-                        alertItem = AlertItem("Success", "some success", "OK")
-                    case .failure(let e):
-                        alertItem = AlertContext.genericErrorAlert(for: e)
+                        alertItem = AlertContext.changeRequestCreationSuccess
+                    case .failure(_):
+                        alertItem = AlertContext.changeRequestCreationFailure
                 }
             }
         }
@@ -77,15 +71,15 @@ final class MasjidChangeRequestVM: ObservableObject {
             return
         }
         if let changeRequestID = masjid.changeRequest?.recordID {
-            CloudKitManager.shared.read(recordType: .changeRequest, predicate: .equalToRecordId(of: changeRequestID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+            CloudKitManager.shared.read(recordType: .changeRequest, predicate: .equalToRecordId(of: changeRequestID), resultsLimit: 1) { [self] (changeRequests: [MasjidChangeRequest]) in
                 if changeRequests.count != 1 {
-                    // something went terribly wrong
+                    alertItem = AlertContext.genericErrorAlert
                     return
                 }
                 // populate using changeRequest
                 let changeRequest = changeRequests[0]
                 print(changeRequest)
-                DispatchQueue.main.async { [self] in
+                onMainThread { [self] in
                     name        = changeRequest.name
                     address     = changeRequest.address
                     email       = changeRequest.email!
@@ -93,13 +87,13 @@ final class MasjidChangeRequestVM: ObservableObject {
                     website     = changeRequest.website!
                 }
                 // get prayertimes from changereq
-                CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: changeRequest.prayerTimes.recordID)) { (prayerTimess: [PrayerTimes]) in
+                CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: changeRequest.prayerTimes.recordID)) { [self] (prayerTimess: [PrayerTimes]) in
                     guard prayerTimess.count > 0 else {
-                        // something went terribly wrong
+                        alertItem = AlertContext.genericErrorAlert
                         return
                     }
                     let prayerTimesFromCurrentMasjid = prayerTimess[0]
-                    DispatchQueue.main.async { [self] in
+                    onMainThread { [self] in
                         prayerTimes = prayerTimesFromCurrentMasjid
                     }
                 }
@@ -115,13 +109,13 @@ final class MasjidChangeRequestVM: ObservableObject {
             
             // get prayertimes
             
-            CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: masjid.prayerTimes.recordID)) { (prayerTimess: [PrayerTimes]) in
+            CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: masjid.prayerTimes.recordID)) { [self] (prayerTimess: [PrayerTimes]) in
                 guard prayerTimess.count > 0 else {
-                    // something went terribly wrong
+                    alertItem = AlertContext.genericErrorAlert
                     return
                 }
                 let prayerTimesFromCurrentMasjid = prayerTimess[0]
-                DispatchQueue.main.async { [self] in
+                onMainThread { [self] in
                     prayerTimes = prayerTimesFromCurrentMasjid
                 }
             }
@@ -138,26 +132,26 @@ final class MasjidChangeRequestVM: ObservableObject {
             let masjid = masjidManager.selectedMasjid,
             let changeRequestReference = masjid.changeRequest
         else {
-            // alert : no masjid : generic : edge case
+            alertItem = AlertContext.masjidDNE
             return
         }
         // get user ID
         CloudKitManager.shared.getUserRecord()
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show alert
+            alertItem = AlertContext.noUserRecord
             return
         }
         // get change requests
-        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { [self] (changeRequests: [MasjidChangeRequest]) in
             if changeRequests.count != 1 {
-                // something went terribly wrong
+                alertItem = AlertContext.genericErrorAlert
                 return
             }
             // use changeRequests[0]
             let changeRequestObject = changeRequests[0]
             
             if changeRequestObject.userRecordIdVotedYes.contains(userRecord.reference()) {
-                // you have already voted
+                alertItem = AlertContext.votedAlready
                 return
             }
             // add user to list
@@ -174,42 +168,35 @@ final class MasjidChangeRequestVM: ObservableObject {
                 masjid.record[Masjid.kPrayerTimes]     = changeRequestObject.prayerTimes
                 masjid.record[Masjid.kIsConfirmed]     = true
                 // then, delete the changerequest and put the reference to it in masjid.record to nil
-                CloudKitManager.shared.delete(changeRequestObject) { res in
+                CloudKitManager.shared.delete(changeRequestObject) { [self] res in
                     switch res {
                         case .success(let success):
                             //deleted
                             print(success)
-                            break
-                        case .failure(let fail):
-                            // unable to delete
-                            print(fail)
-                            break
+                        case .failure(_):
+                            alertItem = AlertContext.genericUnableToVote
                     }
                 }
                 masjid.record[Masjid.kChangeRequest]   = nil
                 CloudKitManager.shared.batchSave(records: [masjid.record]) { res in
-                    DispatchQueue.main.async { [self] in
+                    onMainThread { [self] in
                         switch res {
                             case .success(let saved):
                                 print(saved)
-                                alertItem = AlertContext.genericErrorAlert
-                                break
+                                alertItem = AlertContext.votedSuccess
                             case .failure(_):
-                                // unable to save
-                                break
+                                alertItem = AlertContext.genericUnableToVote
                         }
                     }
                 }
             } else {
                 // save masjid record and changerequest record if not deleted
-                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) { res in
+                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) {[self] res in
                     switch res {
-                        case .success(let saved):
-                            print(saved)
-                            break
-                        case .failure(let err):
-                            print(err)
-                            break
+                        case .success(_):
+                            alertItem = AlertContext.votedSuccess
+                        case .failure(_):
+                            alertItem = AlertContext.genericUnableToVote
                     }
                 }
             }
@@ -222,26 +209,26 @@ final class MasjidChangeRequestVM: ObservableObject {
             let masjid = masjidManager.selectedMasjid,
             let changeRequestReference = masjid.changeRequest
         else {
-            // alert : no masjid : generic : edge case
+            alertItem = AlertContext.masjidDNE
             return
         }
         // get user ID
         CloudKitManager.shared.getUserRecord()
         guard let userRecord = CloudKitManager.shared.userRecord else {
-            // show alert
+            alertItem = AlertContext.noUserRecord
             return
         }
         // get change requests
-        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { (changeRequests: [MasjidChangeRequest]) in
+        CloudKitManager.shared.read(recordType: .changeRequest, predicate: NSPredicate(format: "recordID = %@", changeRequestReference.recordID), resultsLimit: 1) { [self] (changeRequests: [MasjidChangeRequest]) in
             if changeRequests.count != 1 {
-                // something went terribly wrong
+                alertItem = AlertContext.genericErrorAlert
                 return
             }
             // use changeRequests[0]
             let changeRequestObject = changeRequests[0]
             
             if changeRequestObject.userRecordIdVotedNo.contains(userRecord.reference()) {
-                // you have already voted
+                alertItem = AlertContext.votedAlready
                 return
             }
             // add user to list
@@ -251,45 +238,58 @@ final class MasjidChangeRequestVM: ObservableObject {
             if userVotesList.count >= changeRequestObject.votesToPass {
                 // if there are, delete the changerequest and put the reference to it in masjid.record to nil
                 
-                CloudKitManager.shared.delete(changeRequestObject) { res in
+                CloudKitManager.shared.delete(changeRequestObject) { [self] res in
                     switch res {
                         case .success(let success):
                             //deleted
                             print(success)
-                            break
-                        case .failure(let fail):
-                            // unable to delete
-                            print(fail)
-                            break
+                        case .failure(_):
+                            alertItem = AlertContext.genericUnableToVote
                     }
                 }
                 masjid.record[Masjid.kChangeRequest] = nil
-                CloudKitManager.shared.batchSave(records: [masjid.record]) { res in
-                    switch res {
-                        case .success(let saved):
-                            print(saved)
-                            break
-                        case .failure(_):
-                            // unable to save
-                            break
+                CloudKitManager.shared.batchSave(records: [masjid.record]) { [self] res in
+                    onMainThread { [self] in
+                        switch res {
+                            case .success(let saved):
+                                print(saved)
+                                alertItem = AlertContext.votedSuccess
+                            case .failure(_):
+                                alertItem = AlertContext.genericUnableToVote
+                                break
+                        }
                     }
                 }
             }
             else {
                 // save masjid record and changerequest record if not deleted
-                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) { res in
+                CloudKitManager.shared.batchSave(records: [changeRequestObject.record]) { [self] res in
                     switch res {
-                        case .success(let saved):
-                            print(saved)
-                            break
-                        case .failure(let err):
-                            print(err)
-                            break
+                        case .success(_):
+                            alertItem = AlertContext.votedSuccess
+                        case .failure(_):
+                            alertItem = AlertContext.genericUnableToVote
                     }
                 }
             }
         }
     }
     
+    
+    @Published var isLoading: Bool = false
+    @Binding var alertItem: AlertItem?
+    private func showLoadingView() { isLoading = true }
+    private func hideLoadingView() { isLoading = false }
+    
+    func load(completion: () -> Void) {
+        showLoadingView()
+        completion()
+        hideLoadingView()
+    }
+    
+    init(showChangeTimingsView: Binding<Bool>, _ alertItem: Binding<AlertItem?>) {
+        self._alertItem = alertItem
+        self._isShowingThisView = showChangeTimingsView
+    }
 }
 

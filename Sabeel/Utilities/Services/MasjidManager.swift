@@ -4,7 +4,7 @@
 //
 //  Created by Owais on 2023-08-10.
 //
-
+// PROJECT REUSABLE: how to create an env object
 import MapKit
 import SwiftUI
 
@@ -19,7 +19,7 @@ final class MasjidManager: ObservableObject {
     
     func getMasjids(){
             CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
-                DispatchQueue.main.async { [self] in
+                onMainThread { [self] in
                     self.masjids = masjids
                 }
         }

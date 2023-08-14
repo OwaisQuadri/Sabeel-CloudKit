@@ -11,7 +11,7 @@ import MapKit
 struct SMapView: View {
     
     @EnvironmentObject private var masjidManager: MasjidManager
-    @ObservedObject private var vm = SMapViewModel()
+    @ObservedObject var vm: SMapViewModel
     
     var body: some View {
         ZStack{
@@ -31,7 +31,7 @@ struct SMapView: View {
             VStack {
                 if masjidManager.selectedMasjid != nil {
                     Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))
-                    MasjidDetail(vm: MasjidDetailViewModel($vm.alertItem)) .transition(.move(edge: .bottom))
+                    MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem), secondsToMasjid: $vm.timeToMasjid) .transition(.move(edge: .bottom))
                         .onDisappear { vm.getMasjids(with: masjidManager) }
                 } else {
                     BrandLargeBanner().shadow(color: .brandPrimary, radius: 5) .transition(.scale)
@@ -46,6 +46,6 @@ struct SMapView: View {
 
 struct SMapView_Previews: PreviewProvider {
     static var previews: some View {
-        SMapView().environmentObject(MasjidManager([Masjid(record: MockData.masjid)]))
+        SMapView(vm: SMapViewModel()).environmentObject(MasjidManager([Masjid(record: MockData.masjid)]))
     }
 }
