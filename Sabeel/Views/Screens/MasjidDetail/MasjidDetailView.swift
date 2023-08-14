@@ -13,10 +13,8 @@ struct MasjidDetailView: View {
     
     @StateObject var vm: MasjidDetailViewModel
     
-    @Binding var secondsToMasjid: TimeInterval?
-    
     var departAt: Date {
-        guard let secondsToMasjid = secondsToMasjid, let nextPrayer = vm.nextPrayer else {
+        guard let secondsToMasjid = masjidManager.secondsToMasjid, let nextPrayer = vm.timeForNextPrayer else {
             return Date()
         }
         return nextPrayer.addingTimeInterval(secondsToMasjid * -1)
@@ -80,14 +78,14 @@ struct MasjidDetailView: View {
                         HStack(alignment: .center) {
                             Spacer()
                             VStack (alignment: .center) {
-                                if secondsToMasjid != nil {
+                                if masjidManager.secondsToMasjid != nil {
                                     
-                                    Text("Depart:")
+                                    Text("Depart on:")
                                     Text(departAtString)
                                         .bold().foregroundColor((Date.now.distance(to: departAt ) > 0) ?  .brandPrimary : .brandRed )
                                     
                                 }
-                                else if let nextPrayer = vm.nextPrayer {
+                                else if let nextPrayer = vm.timeForNextPrayer {
                                     Text("Nearest Prayer:")
                                     Text(nextPrayer.formatted(date: .abbreviated, time: .shortened))
                                         .bold().foregroundColor((Date.now.distance(to: nextPrayer ) > 0) ?  .brandPrimary : .brandRed )
@@ -100,7 +98,7 @@ struct MasjidDetailView: View {
                             } label: {
                                 HStack{
                                     Image(systemName: "arrowshape.turn.up.right.fill")
-                                    if let secondsToMasjid = secondsToMasjid?.convertSecondsToString() {
+                                    if let secondsToMasjid = masjidManager.secondsToMasjid?.convertSecondsToString() {
                                         Text(secondsToMasjid)
                                     } else {
                                         Text(vm.timeToMasjidString)
@@ -124,12 +122,14 @@ struct MasjidDetailView: View {
                                 } header: {
                                     Text(Constants.prayerTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                                 }
-                                Section {
-                                    ForEach( 0..<prayerTimes.juma.count, id: \.self) { index in
-                                        PrayerCell(title: "Juma \(index+1)", time: prayerTimes.juma[index])
+                                if prayerTimes.juma.count > 0 {
+                                    Section {
+                                        ForEach( 0..<prayerTimes.juma.count, id: \.self) { index in
+                                            PrayerCell(title: "Juma \(index+1)", time: prayerTimes.juma[index])
+                                        }
+                                    } header: {
+                                        Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                                     }
-                                } header: {
-                                    Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                                 }
                             }
                         }
@@ -158,7 +158,7 @@ struct MasjidDetail_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             Spacer()
-            MasjidDetailView( vm: MasjidDetailViewModel(.constant(nil)),secondsToMasjid: .constant(60.0))
+            MasjidDetailView( vm: MasjidDetailViewModel(.constant(nil)))
                 .environmentObject(MasjidManager([Masjid(record: MockData.masjid)], selected: Masjid(record: MockData.masjid)))
         }
     }

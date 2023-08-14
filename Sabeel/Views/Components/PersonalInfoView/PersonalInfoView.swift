@@ -10,7 +10,7 @@ import CloudKit
 
 struct PersonalInfoView: View {
     
-    @ObservedObject private var vm = PersonalInfoViewModel()
+    @ObservedObject var vm: PersonalInfoViewModel
     
     var body: some View {
         ZStack {
@@ -45,7 +45,7 @@ struct PersonalInfoView: View {
 struct PersonalInfoView_Previews: PreviewProvider {
     static var previews: some View {
         List {
-            PersonalInfoView()
+            PersonalInfoView(vm: PersonalInfoViewModel())
         }
     }
 }

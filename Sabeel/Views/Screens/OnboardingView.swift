@@ -15,26 +15,22 @@ struct OnboardingView: View {
             XButton {
                 isShowingOnboarding = false
             }
-            ScrollView{
+            ScrollView {
                 Spacer()
                 Group {
-                    BrandLargeBanner()
+                    Logo()
                         .scaledToFit()
-                        .frame(width: .relativeToScreen(.width))
-                        .foregroundColor(.brandPrimary)// remove when you get an image
-                        .bold()// remove when you get an image
-                        .frame(height: .relativeToScreen(.height, ratio: 0.2))
-                        .background(Color.brandSecondary) // remove when you get an image
+                        .frame(width: .relativeToScreen(.width), height: .relativeToScreen(.height, ratio: 0.3))
                 }.padding(.bottom)
                 Group  {
                     Text("Overview").masjidTitle()
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    Text("What's New?").masjidTitle()
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
-                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "test", bodyText: "other" )
+                    OnboardingNewsView(image: Image(systemName: "location.viewfinder"), headlineText: "Find Masjids in your Area", bodyText: "Get notified when to leave your house to make it in time for the next prayer!" )
+                    OnboardingNewsView(image: Image(systemName: "square.and.arrow.down.on.square"), headlineText: "Get the latest updates", bodyText: "Anyone can submit a request to keep the prayer times up to date!" )
+                    OnboardingNewsView(image: Image(systemName: "person.3.fill"), headlineText: "No Muslim left behind", bodyText: "Connect with your communities and motivate each other to come to the masjid." )
+                    Text("What's New in v1.0.0 ?").masjidTitle()
+                    OnboardingNewsView(image: Image(systemName: "bell.and.waves.left.and.right"), headlineText: "Notifications", bodyText: "Recieve notifications for ideal departure times. configured in Profile > Notification Settings" )
+                    OnboardingNewsView(image: Image(systemName: "doc.richtext.ar"), headlineText: "Masjid Details", bodyText: "View any masjid's prayer times for today, as well as call, email, or visit their website." )
+                    OnboardingNewsView(image: Image(systemName: "arrow.triangle.2.circlepath.doc.on.clipboard"), headlineText: "Masjid Change Request", bodyText: "Submit a change request that will be reviewed by the community." )
                 }
                 .foregroundColor(.brandSecondary)
                 Spacer()
@@ -56,27 +52,28 @@ struct OnboardingNewsView: View {
     
     var body: some View {
         HStack(spacing: 10) {
+            Spacer()
             image?
                 .resizable()
                 .scaledToFit()
-                .frame(height: .relativeToScreen(.height, ratio: 0.08))
+                .frame(width: .relativeToScreen(.height, ratio: 0.08) ,height: .relativeToScreen(.height, ratio: 0.08))
             VStack(alignment: .leading){
                 Spacer()
                 HStack {
                     Text(headlineText ?? "")
-                        .font(.title)
+                        .font(.title3)
                         .foregroundColor(.brandPrimary)
                         .lineLimit(1)
-                Spacer()
+                    Spacer()
                 }
                 Text(bodyText ?? "")
                     .font(.callout)
-                    .lineLimit(2)
+                    .lineLimit(3)
                 Spacer()
             }
-            .frame(width: .relativeToScreen(.width,ratio: 0.5), height: .relativeToScreen(.height, ratio: 0.098))
-            .padding()
+            Spacer()
         }
+        .frame(width: .relativeToScreen(.width,ratio: 0.8), height: .relativeToScreen(.height, ratio: 0.12))
     }
 }
 

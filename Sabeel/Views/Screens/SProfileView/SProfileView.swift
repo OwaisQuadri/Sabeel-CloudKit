@@ -10,12 +10,12 @@ import SwiftUI
 struct SProfileView: View {
     
     @ObservedObject private var vm = SProfileViewModel()
+    @ObservedObject var personalInfoVM: PersonalInfoViewModel
     
     var body: some View {
         List {
             Section {
-                PersonalInfoView()
-                PrayerStatsView()
+                PersonalInfoView(vm: personalInfoVM)
             }
             SSettingsView()
         }
@@ -26,7 +26,7 @@ struct SProfileView: View {
 struct SProfileView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            SProfileView()
+            SProfileView(personalInfoVM: PersonalInfoViewModel())
         }
     }
 }

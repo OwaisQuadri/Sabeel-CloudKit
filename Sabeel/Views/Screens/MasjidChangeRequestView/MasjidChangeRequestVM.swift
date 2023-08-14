@@ -71,30 +71,31 @@ final class MasjidChangeRequestVM: ObservableObject {
             return
         }
         if let changeRequestID = masjid.changeRequest?.recordID {
-            CloudKitManager.shared.read(recordType: .changeRequest, predicate: .equalToRecordId(of: changeRequestID), resultsLimit: 1) { [self] (changeRequests: [MasjidChangeRequest]) in
-                if changeRequests.count != 1 {
-                    alertItem = AlertContext.genericErrorAlert
-                    return
-                }
-                // populate using changeRequest
-                let changeRequest = changeRequests[0]
-                print(changeRequest)
+            CloudKitManager.shared.read(recordType: .changeRequest, predicate: .equalToRecordId(of: changeRequestID), resultsLimit: 1) {  (changeRequests: [MasjidChangeRequest]) in
                 onMainThread { [self] in
+                    if changeRequests.count != 1 {
+                        alertItem = AlertContext.genericErrorAlert
+                        return
+                    }
+                    // populate using changeRequest
+                    alertItem = AlertContext.promptToVoteUpdate
+                    let changeRequest = changeRequests[0]
                     name        = changeRequest.name
                     address     = changeRequest.address
                     email       = changeRequest.email!
                     phoneNumber = changeRequest.phoneNumber!
                     website     = changeRequest.website!
-                }
-                // get prayertimes from changereq
-                CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: changeRequest.prayerTimes.recordID)) { [self] (prayerTimess: [PrayerTimes]) in
-                    guard prayerTimess.count > 0 else {
-                        alertItem = AlertContext.genericErrorAlert
-                        return
-                    }
-                    let prayerTimesFromCurrentMasjid = prayerTimess[0]
-                    onMainThread { [self] in
-                        prayerTimes = prayerTimesFromCurrentMasjid
+                    
+                    // get prayertimes from changereq
+                    CloudKitManager.shared.read(recordType: .prayerTimes, predicate: .equalToRecordId(of: changeRequest.prayerTimes.recordID)) { [self] (prayerTimess: [PrayerTimes]) in
+                        guard prayerTimess.count > 0 else {
+                            alertItem = AlertContext.genericErrorAlert
+                            return
+                        }
+                        let prayerTimesFromCurrentMasjid = prayerTimess[0]
+                        onMainThread { [self] in
+                            prayerTimes = prayerTimesFromCurrentMasjid
+                        }
                     }
                 }
             }

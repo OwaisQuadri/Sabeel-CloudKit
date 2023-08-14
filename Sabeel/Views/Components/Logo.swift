@@ -7,19 +7,19 @@
 
 import SwiftUI
 
-struct BrandLargeBanner: View {
+struct Logo: View {
     var body: some View {
         
-        // TODO: add logo .resizable.scaledtofit.frame with height 20% of screen
-        Text("Sabeel - سبيل")
-            .font(.largeTitle)
-            .padding()
+        Image.masjidLogo
+            .resizable()
+            .scaledToFit()
+            .cornerRadius(10)
         
     }
 }
 
 struct BrandLargeBanner_Previews: PreviewProvider {
     static var previews: some View {
-        BrandLargeBanner()
+        Logo()
     }
 }

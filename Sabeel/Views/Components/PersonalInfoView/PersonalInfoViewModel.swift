@@ -130,6 +130,7 @@ final class PersonalInfoViewModel: ObservableObject {
                         name                                = profile.name
                         handle                              = profile.username
                         CloudKitManager.shared.userProfile  = profile
+                        profileContext = .update
                     case .failure(let err):
                         self.alertItem = AlertContext.genericErrorAlert(for: err)
                 }

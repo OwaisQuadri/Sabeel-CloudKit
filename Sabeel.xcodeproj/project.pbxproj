@@ -28,7 +28,6 @@
 		CDB075412A7F53E50004DE7B /* SMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075402A7F53E50004DE7B /* SMapView.swift */; };
 		CDB075432A7F53F00004DE7B /* SProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075422A7F53F00004DE7B /* SProfileView.swift */; };
 		CDB075452A7F54220004DE7B /* SFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075442A7F54220004DE7B /* SFeedView.swift */; };
-		CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075462A7F54390004DE7B /* SFriendsListView.swift */; };
 		CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075482A7F54430004DE7B /* SSettingsView.swift */; };
 		CDB0754C2A7F67300004DE7B /* CGFloat+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */; };
 		CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0754D2A7FF2C40004DE7B /* MasjidChangeRequestView.swift */; };
@@ -37,7 +36,7 @@
 		CDB075592A81D9A50004DE7B /* MasjidChangeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */; };
 		CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */; };
 		CDB0755D2A830AF20004DE7B /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */; };
-		CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */; };
+		CDB0755F2A8329F40004DE7B /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB0755E2A8329F40004DE7B /* Logo.swift */; };
 		CDB075612A83305D0004DE7B /* PrayerStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075602A83305D0004DE7B /* PrayerStatsView.swift */; };
 		CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075622A8330C00004DE7B /* PersonalInfoView.swift */; };
 		CDB075672A8334510004DE7B /* View+CustomModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB075662A8334510004DE7B /* View+CustomModifiers.swift */; };
@@ -61,6 +60,7 @@
 		CDBD62792A85D5A80079151E /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD62782A85D5A80079151E /* LoadingView.swift */; };
 		CDC3AEF02A87305800EA6FB9 /* NSPredicate+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3AEEF2A87305800EA6FB9 /* NSPredicate+Ext.swift */; };
 		CDC3AEF22A8741E900EA6FB9 /* FillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3AEF12A8741E900EA6FB9 /* FillButton.swift */; };
+		CDE8E8742A8A7AC50003C0A8 /* Image+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE8E8732A8A7AC50003C0A8 /* Image+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,7 +107,6 @@
 		CDB075402A7F53E50004DE7B /* SMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMapView.swift; sourceTree = "<group>"; };
 		CDB075422A7F53F00004DE7B /* SProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SProfileView.swift; sourceTree = "<group>"; };
 		CDB075442A7F54220004DE7B /* SFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFeedView.swift; sourceTree = "<group>"; };
-		CDB075462A7F54390004DE7B /* SFriendsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFriendsListView.swift; sourceTree = "<group>"; };
 		CDB075482A7F54430004DE7B /* SSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SSettingsView.swift; sourceTree = "<group>"; };
 		CDB0754A2A7F617A0004DE7B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CDB0754B2A7F67300004DE7B /* CGFloat+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Ext.swift"; sourceTree = "<group>"; };
@@ -117,7 +116,7 @@
 		CDB075582A81D9A50004DE7B /* MasjidChangeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasjidChangeRequest.swift; sourceTree = "<group>"; };
 		CDB0755A2A81D9BF0004DE7B /* PrayerTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimes.swift; sourceTree = "<group>"; };
 		CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
-		CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandLargeBanner.swift; sourceTree = "<group>"; };
+		CDB0755E2A8329F40004DE7B /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		CDB075602A83305D0004DE7B /* PrayerStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerStatsView.swift; sourceTree = "<group>"; };
 		CDB075622A8330C00004DE7B /* PersonalInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalInfoView.swift; sourceTree = "<group>"; };
 		CDB075662A8334510004DE7B /* View+CustomModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CustomModifiers.swift"; sourceTree = "<group>"; };
@@ -141,6 +140,7 @@
 		CDBD62782A85D5A80079151E /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CDC3AEEF2A87305800EA6FB9 /* NSPredicate+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPredicate+Ext.swift"; sourceTree = "<group>"; };
 		CDC3AEF12A8741E900EA6FB9 /* FillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillButton.swift; sourceTree = "<group>"; };
+		CDE8E8732A8A7AC50003C0A8 /* Image+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -275,6 +275,7 @@
 				CD8FCF242A89E4BA00255869 /* Format+Util.swift */,
 				CD8FCF262A89E4E800255869 /* TimeInterval+Ext.swift */,
 				CD8FCF282A89F38D00255869 /* Date+Ext.swift */,
+				CDE8E8732A8A7AC50003C0A8 /* Image+Ext.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
@@ -306,7 +307,6 @@
 				CDBD626C2A8541020079151E /* STabView */,
 				CDB075442A7F54220004DE7B /* SFeedView.swift */,
 				CDB0755C2A830AF20004DE7B /* NotificationSettingsView.swift */,
-				CDB075462A7F54390004DE7B /* SFriendsListView.swift */,
 				CDB0758E2A84D3110004DE7B /* OnboardingView.swift */,
 			);
 			path = Screens;
@@ -316,7 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				CDBD62752A85C4690079151E /* PersonalInfoView */,
-				CDB0755E2A8329F40004DE7B /* BrandLargeBanner.swift */,
+				CDB0755E2A8329F40004DE7B /* Logo.swift */,
 				CDB075682A83349E0004DE7B /* MasjidHeadline.swift */,
 				CDB075482A7F54430004DE7B /* SSettingsView.swift */,
 				CDB075602A83305D0004DE7B /* PrayerStatsView.swift */,
@@ -547,7 +547,6 @@
 				CDB075452A7F54220004DE7B /* SFeedView.swift in Sources */,
 				CDB075632A8330C00004DE7B /* PersonalInfoView.swift in Sources */,
 				CDB0757E2A8356D80004DE7B /* CKRecord+Ext.swift in Sources */,
-				CDB075472A7F54390004DE7B /* SFriendsListView.swift in Sources */,
 				CD9733152A8887DE006D8991 /* Keyboard Helper.swift in Sources */,
 				CDBD62792A85D5A80079151E /* LoadingView.swift in Sources */,
 				CD68F8062A89A5F90004D405 /* GlobalFunctions.swift in Sources */,
@@ -557,6 +556,7 @@
 				CDB0755D2A830AF20004DE7B /* NotificationSettingsView.swift in Sources */,
 				CDB0758F2A84D3110004DE7B /* OnboardingView.swift in Sources */,
 				CDB075152A7F4C870004DE7B /* Persistence.swift in Sources */,
+				CDE8E8742A8A7AC50003C0A8 /* Image+Ext.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
 				CD68F8082A89AA770004D405 /* SecondaryBackgroundView.swift in Sources */,
 				CDBD626E2A85411A0079151E /* STabViewModel.swift in Sources */,
@@ -575,7 +575,7 @@
 				CDB075182A7F4C870004DE7B /* Sabeel.xcdatamodeld in Sources */,
 				CDB0753D2A7F4F120004DE7B /* Color+Ext.swift in Sources */,
 				CDBD62742A854EE20079151E /* AlertItem.swift in Sources */,
-				CDB0755F2A8329F40004DE7B /* BrandLargeBanner.swift in Sources */,
+				CDB0755F2A8329F40004DE7B /* Logo.swift in Sources */,
 				CDB075492A7F54430004DE7B /* SSettingsView.swift in Sources */,
 				CDB075792A83526A0004DE7B /* CloudKitManager.swift in Sources */,
 				CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */,

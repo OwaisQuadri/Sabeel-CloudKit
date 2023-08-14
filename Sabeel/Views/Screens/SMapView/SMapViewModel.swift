@@ -58,44 +58,20 @@ final class SMapViewModel: NSObject, ObservableObject {
     
     func select(masjid: Masjid, for masjidManager: MasjidManager) {
         withAnimation(.easeInOut) {
-            setFocus(CLLocationCoordinate2D(latitude: masjid.location.coordinate.latitude - 0.005, longitude: masjid.location.coordinate.longitude))
+            setFocus(CLLocationCoordinate2D(latitude: masjid.location.coordinate.latitude - 0.02, longitude: masjid.location.coordinate.longitude))
             masjidManager.selectedMasjid = masjid
         }
-        calculateTimeToMasjid(with: masjidManager)
+        masjidManager.calculateSecondsTo(masjid: masjid, from: userLocationManager)
     }
     
     
     private func setFocus(_ location : CLLocationCoordinate2D){
         let newLocation = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
         withAnimation(.easeInOut){ [self] in
-            region = MKCoordinateRegion(center: newLocation, latitudinalMeters: 2_000, longitudinalMeters: 2_000)
-        }
-    }
-    
-
-    
-    func calculateTimeToMasjid(with masjidManager: MasjidManager) {
-        guard
-            let masjidLocation = masjidManager.selectedMasjid?.location,
-            let userLocationManager = userLocationManager,
-            let userLocation = userLocationManager.location
-        else {
-            alertItem = AlertContext.genericErrorAlert // TODO: change
-            return
-        }
-        let userPlacemark = MKPlacemark(coordinate: userLocation.coordinate )
-        let req = MKDirections.Request()
-        req.source = MKMapItem(placemark: userPlacemark)
-        req.destination = MKMapItem(placemark: MKPlacemark(coordinate: masjidLocation.coordinate))
-        let directions = MKDirections(request: req)
-        directions.calculateETA { res, err in
-            updateUIOnMainThread { [self] in
-                guard let res = res, err == nil else {
-                    alertItem = AlertContext.genericErrorAlert(for: err!) // TODO: change
-                    return
-                }
-                timeToMasjid = res.expectedTravelTime != 0 ? res.expectedTravelTime : nil
-            }
+            let longMeters = 5_000.0
+            let aspectRatio = CGFloat.relativeToScreen(.height, ratio: 1) / CGFloat.relativeToScreen(.width, ratio: 1)
+            let latMeters = longMeters * aspectRatio
+            region = MKCoordinateRegion(center: newLocation, latitudinalMeters: latMeters, longitudinalMeters: longMeters)
         }
     }
     

@@ -33,10 +33,22 @@ extension AlertItem {
 struct AlertContext {
     // MARK: - Masjid Change Request Alerts
     
+    static let promptToVoteCreate = AlertItem(
+        "Alert",
+        "A request exists to create this masjid. Could you please verify and vote on whether the information is accurate? ",
+        "OK"
+    )
+    
+    static let promptToVoteUpdate = AlertItem(
+        "Alert",
+        "A request exists to update this existing masjid. Could you please verify and vote on whether the information is accurate? ",
+        "OK"
+    )
+
     static let changeRequestCreationSuccess = AlertItem(
         "Success",
-        "Masjid change request created.",
-        "Dismiss"
+        "Masjid change request created. Your request will be voted on by the community and the Masjid will be updated accordingly.",
+        "OK"
     )
 
     static let changeRequestCreationFailure = AlertItem(

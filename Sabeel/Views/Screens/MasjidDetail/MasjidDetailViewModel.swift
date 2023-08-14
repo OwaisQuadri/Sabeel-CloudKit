@@ -102,7 +102,7 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     @Binding var alertItem: AlertItem?
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
-    var nextPrayer: Date? {
+    var timeForNextPrayer: Date? {
         guard let prayerTimes = prayerTimes else { return nil }
         let today = Date.now
         var prayers = [prayerTimes.fajr, prayerTimes.asr, prayerTimes.maghrib, prayerTimes.isha ]
@@ -119,14 +119,12 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
                     hour: currentPrayerDateComponents.hour,
                     minute: currentPrayerDateComponents.minute
                 ))
-                
                 return time
             }
             return nil
         })
-        return times.min(by: {
-            return $0.distance(to: today ).magnitude < $1.distance(to: today ).magnitude
-        })
+        let prayersInFuture = times.compactMap({$0.distance(to: today ) < (10).convert(from: .minutes) ? $0 : nil})
+        return prayersInFuture.min(by: { $0.distance(to: today ).magnitude < $1.distance(to: today ).magnitude })
     }
     
     

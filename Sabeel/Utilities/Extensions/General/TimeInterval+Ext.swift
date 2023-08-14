@@ -32,7 +32,7 @@ extension TimeInterval {
         }
         return output == "" ? nil : output
     }
-    func convert(from fromUnit: TimeUnits = .seconds, to toUnit: TimeUnits) -> TimeInterval {
+    func convert(from fromUnit: TimeUnits = .seconds, to toUnit: TimeUnits = .seconds) -> TimeInterval {
         var x = self
         switch fromUnit {
             case .seconds:

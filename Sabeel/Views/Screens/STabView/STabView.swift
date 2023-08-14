@@ -11,6 +11,7 @@ struct STabView: View {
     @EnvironmentObject var masjidManager: MasjidManager
     @ObservedObject private var vm = STabViewModel()
     private let mapViewModel = SMapViewModel()
+    @ObservedObject var personalInfoVM = PersonalInfoViewModel()
     
     var body: some View {
         TabView(selection: $vm.tab) {
@@ -28,7 +29,7 @@ struct STabView: View {
             
             
             NavigationView {
-                SProfileView()
+                SProfileView(personalInfoVM: personalInfoVM)
                     .toolbar(content: {
                         Button { vm.isShowingOnboarding = true } label: {
                             Image(systemName: "info.circle")
@@ -44,7 +45,10 @@ struct STabView: View {
         .accentColor(.brandPrimary)
         .sheet(isPresented: $vm.isShowingOnboarding ) {
             OnboardingView(isShowingOnboarding: $vm.isShowingOnboarding)
-                .onDisappear { vm.tab = Tab.profileView }
+                .onDisappear {
+                    vm.tab = Tab.profileView
+                    personalInfoVM.startUpChecks()
+                }
         }
         
     }

@@ -27,7 +27,7 @@ enum UserDefaultsKey {
 enum Constants {
     // MARK: Ints
     static let numberOfVotesToPassMasjidChangeRequest   :    Int = 1 // 5 in future
-    static let maxNumberOfJumas                         :    Int = 3
+    static let maxNumberOfJumas                         :    Int = 5
     // MARK: Strings
     static let jumaTimesTitle                           : String = "Juma Times"
     static let prayerTimesTitle                         : String = "Prayer Times"

@@ -19,7 +19,7 @@ struct MasjidChangeRequestView: View {
     
     var body: some View {
         ZStack {
-            VStack(alignment: .leading) {
+            VStack(alignment: .center) {
                 if masjidManager.selectedMasjid?.changeRequest != nil {
                     
                     Group {
@@ -43,43 +43,39 @@ struct MasjidChangeRequestView: View {
                         }
                         .padding()
                         Divider()
-                        HStack (alignment: .center, spacing: 10) {
-                            Text(vm.phoneNumber)
-                                .masjidSubtitle()
+                        Group {
+                            HStack (alignment: .center, spacing: 10) {
+                                Text(vm.phoneNumber)
+                                    .masjidSubtitle()
+                                Text(vm.website)
+                                    .masjidSubtitle()
+                            }
+                            
                             Text(vm.email)
-                                .masjidSubtitle()
-                            Text(vm.website)
                                 .masjidSubtitle()
                         }
                         .padding(.horizontal)
                         
-                        ScrollView {
-                            Group {
-                                Divider()
-                                Text("Prayer Times").foregroundColor(.brandSecondary).bold().font(.headline)
-                                Group {
-                                    Divider()
-                                    PrayerCell(title: "Fajr", time: vm.prayerTimes.fajr)
-                                }
-                                Group {
-                                    Divider()
-                                    PrayerCell(title: "Dhuhr", time: vm.prayerTimes.dhuhr)}
-                                Divider()
+                        List {
+                            Section {
+                                PrayerCell(title: "Fajr", time: vm.prayerTimes.fajr)
+                                PrayerCell(title: "Dhuhr", time: vm.prayerTimes.dhuhr)
                                 PrayerCell(title: "Asr", time: vm.prayerTimes.asr)
-                                Divider()
                                 PrayerCell(title: "Maghrib", time: vm.prayerTimes.maghrib)
-                                Divider()
                                 PrayerCell(title: "Isha", time: vm.prayerTimes.isha)
+                            } header: {
+                                Text(Constants.prayerTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                             }
-                            Group {
-                                ForEach( 0..<vm.prayerTimes.juma.count, id: \.self) { index in
-                                    if index == 0 { Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline).padding(.top) }
-                                    Divider()
-                                    PrayerCell(title: "Juma \(index+1)", time: vm.prayerTimes.juma[index])
+                            if vm.prayerTimes.juma.count > 0 {
+                                Section {
+                                    ForEach( 0..<vm.prayerTimes.juma.count, id: \.self) { index in
+                                        PrayerCell(title: "Juma \(index+1)", time: vm.prayerTimes.juma[index])
+                                    }
+                                } header: {
+                                    Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                                 }
                             }
                         }
-                        Divider()
                         Group {
                             HStack(spacing: 25) {
                                 FillButton(backgroundColor: .brandRed.opacity(0.9), systemImage: "xmark", scale: 2) {
@@ -97,7 +93,6 @@ struct MasjidChangeRequestView: View {
                             .padding()
                         }
                     }
-                    .padding(.horizontal)
                     .font(.title3)
                 }
                 else {
@@ -154,7 +149,7 @@ struct MasjidChangeRequestView: View {
                             Divider()
                             Group {
                                 HStack{
-                                    Text("Prayer Timings:")
+                                    Text(Constants.prayerTimesTitle)
                                         .font(.caption)
                                         .foregroundColor(.brandSecondary)
                                     Spacer()
@@ -208,30 +203,33 @@ struct MasjidChangeRequestView: View {
                             }
                             .padding(.horizontal)
                             Group{
-                                HStack {
-                                    Text("Juma Timings:")
-                                        .font(.caption)
-                                        .foregroundColor(.brandSecondary)
-                                    Spacer()
-                                }
-                                ForEach(vm.prayerTimes.juma.indices, id: \.self) { index in
+                                
+                                if vm.prayerTimes.juma.count > 0 {
                                     HStack {
-                                        LabeledContent {
-                                            HStack{
-                                                Spacer()
-                                                TextField("Juma \(index + 1)", text: $vm.prayerTimes.juma[index])
-                                                    .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
+                                        Text(Constants.jumaTimesTitle)
+                                            .font(.caption)
+                                            .foregroundColor(.brandSecondary)
+                                        Spacer()
+                                    }
+                                    ForEach(vm.prayerTimes.juma.indices, id: \.self) { index in
+                                        HStack {
+                                            LabeledContent {
+                                                HStack{
+                                                    Spacer()
+                                                    TextField("Juma \(index + 1)", text: $vm.prayerTimes.juma[index])
+                                                        .frame(width: CGFloat.relativeToScreen(.width, ratio: 0.2))
+                                                }
+                                            } label: {
+                                                Text("Juma \(index + 1) :")
                                             }
-                                        } label: {
-                                            Text("Juma \(index + 1) :")
+                                            Button (role: .destructive){
+                                                vm.prayerTimes.juma.remove(at: index)
+                                            } label: {
+                                                Label("", systemImage: "trash")
+                                            }
+                                            .padding(.horizontal)
+                                            
                                         }
-                                        Button (role: .destructive){
-                                            vm.prayerTimes.juma.remove(at: index)
-                                        } label: {
-                                            Label("", systemImage: "trash")
-                                        }
-                                        .padding(.horizontal)
-                                        
                                     }
                                 }
                                 if vm.prayerTimes.juma.count < Constants.maxNumberOfJumas {
@@ -246,6 +244,7 @@ struct MasjidChangeRequestView: View {
                                             Spacer()
                                         }
                                     }
+                                    .padding(.vertical)
                                     .buttonStyle(.bordered)
                                     .foregroundColor(.brandPrimary.opacity(0.7))
                                 }
@@ -255,7 +254,7 @@ struct MasjidChangeRequestView: View {
                     }
                     
                 }
-                Spacer()
+                Spacer(minLength: 0)
             }
             if vm.isLoading { LoadingView() }
         }

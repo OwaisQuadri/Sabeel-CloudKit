@@ -18,7 +18,7 @@ struct SMapView: View {
             Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: masjidManager.masjids, annotationContent: { masjid in
                 
                 MapAnnotation(coordinate: masjid.location.coordinate) {
-                    Image("masjidOnMap") // TODO: masjid.isConfirmed ? "masjidOnMap" : "questionmark")
+                    Image.masjidLogo
                         .resizable() .scaledToFit()
                         .frame(width: .relativeToScreen(.width, ratio: 0.075))
                         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
@@ -31,10 +31,37 @@ struct SMapView: View {
             VStack {
                 if masjidManager.selectedMasjid != nil {
                     Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))
-                    MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem), secondsToMasjid: $vm.timeToMasjid) .transition(.move(edge: .bottom))
+                    MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem)) .transition(.move(edge: .bottom))
                         .onDisappear { vm.getMasjids(with: masjidManager) }
                 } else {
-                    BrandLargeBanner().shadow(color: .brandPrimary, radius: 5) .transition(.scale)
+                    HStack (alignment: .center) {
+                            Button {
+                                print("pressed")
+                            } label: {
+                                ZStack {
+                                    Logo()
+                                        .frame(
+                                            width: .relativeToScreen(.height, ratio: 0.05),
+                                            height: .relativeToScreen(.height, ratio: 0.05))
+                                        .shadow(color: .brandPrimary, radius: 5)
+                                    Image(systemName: "plus")
+                                        .resizable()
+                                        .imageScale(.small)
+                                        .frame(
+                                            width: .relativeToScreen(.width, ratio: 0.0175),
+                                            height: .relativeToScreen(.width, ratio: 0.0175))
+                                        .offset(y: 16)
+                                }
+                                .tint(.white)
+                            }
+                        Spacer()
+                        Text("SABEEL")
+                            .font(.title).bold()
+                            .shadow(color: .brandPrimary, radius: 5)
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .transition(.move(edge: .top))
                     Spacer()
                 }
             }
