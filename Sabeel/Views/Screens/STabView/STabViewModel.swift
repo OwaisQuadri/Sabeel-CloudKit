@@ -14,14 +14,14 @@ extension STabView {
         @Published var tab = Tab.mapView
         @Published var isShowingOnboarding: Bool = false
         
-        func startUpChecks() {
+        func startUpChecks() async {
             if !hasSeenOnboardView {
                 hasSeenOnboardView = true
             }
-            CloudKitManager.shared.getUserRecord()
+            try? await CloudKitManager.shared.getUserRecord()
         }
     }
-
+    
     enum Tab: String, CaseIterable, Identifiable {
         case feedView, mapView, profileView
         

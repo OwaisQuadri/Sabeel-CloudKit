@@ -137,7 +137,6 @@ final class MasjidChangeRequestVM: ObservableObject {
             return
         }
         // get user ID
-        CloudKitManager.shared.getUserRecord()
         guard let userRecord = CloudKitManager.shared.userRecord else {
             alertItem = AlertContext.noUserRecord
             return
@@ -214,7 +213,6 @@ final class MasjidChangeRequestVM: ObservableObject {
             return
         }
         // get user ID
-        CloudKitManager.shared.getUserRecord()
         guard let userRecord = CloudKitManager.shared.userRecord else {
             alertItem = AlertContext.noUserRecord
             return

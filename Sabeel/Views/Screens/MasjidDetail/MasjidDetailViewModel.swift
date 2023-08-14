@@ -123,7 +123,7 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
             }
             return nil
         })
-        let prayersInFuture = times.compactMap({$0.distance(to: today ) < (10).convert(from: .minutes) ? $0 : nil})
+        let prayersInFuture = times.compactMap({$0.distance(to: today ) < 0 ? $0 : nil})
         return prayersInFuture.min(by: { $0.distance(to: today ).magnitude < $1.distance(to: today ).magnitude })
     }
     

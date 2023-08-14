@@ -127,9 +127,7 @@ struct MasjidChangeRequestView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     // body for creating a changerequest
-                    ZStack {
-                        Color(uiColor: UIColor.secondarySystemBackground)
-                        ScrollView {
+                    ScrollView {
                             Group {
                                 HStack {
                                     Text("General Info:")
@@ -251,7 +249,6 @@ struct MasjidChangeRequestView: View {
                             }
                             .padding(.horizontal)
                         }
-                    }
                     
                 }
                 Spacer(minLength: 0)

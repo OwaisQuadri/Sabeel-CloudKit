@@ -41,7 +41,7 @@ struct STabView: View {
             .tabItem { Label("Profile", systemImage: "person") } .tag(Tab.profileView)
             
         }
-        .onAppear{ vm.startUpChecks() }
+        .task { await vm.startUpChecks() }
         .accentColor(.brandPrimary)
         .sheet(isPresented: $vm.isShowingOnboarding ) {
             OnboardingView(isShowingOnboarding: $vm.isShowingOnboarding)

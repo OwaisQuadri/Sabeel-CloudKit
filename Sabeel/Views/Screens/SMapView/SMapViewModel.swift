@@ -12,6 +12,7 @@ final class SMapViewModel: NSObject, ObservableObject {
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.95, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @Published var alertItem: AlertItem?
     @Published var timeToMasjid: Double?
+    @Published var isCreatingNewMasjid = false
     
     var userLocationManager: CLLocationManager?
     

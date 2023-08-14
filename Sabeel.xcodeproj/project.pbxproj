@@ -61,6 +61,8 @@
 		CDC3AEF02A87305800EA6FB9 /* NSPredicate+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3AEEF2A87305800EA6FB9 /* NSPredicate+Ext.swift */; };
 		CDC3AEF22A8741E900EA6FB9 /* FillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC3AEF12A8741E900EA6FB9 /* FillButton.swift */; };
 		CDE8E8742A8A7AC50003C0A8 /* Image+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE8E8732A8A7AC50003C0A8 /* Image+Ext.swift */; };
+		CDE8E87B2A8ADFD40003C0A8 /* CreateNewMasjidView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE8E87A2A8ADFD40003C0A8 /* CreateNewMasjidView.swift */; };
+		CDE8E87D2A8ADFD60003C0A8 /* CreateNewMasjidViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE8E87C2A8ADFD60003C0A8 /* CreateNewMasjidViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +143,8 @@
 		CDC3AEEF2A87305800EA6FB9 /* NSPredicate+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSPredicate+Ext.swift"; sourceTree = "<group>"; };
 		CDC3AEF12A8741E900EA6FB9 /* FillButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillButton.swift; sourceTree = "<group>"; };
 		CDE8E8732A8A7AC50003C0A8 /* Image+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Ext.swift"; sourceTree = "<group>"; };
+		CDE8E87A2A8ADFD40003C0A8 /* CreateNewMasjidView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMasjidView.swift; sourceTree = "<group>"; };
+		CDE8E87C2A8ADFD60003C0A8 /* CreateNewMasjidViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMasjidViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -300,6 +304,7 @@
 		CDB0756F2A83376F0004DE7B /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CDE8E87E2A8AE00C0003C0A8 /* CreateNewMasjid */,
 				CDB0758B2A84A70D0004DE7B /* MasjidDetail */,
 				CDB075842A849B2A0004DE7B /* MasjidChangeRequestView */,
 				CDB075832A849B040004DE7B /* SProfileView */,
@@ -400,6 +405,15 @@
 				CDB075622A8330C00004DE7B /* PersonalInfoView.swift */,
 			);
 			path = PersonalInfoView;
+			sourceTree = "<group>";
+		};
+		CDE8E87E2A8AE00C0003C0A8 /* CreateNewMasjid */ = {
+			isa = PBXGroup;
+			children = (
+				CDE8E87C2A8ADFD60003C0A8 /* CreateNewMasjidViewModel.swift */,
+				CDE8E87A2A8ADFD40003C0A8 /* CreateNewMasjidView.swift */,
+			);
+			path = CreateNewMasjid;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -559,6 +573,7 @@
 				CDE8E8742A8A7AC50003C0A8 /* Image+Ext.swift in Sources */,
 				CDB0754E2A7FF2C40004DE7B /* MasjidChangeRequestView.swift in Sources */,
 				CD68F8082A89AA770004D405 /* SecondaryBackgroundView.swift in Sources */,
+				CDE8E87D2A8ADFD60003C0A8 /* CreateNewMasjidViewModel.swift in Sources */,
 				CDBD626E2A85411A0079151E /* STabViewModel.swift in Sources */,
 				CDB075532A8007000004DE7B /* MasjidDetailView.swift in Sources */,
 				CDB0755B2A81D9BF0004DE7B /* PrayerTimes.swift in Sources */,
@@ -581,6 +596,7 @@
 				CDB0758D2A84A7200004DE7B /* MasjidDetailViewModel.swift in Sources */,
 				CDBD62702A85497C0079151E /* SProfileViewModel.swift in Sources */,
 				CDB075882A849C7F0004DE7B /* SMapViewModel.swift in Sources */,
+				CDE8E87B2A8ADFD40003C0A8 /* CreateNewMasjidView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

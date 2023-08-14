@@ -37,6 +37,7 @@ struct SMapView: View {
                     HStack (alignment: .center) {
                             Button {
                                 print("pressed")
+                                vm.isCreatingNewMasjid = true
                             } label: {
                                 ZStack {
                                     Logo()
@@ -66,6 +67,9 @@ struct SMapView: View {
                 }
             }
         }
+        .sheet(isPresented: $vm.isCreatingNewMasjid, content: {
+            CreateNewMasjidView(showThisView: $vm.isCreatingNewMasjid)
+        })
         .onAppear { vm.onAppear(with: masjidManager) }
         .alert(item: $vm.alertItem) { $0.alert }
     }

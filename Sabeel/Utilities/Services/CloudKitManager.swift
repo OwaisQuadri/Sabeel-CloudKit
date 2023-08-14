@@ -67,20 +67,13 @@ final class CloudKitManager {
     }
     
     var userRecord: CKRecord?
-    
-    func getUserRecord() { // called in background (on lauch, only need it if we need an account for some tasks)
-        container.fetchUserRecordID { recordId, err in// get recordId
-            guard let recordId = recordId, err == nil else {
-                print(err!.localizedDescription)
-                return
-            }
-            self.publicDB.fetch(withRecordID: recordId) { userRecord, err in // get userRecord
-                guard let userRecord = userRecord, err == nil else {
-                    print(err!.localizedDescription)
-                    return
-                }
-                self.userRecord = userRecord
-            }
+    var profileRecordID: CKRecord.ID?
+    func getUserRecord() async throws { // called in background (on lauch, only need it if we need an account for some tasks)
+        let recordID = try await container.userRecordID()
+        let record = try await publicDB.record(for: recordID)
+        self.userRecord = record
+        if let profileReference = record["userProfile"] as? CKRecord.Reference {
+            profileRecordID = profileReference.recordID
         }
     }
     
