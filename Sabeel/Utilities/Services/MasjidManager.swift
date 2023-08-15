@@ -18,13 +18,6 @@ final class MasjidManager: ObservableObject {
         self.selectedMasjid = masjid
     }
     
-    func getMasjids(){
-            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
-                onMainThread { [self] in
-                    self.masjids = masjids
-                }
-        }
-    }
     
     func calculateSecondsTo(masjid: Masjid, from userLocationManager: CLLocationManager?) {
         guard

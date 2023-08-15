@@ -110,6 +110,12 @@ final class CloudKitManager {
 // MARK: - CRUD Functions
 extension CloudKitManager {
     
+    func getMasjids() async throws -> [Masjid] { // try making this generic
+        let query = CKQuery(recordType: SabeelRecordType.masjid.rawValue, predicate: NSPredicate(value: true))
+        let (matchResults, _) = try await publicDB.records(matching: query) // not using cursor
+        let records = matchResults.compactMap{_, result in try? result.get()} // not using recordID
+        return records.map(Masjid.init)
+    }
     
     // MARK: CREATE
     func add(operation: CKDatabaseOperation) {

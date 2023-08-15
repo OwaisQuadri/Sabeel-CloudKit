@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-final class SMapViewModel: NSObject, ObservableObject {
+@MainActor final class SMapViewModel: NSObject, ObservableObject {
     @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.95, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @Published var alertItem: AlertItem?
     @Published var timeToMasjid: Double?
@@ -16,6 +16,14 @@ final class SMapViewModel: NSObject, ObservableObject {
     
     var userLocationManager: CLLocationManager?
     
+    
+    func getMasjids(with masjidManager: MasjidManager) {
+        Task {
+            do {
+                masjidManager.masjids = try await CloudKitManager.shared.getMasjids()
+            }
+        }
+    }
     
     func onAppear(with masjidManager: MasjidManager) {
         initLocationManager()
@@ -42,17 +50,6 @@ final class SMapViewModel: NSObject, ObservableObject {
             let userLocationCoord = userLocationManager?.location?.coordinate
         {
             setFocus(userLocationCoord)
-        }
-    }
-    
-    
-    func getMasjids(with masjidManager: MasjidManager){
-        withAnimation(.easeInOut) {
-            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(value: true)) {masjids in
-                onMainThread {
-                    masjidManager.masjids = masjids
-                }
-            }
         }
     }
     
