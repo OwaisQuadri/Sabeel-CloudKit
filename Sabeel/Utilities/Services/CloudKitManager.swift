@@ -56,16 +56,6 @@ final class CloudKitManager {
         }
     }
     
-    func requestApplicationPermission (completion: @escaping (Result<Bool, Error>) -> Void) {
-        container.requestApplicationPermission([.userDiscoverability]) { status, err in
-            if status == .granted {
-                completion(.success(true))
-            } else {
-                completion(.failure(err!))
-            }
-        }
-    }
-    
     var userRecord: CKRecord?
     var profileRecordID: CKRecord.ID?
     func getUserRecord() async throws { // called in background (on lauch, only need it if we need an account for some tasks)
@@ -77,150 +67,45 @@ final class CloudKitManager {
         }
     }
     
-    func batchSave(records: [CKRecord], completion: @escaping (Result<[CKRecord], Error>) -> Void) {
-        
-        let operation = CKModifyRecordsOperation(recordsToSave: records)
-        operation.modifyRecordsCompletionBlock = {recordsToSave, _, err in // _=deletedRecordIds
-            guard let savedRecords = recordsToSave, err == nil else {
-                completion(.failure(err!))
-                return
-            }
-            completion(.success(savedRecords))
-        }
-        // add operation to db
-        CKContainer.default().publicCloudDatabase.add(operation) // its like task.resume() to fire off operation
-    }
-    // MARK: - Save and Fetch single records
-    func save(record: CKRecord, completion: @escaping (Result<CKRecord, Error>) -> Void) {
-        publicDB.save(record) { record, err in
-            guard let record = record, err == nil else { completion(.failure(err!)); return }
-            completion(.success(record))
-        }
-    }
-    
-    func fetchRecord(with id: CKRecord.ID, completion: @escaping (Result<CKRecord, Error>) -> Void) {
-        publicDB.fetch(withRecordID: id) { record, err in
-            guard let record = record, err == nil else { completion(.failure(err!)); return }
-            completion(.success(record))
-        }
-    }
 }
 
 
 // MARK: - CRUD Functions
 extension CloudKitManager {
-    
-    func getMasjids() async throws -> [Masjid] { // try making this generic
-        let query = CKQuery(recordType: SabeelRecordType.masjid.rawValue, predicate: NSPredicate(value: true))
-        let (matchResults, _) = try await publicDB.records(matching: query) // not using cursor
-        let records = matchResults.compactMap{_, result in try? result.get()} // not using recordID
-        return records.map(Masjid.init)
+    // save/create/update and delete
+    func batchSave(records : [CKRecord]) async throws -> Bool {
+        let recordsToSave = records
+        let (savedResults, _) = try await publicDB.modifyRecords(saving: recordsToSave, deleting: [])
+        return !(savedResults.compactMap { _, result in try? result.get() }.isEmpty)
     }
-    
-    // MARK: CREATE
-    func add(operation: CKDatabaseOperation) {
-        self.publicDB.add(operation)
+    func save<T:CKObject>(_ objects : [T]) async throws -> Bool {
+        let recordsToSave = objects.map { $0.record }
+        let (savedResults, _) = try await publicDB.modifyRecords(saving: recordsToSave, deleting: [])
+        return !(savedResults.compactMap { _, result in try? result.get() }.isEmpty)
     }
-    
-    func create<T:CKObject>(_ item: T,completion: @escaping (Result<Bool, Error>) -> Void) {
-        
-        // get record
-        let record = item.record
-        
-        // Save to cloudkit
-        save(record, completion: completion)
-    }
-    
-    private func save(_ record: CKRecord, completion: @escaping (Result<Bool, Error>) -> Void) {
-        publicDB.save(record) { returnedRecord, err in
-            if let err = err { completion(.failure(err)) } else { completion(.success(true)) }
-        }
+    func batchDel<T:CKObject>(_ objects : [T]) async throws -> Bool {
+        let recordIds = objects.map { $0.record.recordID }
+        let (_, deletedResultsID) = try await publicDB.modifyRecords(saving: [], deleting: recordIds)
+        return !(deletedResultsID.compactMap { id, _ in id }.isEmpty)
     }
     // MARK: READ
-    func read<T:CKObject>(
-        recordType: SabeelRecordType,
-        predicate: NSPredicate,
-        sortDescriptors: [NSSortDescriptor]? = nil,
-        resultsLimit: Int? = nil,
-        completion: @escaping (_ items: [T]) -> Void // usage: { (masjids as [Masjid]) in
-    ) -> Void {
-        let operation = createOperation(
-            recordType: recordType.rawValue,
-            predicate: predicate,
-            sortDescriptors: sortDescriptors,
-            resultsLimit: resultsLimit
-        )
-        
-        // get items in query
-        var returnedItems: [T] = []
-        
-        addRecordMatchedBlock(operation: operation) { item in
-            returnedItems.append(item)
-        }
-        
-        // Query completion
-        addQueryResultBlock(operation: operation) { finished in
-            completion(returnedItems)
-        }
-        
-        add(operation: operation)
-        
+    func get<T:CKObject>(object type: SabeelRecordType  , from recordID: CKRecord.ID) async throws -> [T] {
+        let predicate: NSPredicate = .equalToRecordId(of: recordID)
+        let query = CKQuery(recordType: type.rawValue , predicate: predicate)
+        let (matchResults, _) = try await publicDB.records(matching: query, resultsLimit: 1)
+        let record = matchResults.compactMap{ _, result in try? result.get() }
+        return record.map(T.init) // remember to cast
     }
-    
-    private func createOperation(
-        recordType: CKRecord.RecordType,
-        predicate: NSPredicate,
+    func getAll<T:CKObject>(
+        objects type: SabeelRecordType,
+        predicate: NSPredicate = NSPredicate(value: true),
         sortDescriptors: [NSSortDescriptor]? = nil,
-        resultsLimit: Int? = nil
-    ) -> CKQueryOperation {
-        let query = CKQuery(recordType: recordType, predicate: predicate)
+        resultLimit: Int = CKQueryOperation.maximumResults
+    ) async throws -> [T] {
+        let query = CKQuery(recordType: type.rawValue , predicate: predicate)
         query.sortDescriptors = sortDescriptors
-        let queryOperation = CKQueryOperation(query: query)
-        if let limit = resultsLimit {
-            queryOperation.resultsLimit = limit
-        }
-        return queryOperation
-    }
-    
-    private func addRecordMatchedBlock<T:CKObject>(operation: CKQueryOperation, completion: @escaping (_ item: T) -> Void) {
-        if #available(iOS 15, *) {
-            operation.recordMatchedBlock = { recordId, result in
-                switch result {
-                    case .success(let record):
-                        let item = T(record: record)// guard let if optional init
-                        completion(item)
-                    case .failure:
-                        break
-                }
-            }
-        }
-    }
-    
-    private func addQueryResultBlock(operation: CKQueryOperation, completion: @escaping (_ finished: Bool) -> Void) {
-        if #available(iOS 15, *) {
-            operation.queryResultBlock = { result in
-                completion(true)
-            }
-        }
-    }
-    
-    // MARK: UPDATE
-    func update<T:CKObject>(_ item: T,completion: @escaping (Result<Bool, Error>) -> Void) { create(item, completion: completion) }
-    
-    
-    
-    // MARK: DELETE
-    func delete<T:CKObject>(_ item: T, completion: @escaping (Result<Bool, Error>) -> Void) {
-        self.delete(item.record, completion: completion)
-    }
-    
-    private func delete(_ record: CKRecord, completion: @escaping (Result<Bool, Error>) -> Void) {
-        publicDB.delete(withRecordID: record.recordID) { returnedRecordId, err in
-            if let err = err {
-                completion(.failure(err))
-            } else {
-                completion(.success(true))
-            }
-        }
+        let (matchResults, _) = try await publicDB.records(matching: query, resultsLimit: resultLimit)
+        let record = matchResults.compactMap{ _, result in try? result.get() }
+        return record.map(T.init) // remember to cast
     }
 }

@@ -260,7 +260,7 @@ struct MasjidChangeRequestView: View {
         .cornerRadius(20).shadow(radius: 20)
         .padding()
         .textFieldStyle(.roundedBorder)
-        .onAppear {
+        .task {
             vm.onAppear(with: masjidManager)
         }
         .alert(item: $vm.alertItem) { $0.alert }

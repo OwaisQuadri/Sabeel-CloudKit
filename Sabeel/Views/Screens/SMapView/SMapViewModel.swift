@@ -20,7 +20,10 @@ import MapKit
     func getMasjids(with masjidManager: MasjidManager) {
         Task {
             do {
-                masjidManager.masjids = try await CloudKitManager.shared.getMasjids()
+                masjidManager.masjids = try await CloudKitManager.shared.getAll(objects: .masjid)
+            }
+            catch {
+                alertItem = AlertItem("tuff", "the warning is actually an issue", "yikes")
             }
         }
     }
@@ -82,7 +85,7 @@ extension SMapViewModel: CLLocationManagerDelegate {
     }
     
     private func checkLocationAuth() {
-        guard let userLocationManager = userLocationManager else {
+        guard let userLocationManager else {
             alertItem = AlertItem("Err", "unable to use any location services. Please update your iPhone settings", "Dismiss")
             return }
         switch userLocationManager.authorizationStatus {

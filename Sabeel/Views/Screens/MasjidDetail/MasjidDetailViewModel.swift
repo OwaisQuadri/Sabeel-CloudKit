@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 
-final class MasjidDetailViewModel: NSObject, ObservableObject {
+@MainActor final class MasjidDetailViewModel: NSObject, ObservableObject {
     
     @Published var prayerTimes: PrayerTimes?
     @Published var showContactInfo: Bool = false
@@ -73,13 +73,11 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     }
     
     
-    func fetchMasjidMetaData(for locationManager: MasjidManager) {
+    func fetchMasjidMetaData(for locationManager: MasjidManager) { // redundant?
         if let selectedMasjid = locationManager.selectedMasjid {
-            CloudKitManager.shared.read(recordType: .masjid, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.record.recordID)) {(masjids: [Masjid]) in
-                onMainThread {
-                    if masjids.count == 1 {
-                        locationManager.selectedMasjid = masjids[0]
-                    }
+            Task {
+                do {
+                    locationManager.selectedMasjid = try await CloudKitManager.shared.get(object: .masjid, from: selectedMasjid.record.recordID)[0] as Masjid
                 }
             }
         }
@@ -88,11 +86,9 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     func fetchPrayerTimes(for locationManager: MasjidManager) {
         
         if let selectedMasjid = locationManager.selectedMasjid {
-            CloudKitManager.shared.read(recordType: .prayerTimes, predicate: NSPredicate(format: "recordID = %@", selectedMasjid.prayerTimes.recordID) , resultsLimit: 1) { (prayerTimes: [PrayerTimes]) in
-                onMainThread { [self] in
-                    if prayerTimes.count == 1 {
-                        self.prayerTimes = prayerTimes[0]
-                    }
+            Task {
+                do {
+                    self.prayerTimes = try await CloudKitManager.shared.get(object: .prayerTimes, from: selectedMasjid.prayerTimes.recordID)[0] as PrayerTimes
                 }
             }
         }
@@ -103,7 +99,7 @@ final class MasjidDetailViewModel: NSObject, ObservableObject {
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
     var timeForNextPrayer: Date? {
-        guard let prayerTimes = prayerTimes else { return nil }
+        guard let prayerTimes else { return nil }
         let today = Date.now
         var prayers = [prayerTimes.fajr, prayerTimes.asr, prayerTimes.maghrib, prayerTimes.isha ]
         if today.formatted(Date.FormatStyle().weekday(.wide)) == "Friday" { prayers.append(contentsOf: prayerTimes.juma) } else { prayers.append(prayerTimes.dhuhr) }

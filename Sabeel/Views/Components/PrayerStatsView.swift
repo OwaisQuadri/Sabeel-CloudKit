@@ -14,7 +14,7 @@ struct PrayerStatsView: View {
         VStack (alignment: .leading){
             // prayer stats
             PrayerStatsHeaderView(hideStats: $hideStats)
-            if let prayerStats = prayerStats {
+            if let prayerStats {
                 if !hideStats {
                     ZStack{
                         SecondaryBackgroundView()

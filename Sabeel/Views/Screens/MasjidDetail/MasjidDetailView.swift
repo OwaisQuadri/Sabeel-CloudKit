@@ -137,7 +137,7 @@ struct MasjidDetailView: View {
                     
                     if vm.isLoading { LoadingView() }
                 }
-                .onAppear { vm.onAppear(with: masjidManager) }
+                .task { vm.onAppear(with: masjidManager) }
                 .frame(height: CGFloat.relativeToScreen(.height, ratio: 0.5))
                 .background(Color.brandBackground)
                 .cornerRadius(20).shadow(radius: 15)

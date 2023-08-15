@@ -32,7 +32,7 @@ struct SMapView: View {
                 if masjidManager.selectedMasjid != nil {
                     Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))
                     MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem)) .transition(.move(edge: .bottom))
-                        .onDisappear { vm.getMasjids(with: masjidManager) }
+                        .onDisappear { Task {vm.getMasjids(with: masjidManager)} }
                 } else {
                     HStack (alignment: .center) {
                             Button {
@@ -70,7 +70,7 @@ struct SMapView: View {
         .sheet(isPresented: $vm.isCreatingNewMasjid, content: {
             CreateNewMasjidView(showThisView: $vm.isCreatingNewMasjid)
         })
-        .onAppear { vm.onAppear(with: masjidManager) }
+        .task { vm.onAppear(with: masjidManager) }
         .alert(item: $vm.alertItem) { $0.alert }
     }
 }

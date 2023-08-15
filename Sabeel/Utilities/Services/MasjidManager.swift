@@ -31,7 +31,7 @@ final class MasjidManager: ObservableObject {
         req.destination = MKMapItem(placemark: MKPlacemark(coordinate: masjidLocation.coordinate))
         let directions = MKDirections(request: req)
         directions.calculateETA { [self] res, err in
-                guard let res = res, err == nil else { return }
+                guard let res, err == nil else { return }
                 secondsToMasjid = res.expectedTravelTime != 0 ? res.expectedTravelTime : nil
         }
     }

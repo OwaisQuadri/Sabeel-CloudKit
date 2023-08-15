@@ -57,7 +57,8 @@ extension SabeelProfile: CKObject {
         record[SabeelProfile.kHomeLocation] = homeLocation
         record[SabeelProfile.kIsPremium]    = isPremium
         
-        CloudKitManager.shared.create(prayerStats) { _ in
+        Task {
+            try? await CloudKitManager.shared.save([prayerStats])
         }
         record[SabeelProfile.kPrayerStats]  = prayerStats.record.reference(.deleteSelf)
         // editable to change schema^

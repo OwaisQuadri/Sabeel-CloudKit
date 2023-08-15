@@ -8,7 +8,7 @@
 import SwiftUI
 import CloudKit
 
-final class PersonalInfoViewModel: ObservableObject {
+@MainActor final class PersonalInfoViewModel: ObservableObject {
     
     @Published var alertItem: AlertItem?
     @Published var name : String = ""
@@ -28,9 +28,8 @@ final class PersonalInfoViewModel: ObservableObject {
                 case .success(_):
                     break
                 case .failure(let err):
-                    onMainThread {
-                        self.alertItem = AlertContext.genericErrorAlert(for: err)
-                    }
+                    self.alertItem = AlertContext.genericErrorAlert(for: err)
+                    
             }
         }
         getProfile()
@@ -42,23 +41,27 @@ final class PersonalInfoViewModel: ObservableObject {
             alertItem = AlertContext.invalidProfile
             return
         }
-        guard let profileRecord = existingProfileRecord else {
-            alertItem = AlertContext.unableToGetProfile
-            return
-        }
-        // update fields
-        profileRecord[SabeelProfile.kName] = name
-        profileRecord[SabeelProfile.kUsername] = handle
+        
         showLoadingView()
-        CloudKitManager.shared.save(record: profileRecord) { res in
-            onMainThread { [self] in
-                hideLoadingView()
-                switch res {
-                    case .success(_):
-                        alertItem = AlertContext.updateProfileSuccess
-                    case .failure(_):
-                        alertItem = AlertContext.updateProfileFailure
+        Task {
+            do {
+                guard let profileRecord = existingProfileRecord else {
+                    alertItem = AlertContext.unableToGetProfile
+                    return
                 }
+                // update fields
+                profileRecord[SabeelProfile.kName] = name
+                profileRecord[SabeelProfile.kUsername] = handle
+                
+                _ = try await CloudKitManager.shared.batchSave(records: [profileRecord])
+                alertItem = AlertContext.updateProfileSuccess
+                hideLoadingView()
+                
+            }
+            catch {
+                hideLoadingView()
+                alertItem = AlertContext.updateProfileFailure
+                
             }
         }
     }
@@ -81,59 +84,55 @@ final class PersonalInfoViewModel: ObservableObject {
         }
         // Create CKRecord from profile view
         let createdProfile = SabeelProfile(name: name, username: handle, homeAddress: nil, homeLocation: nil, isPremium: false, prayerStats: PrayerStats())
-        guard let createdProfile = createdProfile else {
+        guard let createdProfile else {
             self.alertItem = AlertContext.unableToCreateProfile
             return
         }
-        let profileRecord = createdProfile.record
         
-        guard let userRecord = CloudKitManager.shared.userRecord else {
-            self.alertItem = AlertContext.noUserRecord
-            return
-        }
-        // create reference on UserRecord to the SabeelProfile we created
-        userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
         showLoadingView()
-        CloudKitManager.shared.batchSave(records: [userRecord,profileRecord]) { res in
-            onMainThread { [self] in
-                hideLoadingView()
-                switch res {
-                    case .success(let records):
-                        for record in records where record.recordType == SabeelRecordType.profile.rawValue {
-                            existingProfileRecord = record
-                        }
-                        alertItem = AlertContext.accountCreatedSuccessfully
-                    case .failure(let err):
-                        alertItem = AlertContext.genericErrorAlert(for: err)
+        Task {
+            do {
+                let profileRecord = createdProfile.record
+                
+                guard let userRecord = CloudKitManager.shared.userRecord else {
+                    self.alertItem = AlertContext.noUserRecord
+                    return
                 }
+                // create reference on UserRecord to the SabeelProfile we created
+                userRecord["userProfile"] = CKRecord.Reference(recordID: profileRecord.recordID, action: .none)
+                let isSaved = try await CloudKitManager.shared.batchSave(records: [userRecord,profileRecord])
+                if isSaved {
+                    existingProfileRecord = profileRecord
+                    alertItem = AlertContext.accountCreatedSuccessfully
+                }
+                hideLoadingView()
+            }
+            catch {
+                hideLoadingView()
+                alertItem = AlertContext.genericErrorAlert(for: error)
             }
         }
     }
     
     func getProfile() {
-        guard let userRecord = CloudKitManager.shared.userRecord else {
+        // grab reference from that
+        guard let profileRecordID = CloudKitManager.shared.profileRecordID else {
             self.alertItem = AlertContext.noUserRecord
             return
         }
-        // grab reference from that
-        guard let profileReference = userRecord["userProfile"] as? CKRecord.Reference else { return }
-        let profileRecordID = profileReference.recordID
         showLoadingView()
-        CloudKitManager.shared.fetchRecord(with: profileRecordID) { res in
-            onMainThread { [self] in
+        Task {
+            do {
+                let profile = try await CloudKitManager.shared.get(object: .profile, from: profileRecordID)[0] as SabeelProfile
+                existingProfileRecord = profile.record
+                name = profile.name
+                handle = profile.username
+                CloudKitManager.shared.userProfile  = profile
+                profileContext = .update
                 hideLoadingView()
-                switch res {
-                    case .success(let record):
-                        existingProfileRecord = record
-                        // update UI on main thread
-                        let profile                         = SabeelProfile(record: record)
-                        name                                = profile.name
-                        handle                              = profile.username
-                        CloudKitManager.shared.userProfile  = profile
-                        profileContext = .update
-                    case .failure(let err):
-                        self.alertItem = AlertContext.genericErrorAlert(for: err)
-                }
+            } catch {
+                hideLoadingView()
+                alertItem = AlertContext.genericErrorAlert(for: error)
             }
         }
     }

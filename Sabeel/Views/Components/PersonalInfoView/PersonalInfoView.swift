@@ -20,8 +20,10 @@ struct PersonalInfoView: View {
                     .foregroundColor(.brandSecondary)
                 HStack {
                     TextField("Name", text: $vm.name).minimumScaleFactor(0.75)
+                        .autocorrectionDisabled()
                         .submitLabel(.done)
                     TextField("Username", text: $vm.handle)
+                        .autocorrectionDisabled()
                         .minimumScaleFactor(0.75)
                         .bold()
                         .foregroundColor(.brandPrimary)
@@ -36,7 +38,7 @@ struct PersonalInfoView: View {
             }
             if vm.isLoading { LoadingView() }
         }
-        .onAppear { vm.startUpChecks() }
+        .task { vm.startUpChecks() }
         .alert(item: $vm.alertItem) { $0.alert }
     }
 }
