@@ -109,12 +109,16 @@ import MapKit
     func time(for prayer: Prayer) -> Date? {
         guard let prayerTimes else { return nil }
         let today = Date.now
+        let calendar = Calendar(identifier: .gregorian)
+        let todayComponents = calendar.dateComponents([.day,.year,.month], from: today)
+        let isJuma = today.formatted(Date.FormatStyle().weekday(.wide)) == "Friday"
         var whichPrayer: String
         switch prayer {
             case .fajr:
                 whichPrayer = prayerTimes.fajr
             case .dhuhr:
                 whichPrayer = prayerTimes.dhuhr
+                if isJuma { return nil }
             case .asr:
                 whichPrayer = prayerTimes.asr
             case .maghrib:
@@ -123,9 +127,9 @@ import MapKit
                 whichPrayer = prayerTimes.isha
             case .juma(let index):
                 whichPrayer = prayerTimes.juma[index]
+                if !isJuma { return nil }
         }
-            let calendar = Calendar(identifier: .gregorian)
-            let todayComponents = calendar.dateComponents([.day,.year,.month], from: today)
+            
             if let parsedTime = Date.from(string: whichPrayer) {
                 let currentPrayerDateComponents = calendar.dateComponents([.hour, .minute], from: parsedTime)
                 let time = calendar.date(from: DateComponents(
