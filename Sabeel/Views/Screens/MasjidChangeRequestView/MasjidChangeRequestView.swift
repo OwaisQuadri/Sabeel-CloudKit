@@ -34,7 +34,7 @@ struct MasjidChangeRequestView: View {
                             }
                             Spacer()
                             Button {
-                                vm.dismiss()
+                                vm.dismiss(for: masjidManager)
                             } label: {
                                 Image(systemName: "chevron.down")
                                     .foregroundColor(.brandSecondary)
@@ -81,12 +81,12 @@ struct MasjidChangeRequestView: View {
                                 FillButton(backgroundColor: .brandRed.opacity(0.9), systemImage: "xmark", scale: 2) {
                                     vm.denyChangeRequest(with: masjidManager)
                                     playHaptic(.warning)
-                                    vm.dismiss()
+                                    vm.dismiss(for: masjidManager)
                                 }
                                 FillButton(backgroundColor: .brandGreen.opacity(0.9), systemImage: "checkmark", scale: 2) {
                                     vm.acceptChangeRequest(with: masjidManager)
                                     playHaptic(.success)
-                                    vm.dismiss()
+                                    vm.dismiss(for: masjidManager)
                                 }
                             }
                             .frame(height: .relativeToScreen(.height, ratio: 0.1))
@@ -108,7 +108,7 @@ struct MasjidChangeRequestView: View {
                         Button {
                             vm.createNewChangeRequest(using: masjidManager)
                             playHaptic(.success)
-                            vm.dismiss()
+                            vm.dismiss(for: masjidManager)
                         } label: {
                             Image(systemName: "checkmark")
                                 .foregroundColor(.brandPrimary)
@@ -116,7 +116,7 @@ struct MasjidChangeRequestView: View {
                         }
                         .padding()
                         Button {
-                            vm.dismiss()
+                            vm.dismiss(for: masjidManager)
                         } label: {
                             Image(systemName: "chevron.down")
                                 .foregroundColor(.brandSecondary)

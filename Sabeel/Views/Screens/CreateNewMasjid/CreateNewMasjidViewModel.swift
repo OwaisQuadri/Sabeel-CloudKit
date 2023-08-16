@@ -6,8 +6,9 @@
 //
 
 import SwiftUI
+import CoreLocation
 
-final class CreateNewMasjidViewModel: ObservableObject {
+final class CreateNewMasjidViewModel: NSObject, ObservableObject {
     @Published var showNotEditedAlert                           = false
     @Published var selectedChangeRequest: MasjidChangeRequest?  = nil
     @Published var name                 : String                = ""
@@ -17,7 +18,7 @@ final class CreateNewMasjidViewModel: ObservableObject {
     @Published var website              : String                = ""
     @Published var prayerTimes          : PrayerTimes           = PrayerTimes(fajr: "", dhuhr: "", asr: "", maghrib: "", isha: "", juma: [])
     
-    
+    var userLocationManager = UserLocationManager.shared
     @Published var isLoading: Bool = false
     @Published var alertItem: AlertItem?
     private func showLoadingView() { isLoading = true }
@@ -32,34 +33,65 @@ final class CreateNewMasjidViewModel: ObservableObject {
     func createMasjid(){
         load {
             print("Loading")
-            do {
-                sleep(3)
-            }
+            
         }
         print("...Done!")
     }
     
 
-    func onAppear() { }
+    func onAppear() { alertItem = AlertItem("Warning", "This Masjid will be created at your current location", "Dismiss") }
+    
+    @MainActor
+    func createUnconfirmedMasjid() {
+        // create instance for new masjid
+        guard let usersLocation = userLocationManager.location else {
+            alertItem = AlertContext.genericErrorAlert // TODO: we need your location to CREATE masajid (maybe ask one time)
+            return
+        }
+        showLoadingView()
+        Task {
+            do {
+                let newMasjidPrayerTimes = PrayerTimes(fajr: prayerTimes.fajr, dhuhr: prayerTimes.dhuhr, asr: prayerTimes.asr, maghrib: prayerTimes.maghrib, isha: prayerTimes.isha, juma: prayerTimes.juma)
+                let changeReq = MasjidChangeRequest(name: name, email: email, address: address, phoneNumber: phoneNumber, website: website, prayerTimes: newMasjidPrayerTimes, location: usersLocation )// userLocation
+                let newMasjid = Masjid(name: "", email: "", address: "", phoneNumber: "", website: "", prayerTimes: newMasjidPrayerTimes, location: usersLocation, changeRequest: changeReq, isConfirmed: false)
+                // if valid form submission
+                
+                // save all 3
+                try await CloudKitManager.shared.batchSave(records: [newMasjid.record, newMasjidPrayerTimes.record,changeReq.record])
+                // success
+                alertItem = AlertContext.genericSuccess // we were unable to save your masjid Request
+            hideLoadingView()
+            }
+            catch {
+                hideLoadingView()
+                alertItem = AlertContext.genericErrorAlert // we were unable to save your masjid Request
+            }
+        }
+    }
+    
 }
 
-////  VM if subview (for alerts)
-//final class CreateNewMasjidViewModel: ObservableObject {
-//
-//    @Published var isLoading: Bool = false
-//    @Binding var alertItem: AlertItem?
-//    private func showLoadingView() { isLoading = true }
-//    private func hideLoadingView() { isLoading = false }
-//    private func load(completion: () -> Void) {
-//        showLoadingView()
-//        completion()
-//        hideLoadingView()
-//    }
-//
-//    init(_ alertItem: Binding<AlertItem?>) {
-//        self._alertItem = alertItem
-//    }
-//
-//
-//    func onAppear() { }
-//}
+extension CreateNewMasjidViewModel: CLLocationManagerDelegate {
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        checkLocationAuth()
+    }
+    
+    private func checkLocationAuth() {
+        switch userLocationManager.authorizationStatus {
+            case .notDetermined:
+                userLocationManager.requestAlwaysAuthorization()
+            case .restricted:
+                alertItem = AlertContext.genericErrorAlert // TODO: add custom alert message
+            case .denied:
+                alertItem = AlertContext.genericErrorAlert // TODO: add alert
+            case .authorizedAlways, .authorizedWhenInUse:
+                // nice
+                // focusUser() ?
+                break
+            @unknown default:
+                userLocationManager.requestAlwaysAuthorization()
+        }
+    }
+    
+}

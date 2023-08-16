@@ -29,11 +29,7 @@ struct SMapView: View {
             })
             .ignoresSafeArea(edges: .top)
             VStack {
-                if masjidManager.selectedMasjid != nil {
-                    Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))
-                    MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem)) .transition(.move(edge: .bottom))
-                        .onDisappear { Task {vm.getMasjids(with: masjidManager)} }
-                } else {
+                if masjidManager.selectedMasjid == nil {
                     HStack (alignment: .center) {
                             Button {
                                 print("pressed")
@@ -44,7 +40,7 @@ struct SMapView: View {
                                         .frame(
                                             width: .relativeToScreen(.height, ratio: 0.05),
                                             height: .relativeToScreen(.height, ratio: 0.05))
-                                        .shadow(color: .brandPrimary, radius: 5)
+                                        .shadow(color: .brandPrimary, radius: 3)
                                     Image(systemName: "plus")
                                         .resizable()
                                         .imageScale(.small)
@@ -64,11 +60,32 @@ struct SMapView: View {
                     .padding()
                     .transition(.move(edge: .top))
                     Spacer()
+                    HStack {
+                        Button { vm.focusUser(); vm.getMasjids(with: masjidManager) } label: {
+                            Image(systemName: "location")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: .relativeToScreen(.width, ratio: 0.1))
+                                .symbolVariant(.circle.fill.square)
+                                .foregroundStyle( .white, .tint)
+                                .shadow(color: .brandPrimary, radius: 5)
+                        }
+                        .padding(.bottom)
+                        Spacer()
+                    }
+                    .transition(.move(edge: .bottom))
+                    .padding()
+                }
+                else {
+                    Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))
+                    MasjidDetailView(vm: MasjidDetailViewModel($vm.alertItem)) .transition(.move(edge: .bottom))
+                        .onDisappear { Task {vm.getMasjids(with: masjidManager)} }
                 }
             }
         }
         .sheet(isPresented: $vm.isCreatingNewMasjid, content: {
             CreateNewMasjidView(showThisView: $vm.isCreatingNewMasjid)
+                .onDisappear{ Task{ vm.getMasjids(with: masjidManager) } }
         })
         .task { vm.onAppear(with: masjidManager) }
         .alert(item: $vm.alertItem) { $0.alert }

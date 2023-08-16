@@ -23,9 +23,10 @@ import CloudKit
     @Binding var isShowingThisView: Bool
     
     
-    func dismiss() {
+    func dismiss(for masjidManager: MasjidManager) {
         withAnimation(.easeInOut) {
             isShowingThisView = false
+            emptySelectionsIfNotConfirmed(for: masjidManager)
         }
     }
     
@@ -125,6 +126,7 @@ import CloudKit
                 // get user ID
                 guard let userRecord = CloudKitManager.shared.userRecord else {
                     alertItem = AlertContext.noUserRecord
+                    emptySelectionsIfNotConfirmed(for: masjidManager)
                     return
                 }
                 // get change request from reference
@@ -134,6 +136,7 @@ import CloudKit
                     
                     if changeRequestObject.userRecordIdVotedYes.contains(userRecord.reference()) {
                         alertItem = AlertContext.votedAlready
+                        emptySelectionsIfNotConfirmed(for: masjidManager)
                         return
                     }
                     // add user to list
@@ -156,23 +159,28 @@ import CloudKit
                     }}
                 else {
                     alertItem = AlertContext.genericUnableToVote
+                    emptySelectionsIfNotConfirmed(for: masjidManager)
                     return
                 }
                 alertItem = AlertContext.votedSuccess
+                emptySelectionsIfNotConfirmed(for: masjidManager)
             }
             catch {
                 alertItem = AlertContext.genericUnableToVote
+                emptySelectionsIfNotConfirmed(for: masjidManager)
             }
+            
         }
     }
     
     
     func denyChangeRequest(with masjidManager: MasjidManager) {
         guard
-            let masjid = masjidManager.selectedMasjid,
+            var masjid = masjidManager.selectedMasjid,
             let changeRequestReference = masjid.changeRequest
         else {
             alertItem = AlertContext.masjidDNE
+            emptySelectionsIfNotConfirmed(for: masjidManager)
             return
         }
         Task {
@@ -180,6 +188,7 @@ import CloudKit
                 // get user ID
                 guard let userRecord = CloudKitManager.shared.userRecord else {
                     alertItem = AlertContext.noUserRecord
+                    emptySelectionsIfNotConfirmed(for: masjidManager)
                     return
                 }
                 // get request from ref
@@ -188,6 +197,7 @@ import CloudKit
                     let changeRequestObject = changeRequestObjects[0]
                     if changeRequestObject.userRecordIdVotedYes.contains(userRecord.reference()) {
                         alertItem = AlertContext.votedAlready
+                        emptySelectionsIfNotConfirmed(for: masjidManager)
                         return
                     }
                     // add user to list
@@ -197,17 +207,29 @@ import CloudKit
                         // if there are, delete the changerequest and put the reference to it in masjid.record to nil
                         _ = try await CloudKitManager.shared.batchDel([changeRequestObject])
                         masjid.record[Masjid.kChangeRequest] = nil
-                        _ = try await CloudKitManager.shared.save([masjid])
+                        if masjid.isConfirmed {
+                            _ = try await CloudKitManager.shared.save([masjid])
+                        } else {
+                            _ = try await CloudKitManager.shared.batchDel([masjid])
+                        }
                     }
                     else {
                         _ = try await CloudKitManager.shared.save([changeRequestObject])
                     }
                 }
-                alertItem = AlertContext.votedSuccess
+                emptySelectionsIfNotConfirmed(for: masjidManager)
             }
             catch {
                 alertItem = AlertContext.genericUnableToVote
+                emptySelectionsIfNotConfirmed(for: masjidManager)
             }
+        }
+    }
+    
+    private func emptySelectionsIfNotConfirmed(for masjidManager: MasjidManager){
+        if let masjid = masjidManager.selectedMasjid , !masjid.isConfirmed {
+            masjidManager.selectedMasjid = nil
+            selectedChangeRequest = nil
         }
     }
     

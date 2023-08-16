@@ -10,6 +10,7 @@
 		CD68F8042A8987900004D405 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD68F8032A8987900004D405 /* String+Ext.swift */; };
 		CD68F8062A89A5F90004D405 /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD68F8052A89A5F90004D405 /* GlobalFunctions.swift */; };
 		CD68F8082A89AA770004D405 /* SecondaryBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD68F8072A89AA770004D405 /* SecondaryBackgroundView.swift */; };
+		CD6C294F2A8C68C400B19CAC /* UserLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6C294E2A8C68C400B19CAC /* UserLocationManager.swift */; };
 		CD8FCF252A89E4BA00255869 /* Format+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8FCF242A89E4BA00255869 /* Format+Util.swift */; };
 		CD8FCF272A89E4E800255869 /* TimeInterval+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8FCF262A89E4E800255869 /* TimeInterval+Ext.swift */; };
 		CD8FCF292A89F38D00255869 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8FCF282A89F38D00255869 /* Date+Ext.swift */; };
@@ -86,6 +87,7 @@
 		CD68F8032A8987900004D405 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		CD68F8052A89A5F90004D405 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		CD68F8072A89AA770004D405 /* SecondaryBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryBackgroundView.swift; sourceTree = "<group>"; };
+		CD6C294E2A8C68C400B19CAC /* UserLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationManager.swift; sourceTree = "<group>"; };
 		CD8FCF242A89E4BA00255869 /* Format+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Format+Util.swift"; sourceTree = "<group>"; };
 		CD8FCF262A89E4E800255869 /* TimeInterval+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Ext.swift"; sourceTree = "<group>"; };
 		CD8FCF282A89F38D00255869 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 			children = (
 				CDB075782A83526A0004DE7B /* CloudKitManager.swift */,
 				CDB075892A849EC30004DE7B /* MasjidManager.swift */,
+				CD6C294E2A8C68C400B19CAC /* UserLocationManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				CD9733132A8880EF006D8991 /* PrayerCell.swift in Sources */,
 				CD8FCF292A89F38D00255869 /* Date+Ext.swift in Sources */,
 				CDB075762A834DF40004DE7B /* MockData.swift in Sources */,
+				CD6C294F2A8C68C400B19CAC /* UserLocationManager.swift in Sources */,
 				CDBD62772A85C47D0079151E /* PersonalInfoViewModel.swift in Sources */,
 				CDC3AEF02A87305800EA6FB9 /* NSPredicate+Ext.swift in Sources */,
 				CDB0758A2A849EC30004DE7B /* MasjidManager.swift in Sources */,

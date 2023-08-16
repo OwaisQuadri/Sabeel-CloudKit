@@ -15,15 +15,24 @@ struct CreateNewMasjidView: View {
             VStack {
                 HStack (alignment: .center ) {
                     // header for creatng a Masjid
-                    VStack {
+                    VStack (alignment: .leading ) {
                         TextField(text: $vm.name, label: { Text("Masjid Name") })
                             .font(.title)
                             .bold()
                             .frame(maxWidth: .infinity)
                             .foregroundColor(.brandPrimary)
+                        Text("Note: Your current location will be saved as ")
+                            .foregroundColor(.brandSecondary)
+                            .font(.caption).bold()
+                        + Text("\n\"\(vm.name == "" ? "Masjid Name" : vm.name)\"")
+                            .foregroundColor(.brandRed)
+                            .font(.caption).bold()
+                        + Text(" on the map")
+                            .foregroundColor(.brandSecondary)
+                            .font(.caption).bold()
                     }
                     Button {
-                        vm.createMasjid()
+                        vm.createUnconfirmedMasjid()
                         playHaptic(.success)
                         showThisView = false // dismiss only if not cringe entry
                     } label: {
@@ -47,13 +56,9 @@ struct CreateNewMasjidView: View {
                 // body for creating a changerequest
                 ScrollView {
                     Group {
-                        Text("Note: Your current location will be saved as \"\(vm.name == "" ? "Masjid Name" : vm.name)\" on the map")
-                            .font(.caption).bold()
-                            .foregroundColor(.brandRed)
                         HStack {
                             Text("General Info:")
                                 .font(.caption)
-                                .foregroundColor(.brandSecondary)
                             Spacer()
                         }
                         .padding(.top)

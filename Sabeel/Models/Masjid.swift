@@ -48,7 +48,7 @@ extension Masjid: CKObject {
     }
     
     // create memberwise init by creating record and passing it through our other init
-    init?(
+    init(
         name            : String,
         email           : String?,
         address         : String,

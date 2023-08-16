@@ -26,7 +26,7 @@ struct MasjidDetailView: View {
     
     var body: some View {
         if let selectedMasjid = masjidManager.selectedMasjid, vm.isShowingThisView {
-            if !vm.showChangeTimingsView {
+            if !vm.showChangeTimingsView && selectedMasjid.isConfirmed {
                 ZStack{
                     VStack(alignment: .center) {
                         HStack (alignment: .center ) {

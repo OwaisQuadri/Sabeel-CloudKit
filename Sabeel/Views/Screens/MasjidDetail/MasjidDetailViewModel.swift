@@ -77,7 +77,14 @@ import MapKit
         if let selectedMasjid = locationManager.selectedMasjid {
             Task {
                 do {
-                    locationManager.selectedMasjid = try await CloudKitManager.shared.get(object: .masjid, from: selectedMasjid.record.recordID)[0] as Masjid
+                    let masjids = try await CloudKitManager.shared.get(object: .masjid, from: selectedMasjid.record.recordID) as [Masjid]
+                    if masjids.isEmpty {
+                        locationManager.selectedMasjid = nil
+                    }
+                    else {
+                        locationManager.selectedMasjid = masjids[0]
+                    }
+                    
                 }
             }
         }

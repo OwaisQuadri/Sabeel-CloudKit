@@ -15,7 +15,7 @@ protocol CKObject {
     var record: CKRecord { get }
 }
 
-final class CloudKitManager {
+@MainActor final class CloudKitManager {
     
     // MARK: - Singleton
     static let shared = CloudKitManager()
@@ -73,16 +73,19 @@ final class CloudKitManager {
 // MARK: - CRUD Functions
 extension CloudKitManager {
     // save/create/update and delete
+    @discardableResult
     func batchSave(records : [CKRecord]) async throws -> Bool {
         let recordsToSave = records
         let (savedResults, _) = try await publicDB.modifyRecords(saving: recordsToSave, deleting: [])
         return !(savedResults.compactMap { _, result in try? result.get() }.isEmpty)
     }
+    @discardableResult
     func save<T:CKObject>(_ objects : [T]) async throws -> Bool {
         let recordsToSave = objects.map { $0.record }
         let (savedResults, _) = try await publicDB.modifyRecords(saving: recordsToSave, deleting: [])
         return !(savedResults.compactMap { _, result in try? result.get() }.isEmpty)
     }
+    @discardableResult
     func batchDel<T:CKObject>(_ objects : [T]) async throws -> Bool {
         let recordIds = objects.map { $0.record.recordID }
         let (_, deletedResultsID) = try await publicDB.modifyRecords(saving: [], deleting: recordIds)

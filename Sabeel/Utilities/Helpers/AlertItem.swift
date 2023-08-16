@@ -31,6 +31,28 @@ extension AlertItem {
 }
 
 struct AlertContext {
+    // MARK: - Generics
+    
+    static let genericSuccess = AlertItem(
+        "Success!",
+        "Intended Behaviour Executed Successfully!",
+        "OK"
+    )
+    
+    static let genericErrorAlert = AlertItem(
+        "Error",
+        "Something went wrong",
+        "Dismiss"
+    )
+    
+    static func genericErrorAlert(for err: Error) -> AlertItem {
+        AlertItem(
+            "Error",
+            err.localizedDescription,
+            "Dismiss"
+        )
+    }
+    
     // MARK: - Masjid Change Request Alerts
     
     static let promptToVoteCreate = AlertItem(
@@ -140,19 +162,5 @@ struct AlertContext {
         "We were unable to save your profile at this time, Please try again later",
         "Okay"
     )
-    
-    // MARK: - Generic Errors
-    static let genericErrorAlert = AlertItem(
-        "Error",
-        "Something went wrong",
-        "Dismiss"
-    )
-    
-    static func genericErrorAlert(for err: Error) -> AlertItem {
-        AlertItem(
-            "Error",
-            err.localizedDescription,
-            "Dismiss"
-        )
-    }
+
 }

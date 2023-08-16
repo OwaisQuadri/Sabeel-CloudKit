@@ -8,16 +8,15 @@
 import SwiftUI
 import MapKit
 
-@MainActor final class SMapViewModel: NSObject, ObservableObject {
-    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.95, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+ final class SMapViewModel: NSObject, ObservableObject {
+    @Published var region: MKCoordinateRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 43.95, longitude: -79), span: MKCoordinateSpan(latitudeDelta: 2, longitudeDelta: 2))
     @Published var alertItem: AlertItem?
     @Published var timeToMasjid: Double?
     @Published var isCreatingNewMasjid = false
     
-    var userLocationManager: CLLocationManager?
-    
-    
-    func getMasjids(with masjidManager: MasjidManager) {
+     var userLocationManager = UserLocationManager.shared
+    @MainActor
+     func getMasjids(with masjidManager: MasjidManager) {
         Task {
             do {
                 masjidManager.masjids = try await CloudKitManager.shared.getAll(objects: .masjid)
@@ -27,30 +26,20 @@ import MapKit
             }
         }
     }
-    
+    @MainActor
     func onAppear(with masjidManager: MasjidManager) {
         initLocationManager()
         checkLocationAuth()
         getMasjids(with: masjidManager)
     }
     
-    
-    func reload(with masjidManager: MasjidManager){
-        onAppear(with: masjidManager)
-    }
-    
-    
-    private func initializeRegion () { focusUser() }
-    
-    
     private func initLocationManager() {
-        userLocationManager = CLLocationManager()
-        userLocationManager!.delegate = self
+        userLocationManager.delegate = self
     }
     
     func focusUser(){
         if
-            let userLocationCoord = userLocationManager?.location?.coordinate
+            let userLocationCoord = userLocationManager.location?.coordinate
         {
             setFocus(userLocationCoord)
         }
@@ -85,9 +74,6 @@ extension SMapViewModel: CLLocationManagerDelegate {
     }
     
     private func checkLocationAuth() {
-        guard let userLocationManager else {
-            alertItem = AlertItem("Err", "unable to use any location services. Please update your iPhone settings", "Dismiss")
-            return }
         switch userLocationManager.authorizationStatus {
             case .notDetermined:
                 userLocationManager.requestAlwaysAuthorization()
@@ -97,7 +83,7 @@ extension SMapViewModel: CLLocationManagerDelegate {
                 alertItem = AlertContext.genericErrorAlert // TODO: add alert
             case .authorizedAlways, .authorizedWhenInUse:
                 // nice
-                focusUser()
+                // focusUser() ?
                 break
             @unknown default:
                 userLocationManager.requestAlwaysAuthorization()
