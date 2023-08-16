@@ -87,6 +87,7 @@
 		CD68F8032A8987900004D405 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		CD68F8052A89A5F90004D405 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		CD68F8072A89AA770004D405 /* SecondaryBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryBackgroundView.swift; sourceTree = "<group>"; };
+		CD6A72F92A8D52E5008DC8FA /* Sabeel */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sabeel; sourceTree = "<group>"; };
 		CD6C294E2A8C68C400B19CAC /* UserLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocationManager.swift; sourceTree = "<group>"; };
 		CD8FCF242A89E4BA00255869 /* Format+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Format+Util.swift"; sourceTree = "<group>"; };
 		CD8FCF262A89E4E800255869 /* TimeInterval+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Ext.swift"; sourceTree = "<group>"; };
@@ -174,6 +175,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD6A72F32A8D52C3008DC8FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CD6A72F92A8D52E5008DC8FA /* Sabeel */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CDB074FF2A7F4C860004DE7B = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +191,7 @@
 				CDB075212A7F4C880004DE7B /* SabeelTests */,
 				CDB0752B2A7F4C880004DE7B /* SabeelUITests */,
 				CDB075092A7F4C860004DE7B /* Products */,
+				CD6A72F32A8D52C3008DC8FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -429,6 +439,7 @@
 				CDB075042A7F4C860004DE7B /* Sources */,
 				CDB075052A7F4C860004DE7B /* Frameworks */,
 				CDB075062A7F4C860004DE7B /* Resources */,
+				CD6A72B92A8D4DC5008DC8FA /* Embed App Clips */,
 			);
 			buildRules = (
 			);
@@ -764,6 +775,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sabeel;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
@@ -803,6 +816,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Sabeel/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sabeel;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs your location to estimate travel time and distance to different locations.";

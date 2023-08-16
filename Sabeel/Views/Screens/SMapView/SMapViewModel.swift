@@ -17,12 +17,12 @@ import MapKit
      var userLocationManager = UserLocationManager.shared
     @MainActor
      func getMasjids(with masjidManager: MasjidManager) {
-        Task {
+        Task () {
             do {
                 masjidManager.masjids = try await CloudKitManager.shared.getAll(objects: .masjid)
             }
             catch {
-                alertItem = AlertItem("tuff", "the warning is actually an issue", "yikes")
+                alertItem = AlertItem("Yo Dude", error.localizedDescription, "OK")
             }
         }
     }
@@ -44,7 +44,9 @@ import MapKit
             setFocus(userLocationCoord)
         }
     }
-    
+     func focusFavouriteMasjid(){
+         print("focus on the favourite masjid")
+     }
     
     func select(masjid: Masjid, for masjidManager: MasjidManager) {
         withAnimation(.easeInOut) {

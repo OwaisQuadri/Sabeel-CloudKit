@@ -13,7 +13,7 @@ struct CreateNewMasjidView: View {
     var body: some View {
         ZStack {
             VStack {
-                HStack (alignment: .center ) {
+                HStack {
                     // header for creatng a Masjid
                     VStack (alignment: .leading ) {
                         TextField(text: $vm.name, label: { Text("Masjid Name") })

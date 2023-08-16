@@ -14,7 +14,7 @@ import MapKit
     @Published var showContactInfo: Bool = false
     @Published var showChangeTimingsView: Bool = false
     @Published var isShowingThisView: Bool = true
-    let timeToMasjidString: String = "Go"
+    let timeToMasjidString: String = "View on Map"
     
     
     func onAppear(with locationManager: MasjidManager) {
@@ -105,15 +105,28 @@ import MapKit
     @Binding var alertItem: AlertItem?
     private func showLoadingView() { isLoading = true }
     private func hideLoadingView() { isLoading = false }
-    var timeForNextPrayer: Date? {
+    
+    func time(for prayer: Prayer) -> Date? {
         guard let prayerTimes else { return nil }
         let today = Date.now
-        var prayers = [prayerTimes.fajr, prayerTimes.asr, prayerTimes.maghrib, prayerTimes.isha ]
-        if today.formatted(Date.FormatStyle().weekday(.wide)) == "Friday" { prayers.append(contentsOf: prayerTimes.juma) } else { prayers.append(prayerTimes.dhuhr) }
-        let times: [Date] = prayers.compactMap( { timeString in
+        var whichPrayer: String
+        switch prayer {
+            case .fajr:
+                whichPrayer = prayerTimes.fajr
+            case .dhuhr:
+                whichPrayer = prayerTimes.dhuhr
+            case .asr:
+                whichPrayer = prayerTimes.asr
+            case .maghrib:
+                whichPrayer = prayerTimes.maghrib
+            case .isha:
+                whichPrayer = prayerTimes.isha
+            case .juma(let index):
+                whichPrayer = prayerTimes.juma[index]
+        }
             let calendar = Calendar(identifier: .gregorian)
             let todayComponents = calendar.dateComponents([.day,.year,.month], from: today)
-            if let parsedTime = Date.from(string: timeString) {
+            if let parsedTime = Date.from(string: whichPrayer) {
                 let currentPrayerDateComponents = calendar.dateComponents([.hour, .minute], from: parsedTime)
                 let time = calendar.date(from: DateComponents(
                     year: todayComponents.year,
@@ -125,11 +138,22 @@ import MapKit
                 return time
             }
             return nil
-        })
-        let prayersInFuture = times.compactMap({$0.distance(to: today ) < 0 ? $0 : nil})
-        return prayersInFuture.min(by: { $0.distance(to: today ).magnitude < $1.distance(to: today ).magnitude })
     }
     
+    func isLate(for prayer: Prayer) -> Bool? {
+        guard
+            let prayerTime = time(for: prayer)
+        else { return nil }
+        let today = Date.now
+        return today > prayerTime
+    }
+    
+    func departAtTime(for prayer: Prayer, with masjidManager: MasjidManager) -> Date? {
+        guard let secondsToMasjid = masjidManager.secondsToMasjid, let prayerTime = time(for: prayer) else {
+            return nil
+        }
+        return prayerTime.addingTimeInterval(secondsToMasjid * -1)
+    }
     
     func load(completion: () -> Void) {
         showLoadingView()
@@ -142,4 +166,7 @@ import MapKit
         super.init()
     }
     
+}
+enum Prayer{
+    case fajr, dhuhr, asr, maghrib, isha, juma(Int)
 }

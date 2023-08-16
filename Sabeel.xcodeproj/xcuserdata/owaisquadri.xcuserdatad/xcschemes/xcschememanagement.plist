@@ -6,8 +6,43 @@
 	<dict>
 		<key>Sabeel.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>CD6A728A2A8D4DC4008DC8FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD6A72A02A8D4DC5008DC8FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD6A72AA2A8D4DC5008DC8FA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CDB075072A7F4C860004DE7B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CDB0751D2A7F4C880004DE7B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CDB075272A7F4C880004DE7B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

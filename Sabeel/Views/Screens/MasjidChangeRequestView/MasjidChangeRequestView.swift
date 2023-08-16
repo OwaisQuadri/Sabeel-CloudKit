@@ -19,11 +19,11 @@ struct MasjidChangeRequestView: View {
     
     var body: some View {
         ZStack {
-            VStack(alignment: .center) {
+            VStack {
                 if masjidManager.selectedMasjid?.changeRequest != nil {
                     
                     Group {
-                        HStack (alignment: .center ) {
+                        HStack {
                             // header for voting on a changerequest
                             Spacer()
                             VStack {
@@ -44,7 +44,7 @@ struct MasjidChangeRequestView: View {
                         .padding()
                         Divider()
                         Group {
-                            HStack (alignment: .center, spacing: 10) {
+                            HStack {
                                 Text(vm.phoneNumber)
                                     .masjidSubtitle()
                                 Text(vm.website)
@@ -96,7 +96,7 @@ struct MasjidChangeRequestView: View {
                     .font(.title3)
                 }
                 else {
-                    HStack (alignment: .center ) {
+                    HStack {
                         // header for creatng a changerequest
                         VStack {
                             TextField(text: $vm.name, label: { Text("Masjid Name") })

@@ -42,6 +42,10 @@ import CloudKit
             alertItem = AlertContext.masjidDNE
             return
         }
+        guard CloudKitManager.shared.isSignedIntoiCloud else {
+            alertItem = AlertContext.noUserRecord
+            return
+        }
         let newPrayerTimes = PrayerTimes(fajr: prayerTimes.fajr, dhuhr: prayerTimes.dhuhr, asr: prayerTimes.asr, maghrib: prayerTimes.maghrib, isha: prayerTimes.isha, juma: prayerTimes.juma)
         let newChangeRequest = MasjidChangeRequest(name: name, email: email, address: address, phoneNumber: phoneNumber, website: website, prayerTimes: newPrayerTimes, location: masjid.location )
         // upload both to cloudkit

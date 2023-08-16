@@ -7,29 +7,19 @@
 
 import SwiftUI
 import CloudKit
+//import MapKit
 
 struct MasjidDetailView: View {
     @EnvironmentObject var masjidManager: MasjidManager
     
     @StateObject var vm: MasjidDetailViewModel
-    
-    var departAt: Date {
-        guard let secondsToMasjid = masjidManager.secondsToMasjid, let nextPrayer = vm.timeForNextPrayer else {
-            return Date()
-        }
-        return nextPrayer.addingTimeInterval(secondsToMasjid * -1)
-    }
-    
-    var departAtString: String {
-        return departAt.formatted(date: .abbreviated, time: .shortened)
-    }
-    
+//    @State var lookAroundScene: MKLookAroundScene?
     var body: some View {
         if let selectedMasjid = masjidManager.selectedMasjid, vm.isShowingThisView {
             if !vm.showChangeTimingsView && selectedMasjid.isConfirmed {
                 ZStack{
-                    VStack(alignment: .center) {
-                        HStack (alignment: .center ) {
+                    VStack {
+                        HStack {
                             Spacer()
                             MasjidHeadline(name: selectedMasjid.name, address: selectedMasjid.address)
                             Spacer()
@@ -75,57 +65,59 @@ struct MasjidDetailView: View {
                         }
                         .padding(.horizontal)
                         .padding(.top)
-                        HStack(alignment: .center) {
-                            Spacer()
-                            VStack (alignment: .center) {
-                                if masjidManager.secondsToMasjid != nil {
-                                    
-                                    Text("Depart on:")
-                                    Text(departAtString)
-                                        .bold().foregroundColor((Date.now.distance(to: departAt ) > 0) ?  .brandPrimary : .brandRed )
-                                    
-                                }
-                                else if let nextPrayer = vm.timeForNextPrayer {
-                                    Text("Nearest Prayer:")
-                                    Text(nextPrayer.formatted(date: .abbreviated, time: .shortened))
-                                        .bold().foregroundColor((Date.now.distance(to: nextPrayer ) > 0) ?  .brandPrimary : .brandRed )
-                                }
-                            }
-                            Spacer()
+                        HStack {
                             Button {
                                 // send to google maps
                                 vm.getDirectionsToLocation(with: masjidManager)
                             } label: {
                                 HStack{
                                     Image(systemName: "arrowshape.turn.up.right.fill")
+                                    Spacer()
                                     if let secondsToMasjid = masjidManager.secondsToMasjid?.convertSecondsToString() {
                                         Text(secondsToMasjid)
                                     } else {
                                         Text(vm.timeToMasjidString)
                                     }
+                                    Spacer()
                                 }
+                                .font(.title3)
                             }
                             .buttonStyle(.borderedProminent)
                             .accentColor(.brandPrimary)
-                            
+// add in Xcode 15
+//                            Button {
+//                                // send to scene
+//                                lookAroundScene = nil
+//                                guard let locationCoord = masjidManager.selectedMasjid?.location.coordinate else {
+//                                    return
+//                                }
+//                                Task {
+//                                    let request = MKLookAroundSceneRequest(coordinate: locationCoord)
+//                                    lookAroundScene = try? await request.scene
+//                                }
+//                            } label: {
+//                                Text("Look around")
+//                                    .font(.title3)
+//                            }
+//                            .buttonStyle(.borderedProminent)
+//                            .accentColor(.brandPrimary)
                         }
                         .padding(.horizontal)
-                        
                         List {
                             if let prayerTimes = vm.prayerTimes {
                                 Section {
-                                    PrayerCell(title: "Fajr"    , time: prayerTimes.fajr)
-                                    PrayerCell(title: "Dhuhr"   , time: prayerTimes.dhuhr)
-                                    PrayerCell(title: "Asr"     , time: prayerTimes.asr)
-                                    PrayerCell(title: "Maghrib" , time: prayerTimes.maghrib)
-                                    PrayerCell(title: "Isha"    , time: prayerTimes.isha)
+                                    PrayerCell(title: "Fajr"    , timeToLeave: vm.departAtTime(for: .fajr, with: masjidManager) , isLate: vm.isLate(for: .fajr), time: prayerTimes.fajr)
+                                    PrayerCell(title: "Dhuhr"   , timeToLeave: vm.departAtTime(for: .dhuhr, with: masjidManager) , isLate: vm.isLate(for: .dhuhr), time: prayerTimes.dhuhr)
+                                    PrayerCell(title: "Asr"     , timeToLeave: vm.departAtTime(for: .asr, with: masjidManager) , isLate: vm.isLate(for: .asr), time: prayerTimes.asr)
+                                    PrayerCell(title: "Maghrib" , timeToLeave: vm.departAtTime(for: .maghrib, with: masjidManager) , isLate: vm.isLate(for: .maghrib), time: prayerTimes.maghrib)
+                                    PrayerCell(title: "Isha"    , timeToLeave: vm.departAtTime(for: .isha, with: masjidManager) , isLate: vm.isLate(for: .isha), time: prayerTimes.isha)
                                 } header: {
                                     Text(Constants.prayerTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)
                                 }
                                 if prayerTimes.juma.count > 0 {
                                     Section {
                                         ForEach( 0..<prayerTimes.juma.count, id: \.self) { index in
-                                            PrayerCell(title: "Juma \(index+1)", time: prayerTimes.juma[index])
+                                            PrayerCell(title: "Juma \(index+1)", timeToLeave: vm.departAtTime(for: .juma(index), with: masjidManager) , isLate: vm.isLate(for: .juma(index)), time: prayerTimes.juma[index])
                                         }
                                     } header: {
                                         Text(Constants.jumaTimesTitle).foregroundColor(.brandSecondary).bold().font(.headline)

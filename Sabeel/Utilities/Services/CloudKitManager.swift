@@ -15,7 +15,7 @@ protocol CKObject {
     var record: CKRecord { get }
 }
 
-@MainActor final class CloudKitManager {
+final class CloudKitManager {
     
     // MARK: - Singleton
     static let shared = CloudKitManager()
@@ -31,30 +31,30 @@ protocol CKObject {
     var userGivenName: String?
     var userProfile: SabeelProfile?
     
-    func getiCloudStatus(completion: @escaping (Result<Bool, Error>) -> Void) {
-        container.accountStatus { status, err in
-            switch status {
-                case .couldNotDetermine:
-                    print(err?.localizedDescription ?? "iCloud Status couldNotDetermine")
-                    completion(.failure(err!))
-                case .available:
-                    self.isSignedIntoiCloud = true
-                    completion(.success(self.isSignedIntoiCloud))
-                case .restricted:
-                    print(err?.localizedDescription ?? "iCloud Status restricted")
-                    completion(.failure(err!))
-                case .noAccount:
-                    print(err?.localizedDescription ?? "iCloud Status noAccount")
-                    completion(.failure(err!))
-                case .temporarilyUnavailable:
-                    print(err?.localizedDescription ?? "iCloud Status temporarilyUnavailable")
-                    completion(.failure(err!))
-                @unknown default:
-                    print(err?.localizedDescription ?? "iCloud Status unknown")
-                    completion(.failure(err!))
-            }
-        }
-    }
+//    func getiCloudStatus(completion: @escaping (Result<Bool, Error>) -> Void) {
+//        container.accountStatus { status, err in
+//            switch status {
+//                case .couldNotDetermine:
+//                    print(err?.localizedDescription ?? "iCloud Status couldNotDetermine")
+//                    completion(.failure(err!))
+//                case .available:
+//                    self.isSignedIntoiCloud = true
+//                    completion(.success(self.isSignedIntoiCloud))
+//                case .restricted:
+//                    print(err?.localizedDescription ?? "iCloud Status restricted")
+//                    completion(.failure(err!))
+//                case .noAccount:
+//                    print(err?.localizedDescription ?? "iCloud Status noAccount")
+//                    completion(.failure(err!))
+//                case .temporarilyUnavailable:
+//                    print(err?.localizedDescription ?? "iCloud Status temporarilyUnavailable")
+//                    completion(.failure(err))
+//                @unknown default:
+//                    print(err?.localizedDescription ?? "iCloud Status unknown")
+//                    completion(.failure(err!))
+//            }
+//        }
+//    }
     
     var userRecord: CKRecord?
     var profileRecordID: CKRecord.ID?

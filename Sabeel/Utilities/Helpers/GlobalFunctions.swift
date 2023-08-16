@@ -18,4 +18,10 @@ func updateUIOnMainThread (completion: @escaping () -> Void) {
         completion()
     }
 }
+func onBackgroundThread (completion: @escaping () -> Void) {
+    let x = DispatchWorkItem(qos: .userInitiated, flags: .enforceQoS) {
+        completion()
+    }
+    DispatchQueue.main.asyncAndWait(execute: x)
+}
 

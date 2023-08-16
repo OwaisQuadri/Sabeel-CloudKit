@@ -18,4 +18,7 @@ extension Date {
         }
         return date
     }
+    var timeString: String {
+        self.formatted(date: .omitted, time: .shortened)
+    }
 }

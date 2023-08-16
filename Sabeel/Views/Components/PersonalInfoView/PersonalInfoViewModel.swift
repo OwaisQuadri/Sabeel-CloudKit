@@ -23,15 +23,6 @@ import CloudKit
     var profileContext: ProfileContext = .create
     
     func startUpChecks() {
-        CloudKitManager.shared.getiCloudStatus { status in
-            switch status {
-                case .success(_):
-                    break
-                case .failure(let err):
-                    self.alertItem = AlertContext.genericErrorAlert(for: err)
-                    
-            }
-        }
         getProfile()
     }
     

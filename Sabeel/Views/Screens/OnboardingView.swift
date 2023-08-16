@@ -64,6 +64,7 @@ struct OnboardingNewsView: View {
                         .font(.title3)
                         .foregroundColor(.brandPrimary)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.75)
                     Spacer()
                 }
                 Text(bodyText ?? "")

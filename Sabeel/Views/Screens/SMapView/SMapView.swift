@@ -15,8 +15,8 @@ struct SMapView: View {
     
     var body: some View {
         ZStack{
+            // update rotation for ios 15
             Map(coordinateRegion: $vm.region, showsUserLocation: true, annotationItems: masjidManager.masjids, annotationContent: { masjid in
-                
                 MapAnnotation(coordinate: masjid.location.coordinate) {
                     Image.masjidLogo
                         .resizable() .scaledToFit()
@@ -30,51 +30,58 @@ struct SMapView: View {
             .ignoresSafeArea(edges: .top)
             VStack {
                 if masjidManager.selectedMasjid == nil {
-                    HStack (alignment: .center) {
-                            Button {
-                                print("pressed")
-                                vm.isCreatingNewMasjid = true
-                            } label: {
-                                ZStack {
-                                    Logo()
-                                        .frame(
-                                            width: .relativeToScreen(.height, ratio: 0.05),
-                                            height: .relativeToScreen(.height, ratio: 0.05))
-                                        .shadow(color: .brandPrimary, radius: 3)
-                                    Image(systemName: "plus")
-                                        .resizable()
-                                        .imageScale(.small)
-                                        .frame(
-                                            width: .relativeToScreen(.width, ratio: 0.0175),
-                                            height: .relativeToScreen(.width, ratio: 0.0175))
-                                        .offset(y: 16)
+                        HStack {
+                                Button {
+                                    print("pressed")
+                                    vm.isCreatingNewMasjid = true
+                                } label: {
+                                    ZStack {
+                                        Logo()
+                                            .frame(
+                                                width: .relativeToScreen(.height, ratio: 0.05),
+                                                height: .relativeToScreen(.height, ratio: 0.05))
+                                        Image(systemName: "plus")
+                                            .resizable()
+                                            .imageScale(.small)
+                                            .frame(
+                                                width: .relativeToScreen(.width, ratio: 0.0175),
+                                                height: .relativeToScreen(.width, ratio: 0.0175))
+                                            .offset(y: 16)
+                                    }
+                                    .tint(.white)
                                 }
-                                .tint(.white)
-                            }
-                        Spacer()
-                        Text("SABEEL")
-                            .font(.title).bold()
-                            .shadow(color: .brandPrimary, radius: 5)
-                            .foregroundColor(.white)
-                    }
-                    .padding()
-                    .transition(.move(edge: .top))
-                    Spacer()
-                    HStack {
-                        Button { vm.focusUser(); vm.getMasjids(with: masjidManager) } label: {
-                            Image(systemName: "location")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: .relativeToScreen(.width, ratio: 0.1))
-                                .symbolVariant(.circle.fill.square)
-                                .foregroundStyle( .white, .tint)
-                                .shadow(color: .brandPrimary, radius: 5)
+                            Spacer()
+                            Text("SABEEL")
+                                .font(.title).bold()
+                                .foregroundColor(.white)
                         }
-                        .padding(.bottom)
+                        .shadow(radius: 10)
+                        .padding()
+                        .transition(.move(edge: .top))
                         Spacer()
-                    }
-                    .transition(.move(edge: .bottom))
-                    .padding()
+                        HStack {
+                            Button { vm.focusUser(); vm.getMasjids(with: masjidManager) } label: {
+                                Image(systemName: "location")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: .relativeToScreen(.width, ratio: 0.1))
+                            }
+                            .padding(.bottom)
+                            Spacer()
+                            Button { vm.getMasjids(with: masjidManager); vm.focusFavouriteMasjid() } label: {
+                                Image(systemName: "arrow.clockwise")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: .relativeToScreen(.width, ratio: 0.1))
+                            }
+                            .padding(.bottom)
+                        }
+                        .symbolVariant(.fill.circle)
+                        .foregroundStyle(.white.shadow(.drop(radius: 2)), .tint)
+                        .shadow(radius: 10)
+                        .transition(.move(edge: .bottom))
+                        .padding()
+                    
                 }
                 else {
                     Spacer(minLength: .relativeToScreen(.height, ratio: 0.1))

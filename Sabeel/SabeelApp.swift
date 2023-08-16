@@ -10,12 +10,12 @@ import SwiftUI
 @main
 struct SabeelApp: App {
     let persistenceController = PersistenceController.shared
-    let locationManager = MasjidManager()
+    let masjidManager = MasjidManager()
     var body: some Scene {
         WindowGroup {
             STabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .environmentObject(locationManager)
+                .environmentObject(masjidManager)
                 .addKeyboardVisibilityToEnvironment()
         }
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension STabView {
-    final class STabViewModel: ObservableObject {
+    @MainActor final class STabViewModel: ObservableObject {
         @AppStorage(UserDefaultsKey.kHasSeenOnboardingView) var hasSeenOnboardView = false { didSet { isShowingOnboarding = hasSeenOnboardView } }
         
         @Published var tab = Tab.mapView
