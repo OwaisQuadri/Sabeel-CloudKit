@@ -21,7 +21,7 @@ struct SMapView: View {
                     Image.masjidLogo
                         .resizable() .scaledToFit()
                         .frame(width: .relativeToScreen(.width, ratio: 0.075))
-                        .clipShape(RoundedRectangle(cornerSize: CGSize(width: 5, height: 5), style: .continuous))
+                        .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
                         .shadow(radius: 5)
                         .transition(.scale)
                         .onTapGesture { vm.select(masjid: masjid, for: masjidManager) }

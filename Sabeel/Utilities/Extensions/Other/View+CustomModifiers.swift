@@ -28,7 +28,7 @@ struct MasjidTitle: ViewModifier {
             .font(.title)
             .bold()
             .foregroundColor(.brandPrimary)
-            .minimumScaleFactor(0.75)
+            .minimumScaleFactor(0.5)
             .lineLimit(1)
     }
     

@@ -64,6 +64,7 @@ final class CloudKitManager {
         self.userRecord = record
         if let profileReference = record["userProfile"] as? CKRecord.Reference {
             profileRecordID = profileReference.recordID
+            isSignedIntoiCloud = true
         }
     }
     
